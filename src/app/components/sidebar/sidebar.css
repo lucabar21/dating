@@ -6,28 +6,30 @@
   align-items: center;
   background-color: var(--text-color);
   color: var(--bg-color);
-  padding: 16px;
   gap: 64px;
 
   img {
+    margin-top: 16px;
     width: 200px;
     height: auto;
     object-fit: cover;
   }
 
   ul {
+    width: 100%;
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 32px;
 
     li {
       width: 100%;
+      height: 80px;
       font-size: 32px;
       cursor: pointer;
       display: flex;
       align-items: center;
+      justify-content: flex-start;
+      padding-left: 32px;
       gap: 16px;
 
       svg {
@@ -42,8 +44,19 @@
       }
 
       &:hover {
+        background-color: var(--bg-color);
         transition: 0.1s ease-in-out;
 
+        svg {
+          fill: var(--accent-color-f);
+        }
+        a {
+          color: var(--accent-color-f);
+        }
+      }
+
+      &.active {
+        background-color: var(--bg-color);
         svg {
           fill: var(--accent-color-f);
         }

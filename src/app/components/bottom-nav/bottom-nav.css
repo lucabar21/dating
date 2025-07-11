@@ -5,31 +5,35 @@
   justify-content: center;
   background-color: var(--text-color);
   color: var(--bg-color);
-  padding: 16px;
   gap: 64px;
 
   ul {
     list-style-type: none;
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 16px;
+    padding: 8px;
 
     li {
       width: 100%;
-      font-size: 32px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 16px;
+      padding: 8px;
+      border-radius: 50%;
 
       svg {
         width: 32px;
         height: 32px;
         fill: var(--bg-color);
+      }
 
-        &:hover {
+      &.active {
+        background-color: var(--bg-color);
+        transition: 0.1s ease-in-out;
+        svg {
           fill: var(--accent-color-f);
-          transition: 0.1s ease-in-out;
         }
       }
     }
