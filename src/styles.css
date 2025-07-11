@@ -8,8 +8,15 @@ html,
 }
 
 :root {
-  --light-color: #f9f5ff;
-  --dark-color: #03254e;
+  --bg-color: #f9f5ff;
+  --text-color: #03254e;
+  --accent-color-f: #e41196;
+  --accent-color-m: #227dfc;
+}
+
+.theme-dark {
+  --bg-color: #03254e;
+  --text-color: #f9f5ff;
   --accent-color-f: #e41196;
   --accent-color-m: #227dfc;
 }

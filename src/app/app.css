@@ -1,3 +1,11 @@
-div {
-  color: var(--light-color);
+.test {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+.test2 {
+  width: 100px;
+  height: 100px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
