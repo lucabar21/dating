@@ -20,3 +20,8 @@ html,
   --accent-color-f: #e41196;
   --accent-color-m: #227dfc;
 }
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
