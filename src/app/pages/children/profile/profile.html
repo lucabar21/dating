@@ -1,1 +1,26 @@
-<p>profile works</p>
+<div class="profile-container">
+  <div class="top-section">
+    <div class="profile-picture">
+      <img src="{{user.profilePicture}}" alt="Foto profilo" />
+    </div>
+    <div class="user-info">
+      <div class="name-age">
+        <p>{{user.name}}</p>
+        <p>({{getAge()}})</p>
+      </div>
+      <div class="location">
+        <p>{{user.location}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="description">
+    <h2>Su di me</h2>
+    <p>{{user.bio}}</p>
+  </div>
+  <div class="interests">
+    <h2>Interessi</h2>
+    <div class="wrapper">
+      <p class="badge" *ngFor="let interest of user.interests">{{interest}}</p>
+    </div>
+  </div>
+</div>
