@@ -1,20 +1,11 @@
-/* Background styling */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+.container1 {
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-}
-
-.container{
-    display: flex;
-    justify-content: center;
-    padding: 5rem 1rem;
-    background: linear-gradient(135deg, #e41196 10%, #227dfc 80%);
+  padding: 5rem 1rem;
+  background: linear-gradient(135deg, #e41196 10%, #227dfc 80%);
 }
 
 .login-container {
@@ -23,14 +14,14 @@ body {
   border-radius: 20px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   width: 90%;
-  max-width: 400px;
+  max-width: 600px;
   text-align: center;
   background-color: white;
 }
 
 /* Header */
 .login-container h2 {
-  font-size:2rem;
+  font-size: 2rem;
   color: var(--accent-color-f);
   font-weight: 700;
   margin-right: 10px;
@@ -73,7 +64,7 @@ body {
 }
 
 .login-container button:disabled {
-  background-color:  #d47bb3;
+  background-color: #d47bb3;
   cursor: not-allowed;
 }
 
@@ -92,7 +83,6 @@ body {
   color: var(--accent-color-f);
   font-weight: bold;
   text-decoration: none;
-
 }
 
 .register-link a:hover {
@@ -114,11 +104,11 @@ body {
   animation: pulse 0.6s infinite;
 }
 */
-.heart-login-title{
-    display: flex;
-    justify-content: center;
-    justify-items: center;
-    margin: 10px 0px;
+.heart-login-title {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  margin: 10px 0px;
 }
 
 /* Entry animation */
@@ -149,7 +139,6 @@ body {
   }
 }
 
-
 /* HEART RAIN CSS */
 .heart-rain {
   position: fixed;
@@ -169,12 +158,12 @@ body {
   color: white;
   opacity: 0.8;
   animation: fall linear infinite;
-  content: '♡';
-  filter: blur(var(--random-blur)); 
+  content: "♡";
+  filter: blur(var(--random-blur));
 }
 
 .heart::before {
-  content: '♡';
+  content: "♡";
 }
 
 /* Generate random positions & delays */

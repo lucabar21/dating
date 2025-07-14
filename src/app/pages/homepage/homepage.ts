@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './homepage.html',
-  styleUrl: './homepage.css'
+  styleUrl: './homepage.css',
 })
-export class Homepage {
-
-}
+export class Homepage {}
