@@ -13,8 +13,10 @@
       </div>
     </div>
     <div class="settings-btn">
-      <button class="edit">Modifica Profilo</button>
-      <div class="badge-account">{{user.accountType}}</div>
+      <button class="edit" routerLink="/dashboard/settings">
+        Modifica Profilo
+      </button>
+      <div class="badge-account">Piano: {{user.accountType}}</div>
     </div>
   </div>
   <div class="description">

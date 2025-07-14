@@ -1,1 +1,25 @@
-<p>messages works!</p>
+<div class="messages-container">
+  <nav class="messages-navbar">
+    <div class="user-card" *ngFor="let user of users">
+      <div class="user-avatar">
+        <img [src]="user.profilePicture" alt="{{ user.name }}'s avatar" />
+      </div>
+      <div class="user-info">
+        <h3>{{ user.name }}</h3>
+        <p>({{ user.age }})</p>
+      </div>
+    </div>
+  </nav>
+
+  <div class="messages-content"></div>
+  <div class="input-chat">
+    <form [formGroup]="chatForm" onsubmit="submitForm">
+      <textarea
+        formControlName="message"
+        placeholder="Scrivi un messaggio"
+        rows="3"
+      ></textarea>
+      <button type="submit">Invia</button>
+    </form>
+  </div>
+</div>
