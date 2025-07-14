@@ -1,1 +1,31 @@
-<p>login works!</p>
+<div class="heart-rain">
+  <span
+    class="heart"
+    *ngFor="let h of hearts"
+    [ngStyle]="generateStyle()"
+  ></span>
+</div>
+<div class="container1">
+  <div class="login-container">
+    <div class="heart-login-title">
+      <h2>Welcome Back!</h2>
+      <div class="heart-icon">💗</div>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <input type="text" formControlName="username" placeholder="👤 Username" />
+
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="🔒 Password"
+      />
+
+      <button type="submit" [disabled]="loginForm.invalid">Login</button>
+
+      <p class="register-link">
+        New here? <a routerLink="/register">Create an account</a>
+      </p>
+    </form>
+  </div>
+</div>

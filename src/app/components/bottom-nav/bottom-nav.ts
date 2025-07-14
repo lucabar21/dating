@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-homepage',
+  selector: 'app-bottom-nav',
   imports: [RouterModule],
-  templateUrl: './homepage.html',
-  styleUrl: './homepage.css',
+  templateUrl: './bottom-nav.html',
+  styleUrl: './bottom-nav.css',
 })
-export class Homepage {}
+export class BottomNav {}

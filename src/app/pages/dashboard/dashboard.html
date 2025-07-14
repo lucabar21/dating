@@ -1,2 +1,5 @@
- <router-outlet></router-outlet>
- 
+<div class="dashboard-container">
+  <app-sidebar *ngIf="!isMobile"></app-sidebar>
+  <router-outlet></router-outlet>
+  <app-bottom-nav *ngIf="isMobile"></app-bottom-nav>
+</div>
