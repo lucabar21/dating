@@ -1,1 +1,53 @@
-<p>register works!</p>
+<h1>REGISTRATI!</h1>
+
+<form [formGroup]="myform" (ngSubmit)="registra()" class="container mt-4">
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label for="nome" class="form-label">Nome</label>
+      <input type="text" id="nome" class="form-control" formControlName="nome" placeholder="Inserisci il tuo nome">
+    </div>
+
+    <div class="col-md-6">
+      <label for="cognome" class="form-label">Cognome</label>
+      <input type="text" id="cognome" class="form-control" formControlName="cognome" placeholder="Inserisci il tuo cognome">
+    </div>
+
+    <div class="col-md-6">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" id="email" class="form-control" formControlName="email" placeholder="email@esempio.com">
+    </div>
+
+    <div class="col-md-6">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" id="password" class="form-control" formControlName="password" placeholder="Inserisci la password">
+    </div>
+
+    <div class="col-md-6">
+      <label for="genere" class="form-label">Genere</label>
+      <select id="genere" class="form-select" formControlName="genere">
+        <option value="">Seleziona</option>
+        <option value="M">Maschio</option>
+        <option value="F">Femmina</option>
+        <option value="Altro">Altro</option>
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="dataNascita" class="form-label">Data di nascita</label>
+      <input type="date" id="dataNascita" class="form-control" formControlName="dataNascita">
+    </div>
+
+    <div class="col-12">
+      <label for="posizione" class="form-label">Posizione</label>
+      <input type="text" id="posizione" class="form-control" formControlName="posizione" placeholder="Città o coordinate GPS">
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-primary" [disabled]="myform.invalid">
+      Registrami
+    </button>
+  </div>
+</form>
