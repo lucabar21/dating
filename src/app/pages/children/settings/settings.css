@@ -1,8 +1,19 @@
+.wrapper{
+  width: 100%;
+}
+
+.ng-div{
+  width: 100%;
+  padding-left:10px;
+  padding-right: 10px;
+}
+
 .container-fluid{
   width: 100%!important;
 }
 
 .settings-card {
+  width: 100%;
   background-color: var(--bg-color);
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -17,6 +28,7 @@
 }
 
 .section-header {
+  width: 100%;
   background: linear-gradient(135deg, var(--accent-color-f), var(--accent-color-m));
   color: white;
   padding: 20px;
@@ -36,16 +48,16 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 15px;
+  padding: 10px;
   border: 1px solid transparent;
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
-.editable-field:hover {
+/*.editable-field:hover {
   background-color: var(--hover-bg, #f8f9fa);
   border-color: var(--border-color, #e2e8f0);
-}
+}*/
 
 .theme-dark .editable-field:hover {
   background-color: var(--hover-bg);
@@ -53,13 +65,14 @@
 
 .field-info {
   flex-grow: 1;
+  
 }
 
 .field-label {
   font-size: 1.3rem;
   font-weight: 500;
   color: var(--text-color);
-  margin-bottom: 3px;
+  /*margin-bottom: 3px;*/
 }
 
 .field-value {
@@ -460,7 +473,7 @@
 
 
 .tabs-wrapper {
-  width: 100%!important;
+  width: 100%;
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
@@ -468,7 +481,7 @@
 
 .tabs {
   display: flex;
-  width: 100%;
+  width: 99%;
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
@@ -481,6 +494,7 @@
 
 .tabs li {
   flex: 1 1 auto;
+  color: var(--accent-color-m);
   min-width: 120px;
   text-align: center;
   padding: 12px 20px;

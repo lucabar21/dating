@@ -1,5 +1,5 @@
-<div class="container-fluid">
-  <div class="row justify-content-center">
+<div class="wrapper">
+  <div class=" justify-content-center">
     <!-- Tabs Navigation -->
     <div class="tabs-wrapper">
       <ul class="tabs" role="tablist">
@@ -10,13 +10,13 @@
         <li [class.active]="selectedTab === 'actions'" (click)="selectedTab = 'actions'">⚠️ Azioni</li>
       </ul>
     </div>
-      <div *ngIf="selectedTab === 'account'">
+      <div *ngIf="selectedTab === 'account'" class="ng-div">
         <!-- Account Info Section -->
         <div class="settings-card mb-4">
           <div class="section-header">
             <h3 class="mb-0">👤 Informazioni Account</h3>
           </div>
-          <div class="p-4">
+          <div class="">
 
             <!-- Nome -->
             <div class="editable-field" [class.editing]="editingFields.nome">
@@ -27,7 +27,7 @@
                   #nomeInput>
               </div>
               <div class="field-actions">
-                <button class="edit-btn" *ngIf="!editingFields.nome" (click)="startEdit('nome')">
+                <button class="edit-btn" *ngIf="!editingFields.nome" (click)="startEdit('nome')">Modifica
                   <i class="fas fa-edit"></i>
                 </button>
                 <button class="save-btn" *ngIf="editingFields.nome" (click)="saveField('nome')">Salva</button>
@@ -44,14 +44,14 @@
                   *ngIf="editingFields.username" #usernameInput>
               </div>
               <div class="field-actions">
-                <button class="edit-btn" *ngIf="!editingFields.username" (click)="startEdit('username')">
+                <button class="edit-btn" *ngIf="!editingFields.username" (click)="startEdit('username')">Modifica
                   <i class="fas fa-edit"></i>
                 </button>
                 <button class="save-btn" *ngIf="editingFields.username" (click)="saveField('username')">Salva</button>
                 <button class="cancel-btn" *ngIf="editingFields.username"
                   (click)="cancelEdit('username')">Annulla</button>
               </div>
-            </div>
+            </div> 
 
             <!-- Bio -->
             <div class="editable-field" [class.editing]="editingFields.bio">
@@ -62,7 +62,7 @@
                   #bioInput></textarea>
               </div>
               <div class="field-actions">
-                <button class="edit-btn" *ngIf="!editingFields.bio" (click)="startEdit('bio')">
+                <button class="edit-btn" *ngIf="!editingFields.bio" (click)="startEdit('bio')">Modifica
                   <i class="fas fa-edit"></i>
                 </button>
                 <button class="save-btn" *ngIf="editingFields.bio" (click)="saveField('bio')">Salva</button>
@@ -104,7 +104,7 @@
         </div>
       </div>
 
-      <div *ngIf="selectedTab === 'matching'">
+      <div *ngIf="selectedTab === 'matching'" class="ng-div">
         <!-- Preferenze Matching Section -->
         <div class="settings-card mb-4">
           <div class="section-header">
@@ -178,7 +178,7 @@
         </div>
       </div>
 
-      <div *ngIf="selectedTab === 'theme'">
+      <div *ngIf="selectedTab === 'theme'" class="ng-div">
         <!-- Tema Section -->
         <div class="settings-card mb-4">
           <div class="section-header">
@@ -198,7 +198,7 @@
         </div>
       </div>
 
-      <div *ngIf="selectedTab === 'notifications'">
+      <div *ngIf="selectedTab === 'notifications'" class="ng-div">
         <!-- Notifiche Section -->
         <div class="settings-card mb-4">
           <div class="section-header">
@@ -218,7 +218,7 @@
         </div>
       </div>
 
-      <div *ngIf="selectedTab === 'actions'">
+      <div *ngIf="selectedTab === 'actions'" class="ng-div">
         <!-- Account Actions -->
         <div class="settings-card">
           <div class="section-header">

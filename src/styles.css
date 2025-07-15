@@ -28,7 +28,7 @@ body {
   height: 100vh;
 }
 
-app-profile {
+app-profile, app-settings {
   width: 100%;
   height: 100%;
 }
