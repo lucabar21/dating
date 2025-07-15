@@ -1,8 +1,8 @@
 .explore-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--accent-color-m) 0%, var(--accent-color-f) 100%);
   padding: 20px;
   box-sizing: border-box;
   margin: 0 auto;
@@ -291,7 +291,7 @@
 }
 
 .pass-btn {
-  background: #ef4444;
+  background: var(--text-color);
   color: white;
 }
 
@@ -300,7 +300,7 @@
 }
 
 .star-btn {
-  background: #f59e0b;
+  background: var(--accent-color-m);
   color: white;
 }
 
@@ -309,7 +309,7 @@
 }
 
 .like-btn {
-  background: #10b981;
+  background: var(--accent-color-f);
   color: white;
 }
 

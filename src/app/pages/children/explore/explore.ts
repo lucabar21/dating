@@ -65,7 +65,7 @@ export class Explore implements OnInit {
       nome: 'Jessie Hughes',
       eta: 25,
       bio: 'I love any movie where they spontaneously break out into song, can only eat three pieces of pizza (every time i go for four i regret it), and probably work too much!',
-      foto: 'https://images.unsplash.com/photo-1494790108755-2616c82e8c27?w=400&h=600&fit=crop',
+      foto: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=600&fit=crop',
       distanza: 4.2,
       interessi: ['musica', 'cinema', 'cucina', 'arte'],
       professione: 'Artist',
@@ -76,7 +76,7 @@ export class Explore implements OnInit {
       nome: 'Sarah Johnson',
       eta: 29,
       bio: 'Adventure seeker, coffee enthusiast, and dog lover. Always up for trying new restaurants!',
-      foto: 'https://images.unsplash.com/photo-1488207774890-902b62e54213?w=400&h=600&fit=crop',
+      foto: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=600&fit=crop',
       distanza: 7.8,
       interessi: ['viaggi', 'sport', 'cucina', 'natura'],
       professione: 'Marketing Manager',
@@ -107,12 +107,23 @@ export class Explore implements OnInit {
     {
       id: 'user6',
       nome: 'Lisa Chen',
-      eta: 24,
+      eta: 34,
       bio: 'Photographer and music lover. Life is too short for bad coffee and boring conversations.',
       foto: 'https://images.unsplash.com/photo-1506863530036-1efeddceb993?w=400&h=600&fit=crop',
       distanza: 9.3,
       interessi: ['fotografia', 'musica', 'arte', 'caffè'],
       professione: 'Photographer',
+      ultimaAttivita: 'Active 3 hours ago'
+    },
+    {
+      id: 'user7',
+      nome: 'Johanna Smith',
+      eta: 28,
+      bio: 'Tech enthusiast, foodie, and travel addict. I love exploring new cultures and cuisines.',
+      foto: 'https://images.unsplash.com/photo-1634595478068-17f36549dd5e?w=400&h=600&fit=crop',
+      distanza: 10.2,
+      interessi: ['tecnologia', 'cucina', 'viaggi', 'cultura'],
+      professione: 'Junior Developer',
       ultimaAttivita: 'Active 3 hours ago'
     }
   ];
@@ -173,7 +184,7 @@ export class Explore implements OnInit {
         this.currentUser.interessi.includes(interest)
       );
     }
-    
+
   getCurrentProfile(): UserProfile | null {
     if (this.currentProfileIndex >= this.matchingProfiles.length) {
       return null;
