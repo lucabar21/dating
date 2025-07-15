@@ -5,7 +5,6 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
   box-sizing: border-box;
-  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -46,8 +45,8 @@
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
   margin-bottom: 30px;
+  width: 100%;
 }
 
 /* Desktop and tablet layout */
@@ -250,7 +249,7 @@
 }
 
 .interest-tag.common {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--accent-color-m), var(--accent-color-f));
   color: white;
 }
 
@@ -404,12 +403,12 @@
 }
 
 .card-action-btn.pass {
-  background: #ef4444;
+ background-color: var(--text-color);
   color: white;
 }
 
 .card-action-btn.like {
-  background: #10b981;
+  background-color: var(--accent-color-f);
   color: white;
 }
 
