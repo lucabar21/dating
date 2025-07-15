@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ThemeServ } from '../../../services/theme-serv';
+import { UserServ } from '../../../services/user-serv';
 
 interface UserProfile {
   nome: string;
@@ -39,10 +40,9 @@ interface Interest {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './settings.html',
-  styleUrls: ['./settings.css']
+  styleUrls: ['./settings.css'],
 })
 export class Settings implements OnInit {
-
   selectedTab: string = 'account';
 
   @ViewChild('interestsModal') interestsModal!: ElementRef;
@@ -56,7 +56,7 @@ export class Settings implements OnInit {
     nome: 'Alex Rossi',
     username: 'alex.rossi@example.com',
     bio: 'Amo viaggiare e scoprire nuove culture...',
-    notificheAttive: true
+    notificheAttive: true,
   };
 
   // Preferenze di matching
@@ -64,56 +64,62 @@ export class Settings implements OnInit {
     generePreferito: 'FEMMINA',
     minEta: 22,
     maxEta: 35,
-    distanzaMax: 25
+    distanzaMax: 25,
   };
 
   // Dati per cambio password
   passwordData: PasswordData = {
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
   };
 
   // Stato editing dei campi
   editingFields: EditingFields = {
     nome: false,
     username: false,
-    bio: false
+    bio: false,
   };
 
   // Backup values per cancel edit
   private backupValues: any = {};
 
   // Interessi selezionati
-  selectedInterests: string[] = ['sport', 'musica', 'viaggi', 'cucina', 'lettura'];
+  selectedInterests: string[] = [
+    'sport',
+    'musica',
+    'viaggi',
+    'cucina',
+    'lettura',
+  ];
 
   // Termine di ricerca per filtro interessi
   searchTerm: string = '';
 
   // Mappa degli interessi per display
   interestDisplayMap: { [key: string]: string } = {
-    'sport': '⚽ Sport',
-    'musica': '🎵 Musica',
-    'viaggi': '✈️ Viaggi',
-    'cucina': '🍕 Cucina',
-    'lettura': '📚 Lettura',
-    'gaming': '🎮 Gaming',
-    'fotografia': '📸 Fotografia',
-    'cinema': '🎬 Cinema',
-    'yoga': '🧘 Yoga',
-    'vino': '🍷 Vino',
-    'palestra': '🏋️ Palestra',
-    'corsa': '🏃 Corsa',
-    'nuoto': '🏊 Nuoto',
-    'tennis': '🎾 Tennis',
-    'concerti': '🎤 Concerti',
-    'pittura': '🎨 Pittura',
-    'teatro': '🎭 Teatro',
-    'danza': '💃 Danza',
-    'backpacking': '🎒 Backpacking',
-    'camping': '⛺ Camping',
-    'escursionismo': '🥾 Escursionismo',
-    'montagna': '🏔️ Montagna'
+    sport: '⚽ Sport',
+    musica: '🎵 Musica',
+    viaggi: '✈️ Viaggi',
+    cucina: '🍕 Cucina',
+    lettura: '📚 Lettura',
+    gaming: '🎮 Gaming',
+    fotografia: '📸 Fotografia',
+    cinema: '🎬 Cinema',
+    yoga: '🧘 Yoga',
+    vino: '🍷 Vino',
+    palestra: '🏋️ Palestra',
+    corsa: '🏃 Corsa',
+    nuoto: '🏊 Nuoto',
+    tennis: '🎾 Tennis',
+    concerti: '🎤 Concerti',
+    pittura: '🎨 Pittura',
+    teatro: '🎭 Teatro',
+    danza: '💃 Danza',
+    backpacking: '🎒 Backpacking',
+    camping: '⛺ Camping',
+    escursionismo: '🥾 Escursionismo',
+    montagna: '🏔️ Montagna',
   };
 
   // Categorie di interessi
@@ -128,7 +134,7 @@ export class Settings implements OnInit {
       { key: 'yoga', label: '🧘 Yoga' },
       { key: 'ciclismo', label: '🚴 Ciclismo' },
       { key: 'arrampicata', label: '🧗 Arrampicata' },
-      { key: 'sci', label: '⛷️ Sci' }
+      { key: 'sci', label: '⛷️ Sci' },
     ],
     arte: [
       { key: 'musica', label: '🎵 Musica' },
@@ -138,7 +144,7 @@ export class Settings implements OnInit {
       { key: 'teatro', label: '🎭 Teatro' },
       { key: 'danza', label: '💃 Danza' },
       { key: 'disegno', label: '✏️ Disegno' },
-      { key: 'scultura', label: '🗿 Scultura' }
+      { key: 'scultura', label: '🗿 Scultura' },
     ],
     viaggi: [
       { key: 'viaggi', label: '✈️ Viaggi' },
@@ -148,7 +154,7 @@ export class Settings implements OnInit {
       { key: 'roadtrip', label: '🚗 Road Trip' },
       { key: 'spiaggia', label: '🏖️ Spiaggia' },
       { key: 'montagna', label: '🏔️ Montagna' },
-      { key: 'culture', label: '🏛️ Culture' }
+      { key: 'culture', label: '🏛️ Culture' },
     ],
     cibo: [
       { key: 'cucina', label: '🍕 Cucina' },
@@ -158,7 +164,7 @@ export class Settings implements OnInit {
       { key: 'ristoranti', label: '🍽️ Ristoranti' },
       { key: 'dolci', label: '🧁 Dolci' },
       { key: 'street-food', label: '🌮 Street Food' },
-      { key: 'vegano', label: '🥗 Vegano' }
+      { key: 'vegano', label: '🥗 Vegano' },
     ],
     tech: [
       { key: 'gaming', label: '🎮 Gaming' },
@@ -167,7 +173,7 @@ export class Settings implements OnInit {
       { key: 'ai', label: '🤖 AI' },
       { key: 'crypto', label: '₿ Crypto' },
       { key: 'gadget', label: '⌚ Gadget' },
-      { key: 'esports', label: '🏆 E-Sports' }
+      { key: 'esports', label: '🏆 E-Sports' },
     ],
     cultura: [
       { key: 'lettura', label: '📚 Lettura' },
@@ -176,7 +182,7 @@ export class Settings implements OnInit {
       { key: 'podcast', label: '🎧 Podcast' },
       { key: 'fumetti', label: '📖 Fumetti' },
       { key: 'poesia', label: '📝 Poesia' },
-      { key: 'documentari', label: '🎥 Documentari' }
+      { key: 'documentari', label: '🎥 Documentari' },
     ],
     natura: [
       { key: 'cani', label: '🐕 Cani' },
@@ -184,7 +190,7 @@ export class Settings implements OnInit {
       { key: 'animali', label: '🦋 Animali' },
       { key: 'giardinaggio', label: '🌱 Giardinaggio' },
       { key: 'ecologia', label: '🌍 Ecologia' },
-      { key: 'birdwatching', label: '🦅 Birdwatching' }
+      { key: 'birdwatching', label: '🦅 Birdwatching' },
     ],
     lifestyle: [
       { key: 'moda', label: '👗 Moda' },
@@ -192,7 +198,7 @@ export class Settings implements OnInit {
       { key: 'wellness', label: '🧘‍♀️ Wellness' },
       { key: 'meditazione', label: '🕯️ Meditazione' },
       { key: 'spiritualità', label: '🔮 Spiritualità' },
-      { key: 'shopping', label: '🛍️ Shopping' }
+      { key: 'shopping', label: '🛍️ Shopping' },
     ],
     business: [
       { key: 'imprenditoria', label: '💼 Imprenditoria' },
@@ -200,14 +206,15 @@ export class Settings implements OnInit {
       { key: 'investimenti', label: '📈 Investimenti' },
       { key: 'networking', label: '🤝 Networking' },
       { key: 'leadership', label: '👑 Leadership' },
-      { key: 'marketing', label: '📊 Marketing' }
-    ]
+      { key: 'marketing', label: '📊 Marketing' },
+    ],
   };
 
-  constructor(private themeService: ThemeServ) {}
+  constructor(private themeService: ThemeServ, private userServ: UserServ) {}
 
   ngOnInit(): void {
     this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
+    this.testConnection();
   }
 
   // METODO FUNZIONANTE - Toggle del tema
@@ -253,14 +260,20 @@ export class Settings implements OnInit {
   }
 
   updateAgeRange(): void {
-    console.log(`Fascia d'età aggiornata: ${this.preferences.minEta} - ${this.preferences.maxEta}`);
+    console.log(
+      `Fascia d'età aggiornata: ${this.preferences.minEta} - ${this.preferences.maxEta}`
+    );
 
     // TODO: Implementare salvataggio automatico
     // this.preferencesService.updateAgeRange(this.preferences.minEta, this.preferences.maxEta);
   }
 
   updateDistance(): void {
-    console.log('Distanza massima aggiornata:', this.preferences.distanzaMax, 'km');
+    console.log(
+      'Distanza massima aggiornata:',
+      this.preferences.distanzaMax,
+      'km'
+    );
 
     // TODO: Implementare salvataggio automatico
     // this.preferencesService.updateDistance(this.preferences.distanzaMax);
@@ -288,7 +301,9 @@ export class Settings implements OnInit {
 
   toggleInterest(interestKey: string): void {
     if (this.isInterestSelected(interestKey)) {
-      this.selectedInterests = this.selectedInterests.filter(i => i !== interestKey);
+      this.selectedInterests = this.selectedInterests.filter(
+        (i) => i !== interestKey
+      );
     } else {
       if (this.selectedInterests.length < 10) {
         this.selectedInterests.push(interestKey);
@@ -306,8 +321,11 @@ export class Settings implements OnInit {
   getCategoryDisplay(categoryKey: string): string {
     if (!this.searchTerm.trim()) return 'block';
 
-    const category = this.interestCategories[categoryKey as keyof typeof this.interestCategories];
-    const hasVisibleInterests = category.some(interest =>
+    const category =
+      this.interestCategories[
+        categoryKey as keyof typeof this.interestCategories
+      ];
+    const hasVisibleInterests = category.some((interest) =>
       interest.label.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
 
@@ -323,8 +341,8 @@ export class Settings implements OnInit {
   }
 
   getSelectedInterestsDisplay(): string[] {
-    return this.selectedInterests.map(key =>
-      this.interestDisplayMap[key] || key
+    return this.selectedInterests.map(
+      (key) => this.interestDisplayMap[key] || key
     );
   }
 
@@ -379,7 +397,7 @@ export class Settings implements OnInit {
     this.passwordData = {
       currentPassword: '',
       newPassword: '',
-      confirmPassword: ''
+      confirmPassword: '',
     };
 
     const modalElement = this.passwordModal.nativeElement;
@@ -389,7 +407,11 @@ export class Settings implements OnInit {
 
   // Metodo per disattivazione account
   deactivateAccount(): void {
-    if (confirm('⚠️ Sei sicuro di voler disattivare il tuo account? Questa azione non può essere annullata.')) {
+    if (
+      confirm(
+        '⚠️ Sei sicuro di voler disattivare il tuo account? Questa azione non può essere annullata.'
+      )
+    ) {
       console.log('Disattivando account...');
 
       // TODO: Implementare disattivazione account
@@ -397,5 +419,32 @@ export class Settings implements OnInit {
 
       alert('Account disattivato. Ci mancherai! 💔');
     }
+  }
+
+  // Metodo di test
+  testConnection() {
+    console.log('🔥 Testing connection to:', this.userServ['baseUrl']); // Mostra quale URL sta usando
+
+    this.userServ.getAllUsers().subscribe({
+      next: (users: any) => {
+        console.log('✅ SUCCESS! Users received:', users);
+        console.log('📊 Number of users:', users.length);
+
+        // Mostra dettagli di ogni utente
+        users.forEach((user: any, index: number) => {
+          console.log(`👤 User ${index + 1}:`, {
+            id: user.id,
+            nome: user.nome,
+            eta: user.eta,
+            citta: user.citta,
+          });
+        });
+      },
+      error: (error) => {
+        console.error('❌ ERROR:', error);
+        console.error('🔗 URL used:', this.userServ['baseUrl']);
+        console.error('🔗 Check if backend is running on localhost:8080');
+      },
+    });
   }
 }
