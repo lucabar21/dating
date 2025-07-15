@@ -1,77 +1,87 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  
-  private tokenKey = 'auth_token';
-  private roleKey = 'auth_role';
-  loggedIn = signal(false);
+  private apiUrl = environment.apiUrl;
+  public isLoggedIn = signal(!!localStorage.getItem('auth_token'));
 
-    public syncFromStorage() {
-    this.loggedIn.set(!!localStorage.getItem(this.tokenKey));
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
+  login(username: string, password: string) {
+    return this.http.post(`${this.apiUrl}login`, { username, password });
   }
+  // private tokenKey = 'auth_token';
 
-    constructor(private http: HttpClient, private router: Router) {
-    this.syncFromStorage();
-  }
+  // loggedIn = signal(false);
 
-    login(credentials: { username: string; password: string }) {
-      console.log('Sending credentials to backend:', credentials);
-      return this.http.post<any>('http://localhost:8080/api/v1/sessions/login', credentials);
-    }
+  // public syncFromStorage() {
+  //   this.loggedIn.set(!!localStorage.getItem(this.tokenKey));
+  // }
 
-  performLogin(credentials: { username: string; password: string }): void {
-    this.login(credentials).subscribe({
-      next: (response) => {
-        if (response.success) {
-          localStorage.setItem('auth_token', response.sessiondata.token);
-          localStorage.setItem('userId', response.sessiondata.userId); 
-          localStorage.setItem('username', response.sessiondata.username);   
+  // constructor(private http: HttpClient, private router: Router) {
+  //   this.syncFromStorage();
+  // }
 
-          this.syncFromStorage();
-          
-          this.router.navigate(['/dashboard']); 
+  // login(credentials: { username: string; password: string }) {
+  //   console.log('Sending credentials to backend:', credentials);
+  //   return this.http.post<any>(
+  //     'http://localhost:8080/api/v1/sessions/login',
+  //     credentials
+  //   );
+  // }
 
-        } else {
-          alert('Login failed: ' + response.message);
-        }
-      },
-      error: (err) => {
-        alert('Server error during login.');
-        console.error(err);
-      }
-    });
-  }
+  // performLogin(credentials: { username: string; password: string }): void {
+  //   this.login(credentials).subscribe({
+  //     next: (response) => {
+  //       if (response.success) {
+  //         localStorage.setItem('auth_token', response.sessiondata.token);
+  //         localStorage.setItem('userId', response.sessiondata.userId);
+  //         localStorage.setItem('username', response.sessiondata.username);
 
-  logout() {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem('userId');
-    localStorage.removeItem('username'); 
-    this.syncFromStorage();
-    this.router.navigate(['/login']);
-  }
+  //         this.syncFromStorage();
 
-  getLoggedUser(): any | null {
-  return { 
-    token: this.getToken(),
-    userId: this.getUserId(),
-    username: localStorage.getItem('username')
-  };
-}
-  isLoggedIn(): boolean {
-    return this.loggedIn();
-  }
-  
-  getUserId(): number {
-    return +localStorage.getItem('userId')!;
-  }
+  //         this.router.navigate(['/dashboard']);
+  //       } else {
+  //         alert('Login failed: ' + response.message);
+  //       }
+  //     },
+  //     error: (err) => {
+  //       alert('Server error during login.');
+  //       console.error(err);
+  //     },
+  //   });
+  // }
 
-  getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
-  }
+  // logout() {
+  //   localStorage.removeItem(this.tokenKey);
+  //   localStorage.removeItem('userId');
+  //   localStorage.removeItem('username');
+  //   this.syncFromStorage();
+  //   this.router.navigate(['/login']);
+  // }
 
+  // getLoggedUser(): any | null {
+  //   return {
+  //     token: this.getToken(),
+  //     userId: this.getUserId(),
+  //     username: localStorage.getItem('username'),
+  //   };
+  // }
+  // isLoggedIn(): boolean {
+  //   return this.loggedIn();
+  // }
+
+  // getUserId(): number {
+  //   return +localStorage.getItem('userId')!;
+  // }
+
+  // getToken(): string | null {
+  //   return localStorage.getItem(this.tokenKey);
+  // }
 }
