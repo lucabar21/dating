@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { CommonModule } from '@angular/common';
 
@@ -9,38 +15,48 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.css']
+  styleUrls: ['./login.css'],
 })
 export class Login {
-
   hearts = Array.from({ length: 30 });
 
-  loginForm: FormGroup;
+  loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
+  });
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-  }
+  constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(): void {
+    let email = this.loginForm.get('email')?.value ?? '';
+    let password = this.loginForm.get('password')?.value ?? '';
+
     if (this.loginForm.valid) {
-      this.authService.performLogin(this.loginForm.value);
+      this.authService.login(email, password).subscribe((response: any) => {
+        if (response && response.token) {
+          localStorage.setItem('auth_token', response.token);
+          this.authService.isLoggedIn.set(true);
+          this.router.navigate(['/dashboard']);
+        }
+      });
     }
   }
 
-  generateStyle() {
-  return {
-    '--random-left': Math.random().toString(),
-    '--random-speed': Math.random().toString(),
-    '--random-size': (Math.random() * 1.5 + 1).toString(),
-    '--random-blur': (Math.random() * 4).toFixed(1) + 'px'   // 0 – 3px
-  } as any;
-}
+  // onLogin(): void {
+  //   if (this.loginForm.valid) {
+  //     this.authService.performLogin(this.loginForm.value);
+  //   }
+  // }
 
+  generateStyle() {
+    return {
+      '--random-left': Math.random().toString(),
+      '--random-speed': Math.random().toString(),
+      '--random-size': (Math.random() * 1.5 + 1).toString(),
+      '--random-blur': (Math.random() * 4).toFixed(1) + 'px', // 0 – 3px
+    } as any;
+  }
 }

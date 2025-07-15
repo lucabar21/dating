@@ -16,35 +16,32 @@
   width: 90%;
   max-width: 600px;
   text-align: center;
-  background-color: white;
+  background-color: var(--bg-color);
 }
 
 /* Header */
-.login-container h2 {
-  font-size: 2rem;
-  color: var(--accent-color-f);
-  font-weight: 700;
-  margin-right: 10px;
+.login-container img {
+  width: 300px;
+  height: auto;
 }
 
 /* Inputs */
-.login-container input[type="text"],
+.login-container input[type="email"],
 .login-container input[type="password"] {
   width: 100%;
   padding: 14px;
   margin-bottom: 20px;
   border: none;
   border-radius: 10px;
-  background: #fbeff5;
+  background: #fff;
   box-shadow: inset 1px 1px 4px #e3c6d4;
-  font-size: 16px;
+  font-size: 24px;
   color: #333;
   outline: none;
   transition: all 0.2s ease;
 }
 
 .login-container input:focus {
-  background: #fff0f6;
   box-shadow: 0 0 0 2px #ff77aa44;
 }
 
@@ -54,8 +51,8 @@
   padding: 14px;
   background-color: var(--accent-color-f);
   --accent-color-m: #227dfc;
-  color: white;
-  font-size: 1.2rem;
+  color: var(--bg-color);
+  font-size: 24px;
   font-weight: bold;
   border: none;
   border-radius: 10px;
@@ -69,7 +66,7 @@
 }
 
 .login-container button:hover:not(:disabled) {
-  background-color: #f942b6;
+  background-color: var(--accent-color-f);
 }
 
 /* Register link */

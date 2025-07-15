@@ -67,4 +67,17 @@
       }
     }
   }
+
+  button {
+    margin-top: auto;
+    margin-bottom: 16px;
+    width: 90%;
+    padding: 8px 16px;
+    background-color: var(--accent-color-f);
+    color: var(--bg-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 24px;
+  }
 }

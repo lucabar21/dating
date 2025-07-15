@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-bottom-nav',
@@ -7,4 +8,10 @@ import { RouterModule } from '@angular/router';
   templateUrl: './bottom-nav.html',
   styleUrl: './bottom-nav.css',
 })
-export class BottomNav {}
+export class BottomNav {
+  private authService = inject(AuthService);
+
+  logout(): void {
+    this.authService.logout();
+  }
+}

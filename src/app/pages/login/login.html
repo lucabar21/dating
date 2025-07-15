@@ -8,23 +8,26 @@
 <div class="container1">
   <div class="login-container">
     <div class="heart-login-title">
-      <h2>Welcome Back!</h2>
-      <div class="heart-icon">💗</div>
+      <img src="/assets/image/lovvami_logo_dark.svg" alt="" />
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      <input type="text" formControlName="username" placeholder="👤 Username" />
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Inserisci la tua mail"
+      />
 
       <input
         type="password"
         formControlName="password"
-        placeholder="🔒 Password"
+        placeholder="Inserisci la tua password"
       />
 
-      <button type="submit" [disabled]="loginForm.invalid">Login</button>
+      <button type="submit" [disabled]="loginForm.invalid">Accedi</button>
 
       <p class="register-link">
-        New here? <a routerLink="/register">Create an account</a>
+        Non hai un account? <a routerLink="/register">Creane uno nuovo!</a>
       </p>
     </form>
   </div>
