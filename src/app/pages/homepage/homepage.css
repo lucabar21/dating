@@ -38,11 +38,10 @@
     height: auto;
     */
     min-height: auto;
-
   }
   .content {
     min-width: auto;
-     width: 100%;
+    width: 100%;
   }
 
   #Ebene_1 {
@@ -52,7 +51,6 @@
   .subtext {
     word-wrap: break-word;
     font-size: 20px;
-
   }
 
   button {
@@ -97,8 +95,8 @@
 }
 #slogan {
   margin: 20px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-style: italic;
+  font-size: 64px;
   font-weight: 530;
 }
 .subtext {

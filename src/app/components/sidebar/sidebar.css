@@ -6,7 +6,8 @@
   align-items: center;
   background-color: var(--text-color);
   color: var(--bg-color);
-  gap: 64px;
+  justify-content: space-between;
+  /* gap: 64px; */
 
   img {
     margin-top: 16px;
@@ -69,7 +70,7 @@
   }
 
   button {
-    margin-top: auto;
+    /* margin-top: auto; */
     margin-bottom: 16px;
     width: 90%;
     padding: 8px 16px;

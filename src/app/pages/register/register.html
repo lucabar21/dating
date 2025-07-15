@@ -1,59 +1,35 @@
+<div class="heart-rain">
+  <span
+    class="heart"
+    *ngFor="let h of hearts"
+    [ngStyle]="generateStyle()"
+  ></span>
+</div>
 <div class="container1">
   <div class="login-container">
+    <div class="heart-login-title">
+      <img src="/assets/image/lovvami_logo_dark.svg" alt="" />
+    </div>
 
-      <h1 class="c-label">REGISTRATI!</h1>
+    <form [formGroup]="registerForm" (ngSubmit)="registra()">
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Inserisci una mail"
+      />
 
-    <form [formGroup]="myform" (ngSubmit)="registra()" class=" mt-4">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label for="nome" class="c-label form-label ">Nome</label>
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Inserisci una password"
+      />
 
-          <input type="text" id="nome" class="c-label form-control" formControlName="nome" placeholder="Inserisci il tuo nome">
-        </div>
-
-        <div class="col-md-6">
-          <label for="cognome" class="c-label form-label">Cognome</label>
-          <input type="text" id="cognome" class="form-control" formControlName="cognome" placeholder="Inserisci il tuo cognome">
-        </div>
-
-        <div class="col-md-6">
-          <label for="email" class="c-label form-label">Email</label>
-          <input type="email" id="email" class="form-control" formControlName="email" placeholder="email@esempio.com">
-        </div>
-
-        <div class="col-md-6">
-          <label for="password" class="c-label form-label">Password</label>
-          <input type="password" id="password" class="form-control" formControlName="password" placeholder="Inserisci la password">
-        </div>
-
-        <div class="col-md-6">
-          <label for="genere" class="c-label form-label">Genere</label>
-          <select id="genere" class="form-select" formControlName="genere">
-            <option value="">Seleziona</option>
-            <option value="M">Maschio</option>
-            <option value="F">Femmina</option>
-            <option value="Altro">Altro</option>
-          </select>
-        </div>
-
-        <div class="col-md-6">
-          <label for="dataNascita" class="c-label form-label">Data di nascita</label>
-          <input type="date" id="dataNascita" class="form-control" formControlName="dataNascita">
-        </div>
-
-        <div class="col-12">
-          <label for="posizione" class="c-label form-label">Posizione</label>
-          <input type="text" id="posizione" class="form-control" formControlName="posizione" placeholder="Città o coordinate GPS">
-        </div>
-      </div>
-
-      <hr class="my-4">
-
-      <div class="d-grid gap-2">
-        <app-custom-button type="submit" (click)="registra()" ><!--[disabled]="myform.invalid"-->
-      Regstrati
-        </app-custom-button>
-      </div>
+      <button type="submit" [disabled]="registerForm.invalid">
+        Registrati
+      </button>
+      <p class="register-link">
+        Hai già un account? <a routerLink="/login">Accedi qui!</a>
+      </p>
     </form>
   </div>
 </div>

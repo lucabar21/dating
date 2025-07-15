@@ -1,11 +1,10 @@
 .container1 {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding: 5rem 1rem;
   background: linear-gradient(135deg, #e41196 10%, #227dfc 80%);
 }
 
@@ -14,21 +13,174 @@
   padding: 20px 30px;
   border-radius: 20px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  width: 100%;
+  width: 90%;
   max-width: 600px;
   text-align: center;
-  background-color: white;
-  
-
+  background-color: var(--bg-color);
 }
 
-@media (max-width: 768px) {
-  .login-container {
-    margin-top: 215px;
+/* Header */
+.login-container img {
+  width: 300px;
+  height: auto;
+}
+
+/* Inputs */
+.login-container input[type="email"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: inset 1px 1px 4px #e3c6d4;
+  font-size: 24px;
+  color: #333;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.login-container input:focus {
+  box-shadow: 0 0 0 2px #ff77aa44;
+}
+
+/* Button */
+.login-container button {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--accent-color-f);
+  --accent-color-m: #227dfc;
+  color: var(--bg-color);
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-container button:disabled {
+  background-color: #d47bb3;
+  cursor: not-allowed;
+}
+
+.login-container button:hover:not(:disabled) {
+  background-color: var(--accent-color-f);
+}
+
+/* Register link */
+.register-link {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #6b1c36;
+}
+
+.register-link a {
+  color: var(--accent-color-f);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+.heart-icon {
+  font-size: 2rem;
+  color: var(--accent-color-f); /* hot pink */
+  transition: transform 0.3s ease-in-out;
+  animation: popIn 0.6s ease-out;
+  display: inline-block;
+  cursor: pointer;
+  animation: pulse 0.8s infinite;
+}
+
+/* Pulse on hover 
+.heart-icon:hover {
+  animation: pulse 0.6s infinite;
+}
+*/
+.heart-login-title {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  margin: 10px 0px;
+}
+
+/* Entry animation */
+@keyframes popIn {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
-.c-label{
-    color: var(--bg-color);
+/* Heart pulse */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 
+/* HEART RAIN CSS */
+.heart-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.heart {
+  position: absolute;
+  top: -2%;
+  font-size: calc(2rem * var(--random-size));
+  color: white;
+  opacity: 0.8;
+  animation: fall linear infinite;
+  content: "♡";
+  filter: blur(var(--random-blur));
+}
+
+.heart::before {
+  content: "♡";
+}
+
+/* Generate random positions & delays */
+.heart:nth-child(odd) {
+  left: calc(100% * var(--random-left));
+  animation-duration: calc(5s + 5s * var(--random-speed));
+}
+
+.heart:nth-child(even) {
+  left: calc(100% * var(--random-left));
+  animation-duration: calc(4s + 4s * var(--random-speed));
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-10px) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) scale(1.2);
+    opacity: 0;
+  }
 }
