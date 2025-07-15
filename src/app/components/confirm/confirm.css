@@ -1,0 +1,64 @@
+.confirm-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.logo-lovvami {
+  font-size: 48px;
+  font-weight: 900;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+}
+
+.lov {
+  color: #e91e63;
+  position: relative;
+}
+
+.lov::after {
+  content: '♥';
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  font-size: 20px;
+  color: #e91e63;
+}
+
+.vami {
+  color: #1976d2;
+}
+
+.success-card, .error-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  max-width: 500px;
+  width: 100%;
+}
+
+.success-icon, .error-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+
+
+
+
+.login-button, .retry-button {
+  background-color:#e41196;
+  color:white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.login-button:hover, .retry-button:hover {
+  transform: translateY(-2px);
+}
