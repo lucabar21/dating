@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ThemeServ } from '../../../services/theme-serv';
+import { UserServ } from '../../../services/user-serv';
 
 interface UserProfile {
   nome: string;
@@ -42,6 +43,8 @@ interface Interest {
   styleUrls: ['./settings.css']
 })
 export class Settings implements OnInit {
+
+
 
   @ViewChild('interestsModal') interestsModal!: ElementRef;
   @ViewChild('passwordModal') passwordModal!: ElementRef;
@@ -202,10 +205,11 @@ export class Settings implements OnInit {
     ]
   };
 
-  constructor(private themeService: ThemeServ) {}
+  constructor(private themeService: ThemeServ,private userServ: UserServ) {}
 
   ngOnInit(): void {
     this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
+    this.testConnection();
   }
 
   // METODO FUNZIONANTE - Toggle del tema
@@ -396,4 +400,31 @@ export class Settings implements OnInit {
       alert('Account disattivato. Ci mancherai! 💔');
     }
   }
+
+  // Metodo di test
+testConnection() {
+  console.log('🔥 Testing connection to:', this.userServ['baseUrl']); // Mostra quale URL sta usando
+
+  this.userServ.getAllUsers().subscribe({
+    next: (users: any) => {
+      console.log('✅ SUCCESS! Users received:', users);
+      console.log('📊 Number of users:', users.length);
+
+      // Mostra dettagli di ogni utente
+      users.forEach((user: any, index: number) => {
+        console.log(`👤 User ${index + 1}:`, {
+          id: user.id,
+          nome: user.nome,
+          eta: user.eta,
+          citta: user.citta
+        });
+      });
+    },
+    error: (error) => {
+      console.error('❌ ERROR:', error);
+      console.error('🔗 URL used:', this.userServ['baseUrl']);
+      console.error('🔗 Check if backend is running on localhost:8080');
+    }
+  });
+}
 }

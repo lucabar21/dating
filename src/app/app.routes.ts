@@ -14,6 +14,11 @@ export const routes: Routes = [
       import('./pages/register/register').then((m) => m.Register),
   },
   {
+    path: 'confirm',
+    loadComponent: () =>
+      import('./components/confirm/confirm').then((m) => m.Confirm),
+  },
+  {
     path: 'dashboard',
     canActivate: [adminGuard],
     loadChildren: () =>

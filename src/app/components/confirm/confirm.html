@@ -1,0 +1,28 @@
+<div class="confirm-container">
+<img src="../../../assets/image/lovvami_logo_light.svg" alt="Logo" width="300" class="pb-5">
+
+
+  <!-- SUCCESS -->
+  <div *ngIf="isSuccess" class="success-card">
+    <div class="success-icon">✅</div>
+    <h1>Email Confermata!</h1>
+    <h3>Il tuo account è stato attivato con successo.</h3>
+    <h3>Ora puoi accedere e iniziare a conoscere nuove persone!</h3>
+
+    <button class="login-button py-2 px-3 rounded-pill fs-3" routerLink="/login">
+      Accedi Ora
+    </button>
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="isError" class="error-card">
+    <div class="error-icon">❌</div>
+    <h1>Ops! Qualcosa è andato storto</h1>
+    <p>{{ errorMessage }}</p>
+
+    <button class="retry-button" routerLink="/register">
+      🔄 Registrati di Nuovo
+    </button>
+  </div>
+
+</div>
