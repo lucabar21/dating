@@ -31,7 +31,8 @@ body {
 app-profile,
 app-matches,
 app-messages,
-app-explore {
+app-explore,
+app-settings {
   width: 100%;
   height: 100%;
 }

@@ -1,9 +1,25 @@
+.wrapper{
+  width: 100%;
+}
+
+.ng-div{
+  width: 100%;
+  padding-left:10px;
+  padding-right: 10px;
+}
+
+.container-fluid{
+  width: 100%!important;
+}
+
 .settings-card {
+  width: 100%;
   background-color: var(--bg-color);
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--border-color, #e2e8f0);
   transition: all 0.3s ease;
+
 }
 
 .theme-dark .settings-card {
@@ -12,6 +28,7 @@
 }
 
 .section-header {
+  width: 100%;
   background: linear-gradient(135deg, var(--accent-color-f), var(--accent-color-m));
   color: white;
   padding: 20px;
@@ -31,16 +48,16 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 15px;
+  padding: 10px;
   border: 1px solid transparent;
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
-.editable-field:hover {
+/*.editable-field:hover {
   background-color: var(--hover-bg, #f8f9fa);
   border-color: var(--border-color, #e2e8f0);
-}
+}*/
 
 .theme-dark .editable-field:hover {
   background-color: var(--hover-bg);
@@ -48,13 +65,14 @@
 
 .field-info {
   flex-grow: 1;
+  
 }
 
 .field-label {
   font-size: 1.3rem;
   font-weight: 500;
   color: var(--text-color);
-  margin-bottom: 3px;
+  /*margin-bottom: 3px;*/
 }
 
 .field-value {
@@ -453,6 +471,55 @@
   color: var(--text-color);
 }
 
+
+.tabs-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.tabs {
+  display: flex;
+  width: 99%;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px 8px 0 0;
+  box-sizing: border-box;
+}
+
+.tabs li {
+  flex: 1 1 auto;
+  color: var(--accent-color-m);
+  min-width: 120px;
+  text-align: center;
+  padding: 12px 20px;
+  background: #f9f9f9;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  white-space: nowrap;
+  border-radius: 8px 8px 0 0;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.tabs li:hover {
+  background-color: #eee;
+}
+
+.tabs li.active {
+  background-color: var(--accent-color-m);
+  color:  white;
+  font-weight: bold;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .editable-field {
@@ -482,6 +549,17 @@
     margin: 0;
     text-align: center;
   }
+
+
+  .tabs {
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none; /* Chrome */
+  }
+
 }
 
 /* Animation per migliorare UX */
