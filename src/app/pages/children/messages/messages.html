@@ -1,4 +1,5 @@
 <div class="messages-container">
+  <!-- Sezione header con chat avviate -->
   <nav class="messages-navbar">
     <div class="user-card" *ngFor="let user of users">
       <div class="user-avatar">
@@ -11,7 +12,17 @@
     </div>
   </nav>
 
-  <div class="messages-content"></div>
+  <!-- Sezione dove sarà presente la chat -->
+  <div class="messages-content">
+    <div class="profile-box-msg">
+      <p>Ciao, come stai?</p>
+    </div>
+    <div class="user-box-msg">Bene grazie e tu?</div>
+
+    <div class="profile-box-msg">Molto bene!</div>
+  </div>
+
+  <!-- Form di invio messaggi -->
   <div class="input-chat">
     <form [formGroup]="chatForm" onsubmit="submitForm">
       <textarea

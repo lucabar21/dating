@@ -8,10 +8,10 @@
   .messages-navbar {
     width: 100%;
     height: 100px;
-    background-color: var(--text-color);
     display: flex;
+    background-color: var(--text-color);
     gap: 16px;
-    padding: 16px;
+    padding: 32px;
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
@@ -23,9 +23,9 @@
       padding: 8px;
       box-sizing: border-box;
       cursor: pointer;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      border: 1px solid var(--text-color);
+      background-color: var(--text-color);
+      color: var(--bg-color);
+      border: 1px solid var(--bg-color);
       gap: 16px;
       border-radius: 8px;
 
@@ -54,6 +54,38 @@
   }
 
   .messages-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 64px;
+    align-items: center;
+
+    p {
+      margin: 0;
+    }
+
+    .profile-box-msg {
+      background-color: var(--accent-color-f);
+      color: var(--bg-color);
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 32px;
+      margin-left: auto;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .user-box-msg {
+      background-color: var(--accent-color-m);
+      color: var(--bg-color);
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 32px;
+      margin-right: auto;
+    }
   }
 
   .input-chat {
