@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 export class AuthService {
   
   private tokenKey = 'auth_token';
-  private roleKey = 'auth_role';
   loggedIn = signal(false);
 
     public syncFromStorage() {

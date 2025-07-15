@@ -43,6 +43,8 @@ interface Interest {
 })
 export class Settings implements OnInit {
 
+  selectedTab: string = 'account';
+
   @ViewChild('interestsModal') interestsModal!: ElementRef;
   @ViewChild('passwordModal') passwordModal!: ElementRef;
 
