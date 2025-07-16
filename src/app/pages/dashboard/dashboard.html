@@ -5,3 +5,8 @@
   </div>
   <app-bottom-nav *ngIf="isMobile"></app-bottom-nav>
 </div>
+<!-- Welcome Modal -->
+<app-welcome-modal
+  [showModal]="showWelcomeModal"
+  (closeModal)="onCloseWelcomeModal()">
+</app-welcome-modal>
