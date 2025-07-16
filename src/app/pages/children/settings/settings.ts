@@ -9,6 +9,7 @@ interface UserProfile {
   username: string;
   bio: string;
   notificheAttive: boolean;
+  profileImageUrl?: string;
 }
 
 interface Preferences {
@@ -48,8 +49,15 @@ export class Settings implements OnInit {
   @ViewChild('interestsModal') interestsModal!: ElementRef;
   @ViewChild('passwordModal') passwordModal!: ElementRef;
 
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
   // Variabili per tema
   isDarkTheme: boolean = false;
+
+  // Variabili per gestione immagine di profilo
+  isUploadingImage: boolean = false;
+  maxFileSize: number = 5 * 1024 * 1024; // 5MB
+  allowedImageTypes: string[] = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
   // Profilo utente
   userProfile: UserProfile = {
@@ -57,6 +65,7 @@ export class Settings implements OnInit {
     username: 'alex.rossi@example.com',
     bio: 'Amo viaggiare e scoprire nuove culture...',
     notificheAttive: true,
+    profileImageUrl: '',
   };
 
   // Preferenze di matching
@@ -211,6 +220,51 @@ export class Settings implements OnInit {
   };
 
   constructor(private themeService: ThemeServ, private userServ: UserServ) {}
+
+  /****************************************************************************************************/
+
+  triggerFileInput(): void {
+  if (this.fileInput) {
+    this.fileInput.nativeElement.click();
+  }
+}
+
+onImageError(event: Event): void {
+  const img = event.target as HTMLImageElement;
+  img.src = 'assets/default-avatar.png';
+}
+
+onFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input.files || input.files.length === 0) return;
+
+  const file = input.files[0];
+
+  // Verifica tipo immagine
+  if (!this.allowedImageTypes.includes(file.type)) {
+    alert('Formato immagine non supportato. Usa JPG, PNG, GIF o WEBP.');
+    return;
+  }
+
+  // Verifica dimensione
+  if (file.size > this.maxFileSize) {
+    alert('L\'immagine supera la dimensione massima di 5MB.');
+    return;
+  }
+
+  // Legge l'immagine come base64 per anteprima immediata
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.userProfile.profileImageUrl = reader.result as string;
+  };
+  reader.readAsDataURL(file);
+  
+  
+   setTimeout(() => {
+      alert('Immagine caricata: ' + this.userProfile.profileImageUrl);
+    }, 1000);
+}
+
 
   ngOnInit(): void {
     this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
