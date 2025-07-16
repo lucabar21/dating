@@ -129,6 +129,7 @@ export class Explore implements OnInit {
   ];
 
   matchingProfiles: UserProfile[] = [];
+  likedProfiles: UserProfile[] = [];
   currentProfileIndex = 0;
   isAnimating = false;
   noMoreProfiles = false;
@@ -179,11 +180,11 @@ export class Explore implements OnInit {
     return interestScore + distanceScore;
   }
 
-    getCommonInterests(profile: UserProfile): string[] {
-      return profile.interessi.filter(interest => 
-        this.currentUser.interessi.includes(interest)
-      );
-    }
+  getCommonInterests(profile: UserProfile): string[] {
+    return profile.interessi.filter(interest => 
+      this.currentUser.interessi.includes(interest)
+    );
+  }
 
   getCurrentProfile(): UserProfile | null {
     if (this.currentProfileIndex >= this.matchingProfiles.length) {
@@ -243,6 +244,17 @@ export class Explore implements OnInit {
       }
     }
   }
+
+  addToFavorites(profile: UserProfile) {
+    if (!this.likedProfiles.includes(profile)) {
+      this.likedProfiles.push(profile);
+      console.log('Added to favorites:', profile.nome);
+      this.swipeRight(profile);  
+    } else {
+      console.log('Already in favorites.');
+    }
+  }
+
 
   animateSwipe(direction: 'left' | 'right') {
     this.isAnimating = true;
