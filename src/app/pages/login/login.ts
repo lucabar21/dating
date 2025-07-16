@@ -31,19 +31,21 @@ export class Login {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(): void {
-    let email = this.loginForm.get('email')?.value ?? '';
-    let password = this.loginForm.get('password')?.value ?? '';
+  let email = this.loginForm.get('email')?.value ?? '';
+  let password = this.loginForm.get('password')?.value ?? '';
 
-    if (this.loginForm.valid) {
-      this.authService.login(email, password).subscribe((response: any) => {
-        if (response && response.token) {
-          localStorage.setItem('auth_token', response.token);
-          this.authService.isLoggedIn.set(true);
-          this.router.navigate(['/dashboard']);
-        }
-      });
-    }
+  if (this.loginForm.valid) {
+    this.authService.login(email, password).subscribe((response: any) => {
+      if (response && response.token) {
+        localStorage.setItem('auth_token', response.token);
+        // 🔥 AGGIUNGI QUESTO
+        localStorage.setItem('primo_accesso', response.primoAccesso.toString());
+        this.authService.isLoggedIn.set(true);
+        this.router.navigate(['/dashboard']);
+      }
+    });
   }
+}
 
   // onLogin(): void {
   //   if (this.loginForm.valid) {
