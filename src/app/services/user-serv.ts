@@ -13,14 +13,12 @@ export interface UserData {
   citta: string;
   eta: number;
   accountType?: 'GOLD' | 'PLATINUM' | 'PREMIUM' | 'STANDARD'; // Tipi specifici
-
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserServ {
-
   private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {
@@ -31,27 +29,27 @@ export class UserServ {
    * Ottiene il profilo dell'utente corrente
    */
   getCurrentUser(): Observable<UserData> {
-    return this.http.get<UserData>(`${this.baseUrl}/utenti/me`);
+    return this.http.get<UserData>(`${this.baseUrl}utenti/me`);
   }
 
   /**
    * Aggiorna il profilo dell'utente
    */
   updateUser(userData: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/utenti/me`, userData);
+    return this.http.put(`${this.baseUrl}utenti/me`, userData);
   }
 
   /**
    * Ottiene tutti gli utenti (per test/admin)
    */
   getAllUsers(): Observable<UserData[]> {
-    return this.http.get<UserData[]>(`${this.baseUrl}/utenti`);
+    return this.http.get<UserData[]>(`${this.baseUrl}utenti`);
   }
 
   /**
    * Ottiene il profilo pubblico di un utente
    */
   getUserProfile(userId: number): Observable<UserData> {
-    return this.http.get<UserData>(`${this.baseUrl}/utenti/${userId}`);
+    return this.http.get<UserData>(`${this.baseUrl}utenti/${userId}`);
   }
 }
