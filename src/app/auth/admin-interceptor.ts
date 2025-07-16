@@ -9,7 +9,7 @@ export const adminInterceptor: HttpInterceptorFn = (req, next) => {
     });
     return next(cloned);
   } else {
-    console.log('Nessun token trovato');
   }
+
   return next(req);
 };

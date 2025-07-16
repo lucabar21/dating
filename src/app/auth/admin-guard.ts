@@ -8,7 +8,6 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const token = localStorage.getItem('auth_token');
 
   if (!token) {
-    console.log('Accesso negato!)');
     router.navigate(['/login']);
     return false;
   }

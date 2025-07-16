@@ -5,7 +5,11 @@
   justify-content: center;
   align-items: center;
   padding: 5rem 1rem;
-  background: linear-gradient(135deg, #e41196 10%, #227dfc 80%);
+  background: linear-gradient(
+    135deg,
+    var(--accent-color-f) 10%,
+    var(--accent-color-m) 80%
+  );
 }
 
 .login-container {
@@ -50,7 +54,7 @@
   width: 100%;
   padding: 14px;
   background-color: var(--accent-color-f);
-  --accent-color-m: #227dfc;
+  --accent-color-m: var(--accent-color-m);
   color: var(--bg-color);
   font-size: 24px;
   font-weight: bold;
@@ -73,7 +77,7 @@
 .register-link {
   margin-top: 20px;
   font-size: 1.2rem;
-  color: #6b1c36;
+  color: var(--text-color);
 }
 
 .register-link a {
