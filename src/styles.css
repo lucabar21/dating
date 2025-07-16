@@ -12,6 +12,11 @@ html,
   --text-color: #03254e;
   --accent-color-f: #e41196;
   --accent-color-m: #227dfc;
+  --accent-color-dim-f: #bc4f94;
+  --accent-color-dim-m: #5f8dcc;
+  --accent-color-bright-f: #ff44bb;
+  --accent-color-bright-m: #549bff;
+  --text-color-active: #172392;
 }
 
 .theme-dark {

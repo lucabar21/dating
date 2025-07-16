@@ -64,7 +64,7 @@ export class Explore implements OnInit {
       id: 'user2',
       nome: 'Jessie Hughes',
       eta: 25,
-      bio: 'I love any movie where they spontaneously break out into song, can only eat three pieces of pizza (every time i go for four i regret it), and probably work too much!',
+      bio: 'I love any movie where they spontaneously break out into song, can only eat three pieces of pizza, and probably work too much!',
       foto: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=600&fit=crop',
       distanza: 4.2,
       interessi: ['musica', 'cinema', 'cucina', 'arte'],

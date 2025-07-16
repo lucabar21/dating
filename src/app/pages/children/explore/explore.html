@@ -1,6 +1,6 @@
 <div class="explore-container">
   <div class="header">
-    <h1>Explore</h1>
+    <div><h1>Explore</h1></div>
     <div class="filter-icon">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
@@ -53,16 +53,13 @@
           </svg>
           {{ profile.distanza }} km away
         </div>
-        <p class="bio">{{ profile.bio }}</p>
+        <div class="bio">{{ profile.bio }}</div>
         <div class="interests">
-          <span *ngFor="let interest of getCommonInterests(profile)" class="interest-tag common">
-            {{ interest }}
-          </span>
-          <span *ngFor="let interest of profile.interessi" 
+          <div *ngFor="let interest of profile.interessi" 
                 class="interest-tag" 
                 [class.common]="getCommonInterests(profile).includes(interest)">
             {{ interest }}
-          </span>
+        </div>
         </div>
       </div>
       
