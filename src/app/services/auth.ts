@@ -15,11 +15,11 @@ export class AuthService {
   private router = inject(Router);
 
   login(email: string, password: string) {
-    return this.http.post(`${this.apiUrl}/login`, { email, password });
+    return this.http.post(`${this.apiUrl}/auth/login`, { email, password });
   }
 
   register(email: string, password: string) {
-    return this.http.post(`${this.apiUrl}/register`, { email, password });
+    return this.http.post(`${this.apiUrl}/auth/register`, { email, password });
   }
 
   logout() {
