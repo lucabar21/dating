@@ -52,4 +52,8 @@ export class UserServ {
   getUserProfile(userId: number): Observable<UserData> {
     return this.http.get<UserData>(`${this.baseUrl}utenti/${userId}`);
   }
+
+  getDiscoverableUsers() {
+    return this.http.get<UserData>(`${this.baseUrl}utenti/discover`);
+  }
 }
