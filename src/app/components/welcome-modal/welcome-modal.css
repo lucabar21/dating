@@ -51,7 +51,6 @@
   font-size: 48px;
   font-weight: bold;
   color: var(--accent-color-f);
-  margin: 0;
   line-height: 1.2;
 }
 
@@ -64,13 +63,9 @@
   font-size: 28px;
   color: var(--text-color);
   line-height: 1.4;
-  margin-bottom: 24px;
 }
 
-.welcome-message strong {
-  color: var(--accent-color-f);
-  font-weight: bold;
-}
+
 
 .edit {
   background-color: var(--accent-color-f);
@@ -81,7 +76,6 @@
   font-size: 32px;
   min-width: 200px;
   cursor: pointer;
-  margin: 16px 0;
   transition: all 0.3s ease;
   font-family: "Dongle", sans-serif;
   font-weight: bold;
@@ -172,5 +166,10 @@
     font-size: 20px;
   }
 
+  .edit:hover {
+  background-color: var(--accent-color-m);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(228, 17, 150, 0.3);
+}
 
 }
