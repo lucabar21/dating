@@ -70,6 +70,7 @@
         width: 100%;
         height: 550px;
         margin-bottom: 0;
+        height: 80vh;
     }
 
     .profile-card.next-card {
@@ -107,11 +108,8 @@
     .profile-card:hover {
         transform: scale(1.02);
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        opacity: 1;
     }
-}
-
-
-@media (min-width: 769px) {
 
     .profile-card.next-card,
     .profile-card.current-card {
@@ -119,7 +117,13 @@
         opacity: 0.9;
         z-index: auto;
     }
+
+    .card-actions {
+        display: flex;
+        opacity: 1;
+    }
 }
+
 
 @media (max-width: 768px) {
     .profile-card.next-card {
@@ -286,6 +290,7 @@
     justify-content: center;
     gap: 20px;
     padding: 0 20px;
+    z-index: 10;
 }
 
 /* Desktop action buttons */
@@ -502,7 +507,7 @@
     }
 
     .profile-card {
-        height: 500px;
+        height: 80vh;
     }
 
     .profile-info {
