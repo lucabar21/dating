@@ -143,6 +143,52 @@
             </div>
           </div>
 
+          <!-- 🔥 GENERE - EDITABILE come Nome/Bio -->
+          <div class="editable-field" [class.editing]="editingFields.genere">
+            <div class="field-info">
+              <div class="field-label">Genere</div>
+              <div class="field-value" *ngIf="!editingFields.genere">
+                {{ userProfile.genere || 'Non specificato' }}
+              </div>
+              <select
+                class="field-input"
+                *ngIf="editingFields.genere"
+                [(ngModel)]="userProfile.genere"
+                #genereInput
+              >
+                <option value="">Seleziona</option>
+                <option value="MASCHIO">MASCHIO</option>
+                <option value="FEMMINA">FEMMINA</option>
+              </select>
+            </div>
+            <div class="field-actions">
+              <button
+                class="edit-btn"
+                *ngIf="!editingFields.genere"
+                (click)="startEdit('genere')"
+                [disabled]="saving"
+              >
+                Modifica <i class="fas fa-edit"></i>
+              </button>
+              <button
+                class="save-btn"
+                *ngIf="editingFields.genere"
+                (click)="saveField('genere')"
+                [disabled]="saving"
+              >
+                {{ saving ? 'Salvando...' : 'Salva' }}
+              </button>
+              <button
+                class="cancel-btn"
+                *ngIf="editingFields.genere"
+                (click)="cancelEdit('genere')"
+                [disabled]="saving"
+              >
+                Annulla
+              </button>
+            </div>
+          </div>
+
           <!-- 🔥 BIO - CON DATI REALI -->
           <div class="editable-field" [class.editing]="editingFields.bio">
             <div class="field-info">

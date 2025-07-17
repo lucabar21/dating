@@ -9,6 +9,7 @@ interface UserProfile {
   id: number;
   nome: string;
   username: string; // Email dell'utente
+  genere: 'MASCHIO' | 'FEMMINA' | null; // Genere dell'utente
   bio: string;
   interessi: string; // Stringa dal backend (da convertire in array)
   fotoProfilo: string;
@@ -51,6 +52,7 @@ interface EditingFields {
   bio: boolean;
   citta: boolean;
   dataNascita: boolean,
+  genere: boolean;
 }
 
 interface Interest {
@@ -90,6 +92,7 @@ export class Settings implements OnInit {
     id: 0,
     nome: '',
     username: '',
+    genere: null,
     bio: '',
     interessi: '',
     fotoProfilo: '',
@@ -122,6 +125,7 @@ export class Settings implements OnInit {
     bio: false,
     citta: false,
     dataNascita: false,
+    genere: false,
   };
 
   // Backup values per cancel edit
@@ -278,6 +282,7 @@ export class Settings implements OnInit {
           id: response.id,
           nome: response.nome || '',
           username: response.email || 'cinque.sabrina@gmail.com', // Usa email come username
+          genere: response.genere || null, // Aggiungi genere
           bio: response.bio || '',
           interessi: response.interessi || '',
           fotoProfilo: response.fotoProfilo || '',
@@ -361,7 +366,7 @@ private formatDateForInput(dateString: string): string {
       interessi: this.selectedInterests.join(', '), // Converti array in stringa
       città: this.userProfile.citta,
       dataNascita: this.formatDateForInput(this.userProfile.dataNascita), // Formatta data per input date
-      genere: 'FEMMINA', // TODO: gestire genere reale
+      genere: this.userProfile.genere || '', // Aggiungi genere
       fotoProfilo: this.userProfile.fotoProfilo
     };
   }
