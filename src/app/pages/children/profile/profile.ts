@@ -72,15 +72,15 @@ export class Profile implements OnInit {
 
     this.userServ.getCurrentUser().subscribe({
       next: (response: any) => {
-        console.log('✅ Profilo utente ricevuto:', response);
+        // console.log('✅ Profilo utente ricevuto:', response);
         this.user = response;
         this.loading = false;
       },
       error: (error) => {
-        console.error('❌ Errore nel caricamento profilo:', error);
+        console.error('Errore nel caricamento profilo:', error);
         this.error = 'Errore nel caricamento del profilo. Riprova più tardi.';
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -95,8 +95,8 @@ export class Profile implements OnInit {
     // Splitta per virgola e pulisce gli spazi
     return this.user.interessi
       .split(',')
-      .map(interest => interest.trim())
-      .filter(interest => interest.length > 0);
+      .map((interest) => interest.trim())
+      .filter((interest) => interest.length > 0);
   }
 
   /**
@@ -105,7 +105,7 @@ export class Profile implements OnInit {
   getDisplayInterests(): string[] {
     const interests = this.getInterestsArray();
 
-    return interests.map(interest => {
+    return interests.map((interest) => {
       const lowerInterest = interest.toLowerCase();
       // Usa la mappa per il display, altrimenti usa il valore originale
       return this.interestDisplayMap[lowerInterest] || `🔸 ${interest}`;

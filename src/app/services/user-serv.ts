@@ -21,9 +21,7 @@ export interface UserData {
 export class UserServ {
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {
-    console.log('UserServ initialized with baseUrl:', this.baseUrl);
-  }
+  constructor(private http: HttpClient) {}
 
   /**
    * Ottiene il profilo dell'utente corrente

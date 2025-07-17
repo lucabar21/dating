@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  signal,
+  ɵsetAllowDuplicateNgModuleIdsForTest,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { MatchServ } from '../../../services/matchServ';
 
 @Component({
   selector: 'app-matches',
@@ -8,7 +15,11 @@ import { RouterModule } from '@angular/router';
   templateUrl: './matches.html',
   styleUrl: './matches.css',
 })
-export class Matches {
+export class Matches implements OnInit {
+  private matchService = inject(MatchServ);
+
+  matches = signal<any[]>([]);
+  /*
   userProfiles = [
     {
       id: 101,
@@ -51,4 +62,35 @@ export class Matches {
       location: 'Firenze',
     },
   ];
+  */
+
+  getMatches() {
+    this.matchService.getMatches().subscribe((data: any[]) => {
+      console.log('Matches fetched:', data);
+      this.matches.set(data);
+    });
+  }
+
+  ngOnInit() {
+    this.getMatches();
+  }
+
+  // Metodo per convertire il timestamp del match in quanto tempo è passato da quando è stato creato
+  timeAgo(timestamp: string): string {
+    const now = new Date().getTime();
+    const seconds = Math.floor((now - new Date(timestamp).getTime()) / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+      return `${days} giorni fa`;
+    } else if (hours > 0) {
+      return `${hours} ore fa`;
+    } else if (minutes > 0) {
+      return `${minutes} minuti fa`;
+    } else {
+      return `${seconds} secondi fa`;
+    }
+  }
 }

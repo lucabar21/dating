@@ -1,20 +1,7 @@
 <div class="explore-container">
-  <div class="profile-card" *ngFor="let user of discoverableUsers()">
-    <div class="profile-info">
-      <h2>{{user.nome}}</h2>
-      <p>{{user.eta}}</p>
-      <p>{{user.bio}}</p>
-    </div>
-    <div class="btns-container">
-      <button class="like" (click)="swipe('LIKE',user.id)">Like</button>
-      <button
-        *ngIf="isPremium()"
-        class="superlike"
-        (click)="swipe('SUPER_LIKE', user.id)"
-      >
-        SuperLike
-      </button>
-      <button class="pass" (click)="swipe('PASS', user.id)">Dislike</button>
-    </div>
-  </div>
+  <app-explore-card
+    *ngIf="CurrentUser"
+    [discoverableUser]="CurrentUser"
+    (swipeEvent)="handleSwipe($event, CurrentUser.id)"
+  ></app-explore-card>
 </div>

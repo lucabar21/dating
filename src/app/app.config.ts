@@ -6,7 +6,11 @@ import {
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 import { adminInterceptor } from './auth/admin-interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -14,6 +18,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([adminInterceptor])),
+    provideHttpClient(withInterceptors([adminInterceptor]), withFetch()),
   ],
 };
