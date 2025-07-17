@@ -9,9 +9,7 @@
   <div class="error-icon">⚠️</div>
   <h2 class="error-title">Errore nel caricamento</h2>
   <p class="error-message">{{ error }}</p>
-  <button class="retry-btn" (click)="retryLoadProfile()">
-    🔄 Riprova
-  </button>
+  <button class="retry-btn" (click)="retryLoadProfile()">🔄 Riprova</button>
 </div>
 
 <!-- 🔥 MAIN CONTENT (SOLO QUANDO CARICATO) -->
@@ -20,11 +18,36 @@
     <!-- Tabs Navigation -->
     <div class="tabs-wrapper">
       <ul class="tabs" role="tablist">
-        <li [class.active]="selectedTab === 'account'" (click)="selectedTab = 'account'">👤 Account</li>
-        <li [class.active]="selectedTab === 'matching'" (click)="selectedTab = 'matching'">💕 Matching</li>
-        <li [class.active]="selectedTab === 'theme'" (click)="selectedTab = 'theme'">🎨 Tema</li>
-        <li [class.active]="selectedTab === 'notifications'" (click)="selectedTab = 'notifications'">🔔 Notifiche</li>
-        <li [class.active]="selectedTab === 'actions'" (click)="selectedTab = 'actions'">⚠️ Azioni</li>
+        <li
+          [class.active]="selectedTab === 'account'"
+          (click)="selectedTab = 'account'"
+        >
+          👤 Account
+        </li>
+        <li
+          [class.active]="selectedTab === 'matching'"
+          (click)="selectedTab = 'matching'"
+        >
+          💕 Matching
+        </li>
+        <li
+          [class.active]="selectedTab === 'theme'"
+          (click)="selectedTab = 'theme'"
+        >
+          🎨 Tema
+        </li>
+        <li
+          [class.active]="selectedTab === 'notifications'"
+          (click)="selectedTab = 'notifications'"
+        >
+          🔔 Notifiche
+        </li>
+        <li
+          [class.active]="selectedTab === 'actions'"
+          (click)="selectedTab = 'actions'"
+        >
+          ⚠️ Azioni
+        </li>
       </ul>
     </div>
 
@@ -36,28 +59,33 @@
           <h3 class="mb-0">👤 Informazioni Account</h3>
         </div>
         <div class="">
-
           <!-- 🔥 PROFILE IMAGE - CON DATI REALI -->
           <div class="profile-image-wrapper" (click)="triggerFileInput()">
-            <img *ngIf="userProfile.profileImageUrl; else placeholder"
-                [src]="userProfile.profileImageUrl"
-                alt="Foto profilo"
-                class="profile-image"
-                (error)="onImageError($event)" />
+            <img
+              *ngIf="userProfile.profileImageUrl; else placeholder"
+              [src]="userProfile.profileImageUrl"
+              alt="Foto profilo"
+              class="profile-image"
+              (error)="onImageError($event)"
+            />
 
             <ng-template #placeholder>
               <div class="profile-placeholder-text">
-                Aggiungi / Modifica<br>Immagine Profilo
+                Aggiungi / Modifica<br />Immagine Profilo
               </div>
             </ng-template>
 
-            <div *ngIf="userProfile.profileImageUrl" class="edit-label">Modifica</div>
+            <div *ngIf="userProfile.profileImageUrl" class="edit-label">
+              Modifica
+            </div>
 
-            <input type="file"
-                  #fileInput
-                  (change)="onFileSelected($event)"
-                  accept="image/*"
-                  hidden />
+            <input
+              type="file"
+              #fileInput
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              hidden
+            />
           </div>
 
           <!-- 🔥 NOME - CON DATI REALI -->
@@ -67,30 +95,38 @@
               <div class="field-value" *ngIf="!editingFields.nome">
                 {{ userProfile.nome || 'Nome non inserito' }}
               </div>
-              <input type="text"
-                     class="field-input"
-                     [(ngModel)]="userProfile.nome"
-                     *ngIf="editingFields.nome"
-                     placeholder="Inserisci il tuo nome"
-                     #nomeInput>
+              <input
+                type="text"
+                class="field-input"
+                [(ngModel)]="userProfile.nome"
+                *ngIf="editingFields.nome"
+                placeholder="Inserisci il tuo nome"
+                #nomeInput
+              />
             </div>
             <div class="field-actions">
-              <button class="edit-btn"
-                      *ngIf="!editingFields.nome"
-                      (click)="startEdit('nome')"
-                      [disabled]="saving">
+              <button
+                class="edit-btn"
+                *ngIf="!editingFields.nome"
+                (click)="startEdit('nome')"
+                [disabled]="saving"
+              >
                 Modifica <i class="fas fa-edit"></i>
               </button>
-              <button class="save-btn"
-                      *ngIf="editingFields.nome"
-                      (click)="saveField('nome')"
-                      [disabled]="saving">
+              <button
+                class="save-btn"
+                *ngIf="editingFields.nome"
+                (click)="saveField('nome')"
+                [disabled]="saving"
+              >
                 {{ saving ? 'Salvando...' : 'Salva' }}
               </button>
-              <button class="cancel-btn"
-                      *ngIf="editingFields.nome"
-                      (click)="cancelEdit('nome')"
-                      [disabled]="saving">
+              <button
+                class="cancel-btn"
+                *ngIf="editingFields.nome"
+                (click)="cancelEdit('nome')"
+                [disabled]="saving"
+              >
                 Annulla
               </button>
             </div>
@@ -114,30 +150,38 @@
               <div class="field-value" *ngIf="!editingFields.bio">
                 {{ userProfile.bio || 'Raccontaci qualcosa di te...' }}
               </div>
-              <textarea class="field-input"
-                        rows="3"
-                        [(ngModel)]="userProfile.bio"
-                        *ngIf="editingFields.bio"
-                        placeholder="Raccontaci qualcosa di te..."
-                        #bioInput></textarea>
+              <textarea
+                class="field-input"
+                rows="3"
+                [(ngModel)]="userProfile.bio"
+                *ngIf="editingFields.bio"
+                placeholder="Raccontaci qualcosa di te..."
+                #bioInput
+              ></textarea>
             </div>
             <div class="field-actions">
-              <button class="edit-btn"
-                      *ngIf="!editingFields.bio"
-                      (click)="startEdit('bio')"
-                      [disabled]="saving">
+              <button
+                class="edit-btn"
+                *ngIf="!editingFields.bio"
+                (click)="startEdit('bio')"
+                [disabled]="saving"
+              >
                 Modifica <i class="fas fa-edit"></i>
               </button>
-              <button class="save-btn"
-                      *ngIf="editingFields.bio"
-                      (click)="saveField('bio')"
-                      [disabled]="saving">
+              <button
+                class="save-btn"
+                *ngIf="editingFields.bio"
+                (click)="saveField('bio')"
+                [disabled]="saving"
+              >
                 {{ saving ? 'Salvando...' : 'Salva' }}
               </button>
-              <button class="cancel-btn"
-                      *ngIf="editingFields.bio"
-                      (click)="cancelEdit('bio')"
-                      [disabled]="saving">
+              <button
+                class="cancel-btn"
+                *ngIf="editingFields.bio"
+                (click)="cancelEdit('bio')"
+                [disabled]="saving"
+              >
                 Annulla
               </button>
             </div>
@@ -149,42 +193,122 @@
               <div class="field-label">Interessi</div>
               <div class="field-value">I tuoi interessi e passioni</div>
               <div class="interests-display">
-                <span class="selected-interest" *ngFor="let interest of getSelectedInterestsDisplay()">
+                <span
+                  class="selected-interest"
+                  *ngFor="let interest of getSelectedInterestsDisplay()"
+                >
                   {{ interest }}
                 </span>
-                <span *ngIf="selectedInterests.length === 0" class="no-interests-text">
+                <span
+                  *ngIf="selectedInterests.length === 0"
+                  class="no-interests-text"
+                >
                   Nessun interesse selezionato
                 </span>
               </div>
             </div>
             <div class="field-actions">
-              <button class="password-btn interests-btn"
-                      (click)="openInterestsModal()"
-                      [disabled]="saving">
+              <button
+                class="password-btn interests-btn"
+                (click)="openInterestsModal()"
+                [disabled]="saving"
+              >
                 <i class="fas fa-tags"></i> Modifica Interessi
               </button>
             </div>
           </div>
 
-          <!-- 🔥 CITTÀ - VISUALIZZAZIONE -->
-          <div class="editable-field">
+          <!-- 🔥 CITTÀ - EDITABILE -->
+          <div class="editable-field" [class.editing]="editingFields.citta">
             <div class="field-info">
               <div class="field-label">Città</div>
-              <div class="field-value">{{ userProfile.citta || 'Città non specificata' }}</div>
+              <div class="field-value" *ngIf="!editingFields.citta">
+                {{ userProfile.citta || 'Città non specificata' }}
+              </div>
+              <input
+                type="text"
+                class="field-input"
+                [(ngModel)]="userProfile.citta"
+                *ngIf="editingFields.citta"
+                placeholder="Inserisci la tua città"
+                #cittaInput
+              />
             </div>
             <div class="field-actions">
-              <span class="info-text">📍 Aggiornata automaticamente</span>
+              <button
+                class="edit-btn"
+                *ngIf="!editingFields.citta"
+                (click)="startEdit('citta')"
+                [disabled]="saving"
+              >
+                Modifica <i class="fas fa-edit"></i>
+              </button>
+              <button
+                class="save-btn"
+                *ngIf="editingFields.citta"
+                (click)="saveField('citta')"
+                [disabled]="saving"
+              >
+                {{ saving ? 'Salvando...' : 'Salva' }}
+              </button>
+              <button
+                class="cancel-btn"
+                *ngIf="editingFields.citta"
+                (click)="cancelEdit('citta')"
+                [disabled]="saving"
+              >
+                Annulla
+              </button>
             </div>
           </div>
 
-          <!-- 🔥 ETÀ - VISUALIZZAZIONE -->
-          <div class="editable-field">
+          <!-- 🔥 DATA DI NASCITA EDITABILE -->
+          <div
+            class="editable-field"
+            [class.editing]="editingFields.dataNascita"
+          >
             <div class="field-info">
-              <div class="field-label">Età</div>
-              <div class="field-value">{{ userProfile.eta || 'Non specificata' }} anni</div>
+              <div class="field-label">Data di Nascita</div>
+              <div class="field-value" *ngIf="!editingFields.dataNascita">
+                {{ userProfile.dataNascita ? (userProfile.dataNascita |
+                date:'dd/MM/yyyy') : 'Non specificata' }}
+                <span *ngIf="userProfile.eta > 0" class="age-display"
+                  >({{ userProfile.eta }} anni)</span
+                >
+              </div>
+              <input
+                type="date"
+                class="field-input"
+                [(ngModel)]="userProfile.dataNascita"
+                *ngIf="editingFields.dataNascita"
+                #dataNascitaInput
+              />
             </div>
             <div class="field-actions">
-              <span class="info-text">🎂 Calcolata dalla data di nascita</span>
+              <button
+                class="edit-btn"
+                *ngIf="!editingFields.dataNascita"
+                (click)="startEdit('dataNascita')"
+                [disabled]="saving"
+              >
+                Modifica <i class="fas fa-edit"></i>
+              </button>
+              <button
+                class="save-btn"
+                *ngIf="editingFields.dataNascita"
+                (click)="saveField('dataNascita')"
+                [disabled]="saving"
+              >
+                {{ saving ? 'Salvando...' : 'Salva' }}
+              </button>
+              <button
+                class="cancel-btn"
+                *ngIf="editingFields.dataNascita"
+                (click)="cancelEdit('dataNascita')"
+                [disabled]="saving"
+              >
+                Annulla
+              </button>
             </div>
           </div>
 
@@ -212,7 +336,6 @@
           <h3 class="mb-0">💕 Preferenze di Matching</h3>
         </div>
         <div class="p-4">
-
           <!-- Genere Preferito -->
           <div class="editable-field">
             <div class="field-info">
@@ -221,14 +344,18 @@
             </div>
             <div class="field-actions">
               <div class="gender-badges">
-                <span class="gender-badge male"
-                      [class.selected]="preferences.generePreferito === 'MASCHIO'"
-                      (click)="selectGender('MASCHIO')">
+                <span
+                  class="gender-badge male"
+                  [class.selected]="preferences.generePreferito === 'MASCHIO'"
+                  (click)="selectGender('MASCHIO')"
+                >
                   👨 Uomini
                 </span>
-                <span class="gender-badge female"
-                      [class.selected]="preferences.generePreferito === 'FEMMINA'"
-                      (click)="selectGender('FEMMINA')">
+                <span
+                  class="gender-badge female"
+                  [class.selected]="preferences.generePreferito === 'FEMMINA'"
+                  (click)="selectGender('FEMMINA')"
+                >
                   👩 Donne
                 </span>
               </div>
@@ -246,24 +373,28 @@
                 <div class="col-6">
                   <label class="form-label small">Età Minima</label>
                   <div class="range-container">
-                    <input type="range"
-                           class="range-slider"
-                           min="18"
-                           max="65"
-                           [(ngModel)]="preferences.minEta"
-                           (input)="updateAgeRange()">
+                    <input
+                      type="range"
+                      class="range-slider"
+                      min="18"
+                      max="65"
+                      [(ngModel)]="preferences.minEta"
+                      (input)="updateAgeRange()"
+                    />
                     <span class="range-value">{{ preferences.minEta }}</span>
                   </div>
                 </div>
                 <div class="col-6">
                   <label class="form-label small">Età Massima</label>
                   <div class="range-container">
-                    <input type="range"
-                           class="range-slider"
-                           min="18"
-                           max="65"
-                           [(ngModel)]="preferences.maxEta"
-                           (input)="updateAgeRange()">
+                    <input
+                      type="range"
+                      class="range-slider"
+                      min="18"
+                      max="65"
+                      [(ngModel)]="preferences.maxEta"
+                      (input)="updateAgeRange()"
+                    />
                     <span class="range-value">{{ preferences.maxEta }}</span>
                   </div>
                 </div>
@@ -279,13 +410,17 @@
             </div>
             <div class="field-actions w-50">
               <div class="range-container mt-2">
-                <input type="range"
-                       class="range-slider"
-                       min="5"
-                       max="100"
-                       [(ngModel)]="preferences.distanzaMax"
-                       (input)="updateDistance()">
-                <span class="range-value">{{ preferences.distanzaMax }} km</span>
+                <input
+                  type="range"
+                  class="range-slider"
+                  min="5"
+                  max="100"
+                  [(ngModel)]="preferences.distanzaMax"
+                  (input)="updateDistance()"
+                />
+                <span class="range-value"
+                  >{{ preferences.distanzaMax }} km</span
+                >
               </div>
             </div>
           </div>
@@ -304,9 +439,15 @@
           <div class="d-flex align-items-center justify-content-between">
             <div>
               <div class="field-label">Tema Scuro</div>
-              <div class="field-value">Attiva il tema scuro per un'esperienza più rilassante</div>
+              <div class="field-value">
+                Attiva il tema scuro per un'esperienza più rilassante
+              </div>
             </div>
-            <div class="toggle-switch" [class.active]="isDarkTheme" (click)="toggleTheme()">
+            <div
+              class="toggle-switch"
+              [class.active]="isDarkTheme"
+              (click)="toggleTheme()"
+            >
               <div class="toggle-slider"></div>
             </div>
           </div>
@@ -325,11 +466,15 @@
           <div class="editable-field">
             <div class="field-info">
               <div class="field-label">Notifiche Attive</div>
-              <div class="field-value">Ricevi notifiche per match e messaggi</div>
+              <div class="field-value">
+                Ricevi notifiche per match e messaggi
+              </div>
             </div>
-            <div class="toggle-switch"
-                 [class.active]="userProfile.notificheAttive"
-                 (click)="toggleNotifications()">
+            <div
+              class="toggle-switch"
+              [class.active]="userProfile.notificheAttive"
+              (click)="toggleNotifications()"
+            >
               <div class="toggle-slider"></div>
             </div>
           </div>
@@ -346,14 +491,16 @@
         </div>
         <div class="p-4">
           <div class="d-grid gap-3">
-            <button class="btn btn-outline-danger btn-lg" (click)="deactivateAccount()">
+            <button
+              class="btn btn-outline-danger btn-lg"
+              (click)="deactivateAccount()"
+            >
               <i class="fas fa-user-slash"></i> Disattiva Account
             </button>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -363,152 +510,208 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">🏷️ Seleziona i tuoi Interessi</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body interests-modal-body">
-        <input type="text"
-               class="modal-search"
-               placeholder="🔍 Cerca un interesse..."
-               [(ngModel)]="searchTerm"
-               (input)="filterInterests()">
+        <input
+          type="text"
+          class="modal-search"
+          placeholder="🔍 Cerca un interesse..."
+          [(ngModel)]="searchTerm"
+          (input)="filterInterests()"
+        />
 
         <div class="selected-count">
           Selezionati: {{ selectedInterests.length }} interessi
         </div>
 
         <!-- Sport & Fitness -->
-        <div class="interest-category" [style.display]="getCategoryDisplay('sport')">
+        <div
+          class="interest-category"
+          [style.display]="getCategoryDisplay('sport')"
+        >
           <div class="category-title">🏃‍♂️ Sport & Fitness</div>
           <div class="interest-grid">
-            <span *ngFor="let interest of interestCategories.sport"
-                  class="interest-tag"
-                  [class.selected]="isInterestSelected(interest.key)"
-                  [style.display]="getInterestDisplay(interest.label)"
-                  (click)="toggleInterest(interest.key)">
+            <span
+              *ngFor="let interest of interestCategories.sport"
+              class="interest-tag"
+              [class.selected]="isInterestSelected(interest.key)"
+              [style.display]="getInterestDisplay(interest.label)"
+              (click)="toggleInterest(interest.key)"
+            >
               {{ interest.label }}
             </span>
           </div>
         </div>
 
         <!-- Musica & Arte -->
-        <div class="interest-category" [style.display]="getCategoryDisplay('arte')">
+        <div
+          class="interest-category"
+          [style.display]="getCategoryDisplay('arte')"
+        >
           <div class="category-title">🎨 Musica & Arte</div>
           <div class="interest-grid">
-            <span *ngFor="let interest of interestCategories.arte"
-                  class="interest-tag female-style"
-                  [class.selected]="isInterestSelected(interest.key)"
-                  [style.display]="getInterestDisplay(interest.label)"
-                  (click)="toggleInterest(interest.key)">
+            <span
+              *ngFor="let interest of interestCategories.arte"
+              class="interest-tag female-style"
+              [class.selected]="isInterestSelected(interest.key)"
+              [style.display]="getInterestDisplay(interest.label)"
+              (click)="toggleInterest(interest.key)"
+            >
               {{ interest.label }}
             </span>
           </div>
         </div>
 
         <!-- Viaggi & Avventura -->
-        <div class="interest-category" [style.display]="getCategoryDisplay('viaggi')">
+        <div
+          class="interest-category"
+          [style.display]="getCategoryDisplay('viaggi')"
+        >
           <div class="category-title">✈️ Viaggi & Avventura</div>
           <div class="interest-grid">
-            <span *ngFor="let interest of interestCategories.viaggi"
-                  class="interest-tag"
-                  [class.selected]="isInterestSelected(interest.key)"
-                  [style.display]="getInterestDisplay(interest.label)"
-                  (click)="toggleInterest(interest.key)">
+            <span
+              *ngFor="let interest of interestCategories.viaggi"
+              class="interest-tag"
+              [class.selected]="isInterestSelected(interest.key)"
+              [style.display]="getInterestDisplay(interest.label)"
+              (click)="toggleInterest(interest.key)"
+            >
               {{ interest.label }}
             </span>
           </div>
         </div>
 
         <!-- Cibo & Bevande -->
-        <div class="interest-category" [style.display]="getCategoryDisplay('cibo')">
+        <div
+          class="interest-category"
+          [style.display]="getCategoryDisplay('cibo')"
+        >
           <div class="category-title">🍕 Cibo & Bevande</div>
           <div class="interest-grid">
-            <span *ngFor="let interest of interestCategories.cibo"
-                  class="interest-tag female-style"
-                  [class.selected]="isInterestSelected(interest.key)"
-                  [style.display]="getInterestDisplay(interest.label)"
-                  (click)="toggleInterest(interest.key)">
+            <span
+              *ngFor="let interest of interestCategories.cibo"
+              class="interest-tag female-style"
+              [class.selected]="isInterestSelected(interest.key)"
+              [style.display]="getInterestDisplay(interest.label)"
+              (click)="toggleInterest(interest.key)"
+            >
               {{ interest.label }}
             </span>
           </div>
         </div>
 
         <!-- Tecnologia & Gaming -->
-        <div class="interest-category" [style.display]="getCategoryDisplay('tech')">
+        <div
+          class="interest-category"
+          [style.display]="getCategoryDisplay('tech')"
+        >
           <div class="category-title">💻 Tecnologia & Gaming</div>
           <div class="interest-grid">
-            <span *ngFor="let interest of interestCategories.tech"
-                  class="interest-tag"
-                  [class.selected]="isInterestSelected(interest.key)"
-                  [style.display]="getInterestDisplay(interest.label)"
-                  (click)="toggleInterest(interest.key)">
+            <span
+              *ngFor="let interest of interestCategories.tech"
+              class="interest-tag"
+              [class.selected]="isInterestSelected(interest.key)"
+              [style.display]="getInterestDisplay(interest.label)"
+              (click)="toggleInterest(interest.key)"
+            >
               {{ interest.label }}
             </span>
           </div>
         </div>
 
         <!-- Libri & Cinema -->
-        <div class="interest-category" [style.display]="getCategoryDisplay('cultura')">
+        <div
+          class="interest-category"
+          [style.display]="getCategoryDisplay('cultura')"
+        >
           <div class="category-title">📚 Libri & Cinema</div>
           <div class="interest-grid">
-            <span *ngFor="let interest of interestCategories.cultura"
-                  class="interest-tag female-style"
-                  [class.selected]="isInterestSelected(interest.key)"
-                  [style.display]="getInterestDisplay(interest.label)"
-                  (click)="toggleInterest(interest.key)">
+            <span
+              *ngFor="let interest of interestCategories.cultura"
+              class="interest-tag female-style"
+              [class.selected]="isInterestSelected(interest.key)"
+              [style.display]="getInterestDisplay(interest.label)"
+              (click)="toggleInterest(interest.key)"
+            >
               {{ interest.label }}
             </span>
           </div>
         </div>
 
         <!-- Animali & Natura -->
-        <div class="interest-category" [style.display]="getCategoryDisplay('natura')">
+        <div
+          class="interest-category"
+          [style.display]="getCategoryDisplay('natura')"
+        >
           <div class="category-title">🐕 Animali & Natura</div>
           <div class="interest-grid">
-            <span *ngFor="let interest of interestCategories.natura"
-                  class="interest-tag"
-                  [class.selected]="isInterestSelected(interest.key)"
-                  [style.display]="getInterestDisplay(interest.label)"
-                  (click)="toggleInterest(interest.key)">
+            <span
+              *ngFor="let interest of interestCategories.natura"
+              class="interest-tag"
+              [class.selected]="isInterestSelected(interest.key)"
+              [style.display]="getInterestDisplay(interest.label)"
+              (click)="toggleInterest(interest.key)"
+            >
               {{ interest.label }}
             </span>
           </div>
         </div>
 
         <!-- Lifestyle -->
-        <div class="interest-category" [style.display]="getCategoryDisplay('lifestyle')">
+        <div
+          class="interest-category"
+          [style.display]="getCategoryDisplay('lifestyle')"
+        >
           <div class="category-title">✨ Lifestyle</div>
           <div class="interest-grid">
-            <span *ngFor="let interest of interestCategories.lifestyle"
-                  class="interest-tag female-style"
-                  [class.selected]="isInterestSelected(interest.key)"
-                  [style.display]="getInterestDisplay(interest.label)"
-                  (click)="toggleInterest(interest.key)">
+            <span
+              *ngFor="let interest of interestCategories.lifestyle"
+              class="interest-tag female-style"
+              [class.selected]="isInterestSelected(interest.key)"
+              [style.display]="getInterestDisplay(interest.label)"
+              (click)="toggleInterest(interest.key)"
+            >
               {{ interest.label }}
             </span>
           </div>
         </div>
 
         <!-- Business & Carriera -->
-        <div class="interest-category" [style.display]="getCategoryDisplay('business')">
+        <div
+          class="interest-category"
+          [style.display]="getCategoryDisplay('business')"
+        >
           <div class="category-title">💼 Business & Carriera</div>
           <div class="interest-grid">
-            <span *ngFor="let interest of interestCategories.business"
-                  class="interest-tag"
-                  [class.selected]="isInterestSelected(interest.key)"
-                  [style.display]="getInterestDisplay(interest.label)"
-                  (click)="toggleInterest(interest.key)">
+            <span
+              *ngFor="let interest of interestCategories.business"
+              class="interest-tag"
+              [class.selected]="isInterestSelected(interest.key)"
+              [style.display]="getInterestDisplay(interest.label)"
+              (click)="toggleInterest(interest.key)"
+            >
               {{ interest.label }}
             </span>
           </div>
         </div>
       </div>
       <div class="modal-footer border-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <button type="button"
-                class="btn interests-save-btn"
-                (click)="saveInterests()"
-                [disabled]="saving">
-          <i class="fas fa-save"></i> {{ saving ? 'Salvando...' : 'Salva Interessi' }}
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Annulla
+        </button>
+        <button
+          type="button"
+          class="btn interests-save-btn"
+          (click)="saveInterests()"
+          [disabled]="saving"
+        >
+          <i class="fas fa-save"></i> {{ saving ? 'Salvando...' : 'Salva
+          Interessi' }}
         </button>
       </div>
     </div>
@@ -521,41 +724,57 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">🔐 Cambia Password</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body">
         <form>
           <div class="mb-4">
             <label class="form-label field-label">Password Attuale</label>
-            <input type="password"
-                   class="form-control password-input"
-                   [(ngModel)]="passwordData.currentPassword"
-                   name="currentPassword"
-                   placeholder="Inserisci password attuale">
+            <input
+              type="password"
+              class="form-control password-input"
+              [(ngModel)]="passwordData.currentPassword"
+              name="currentPassword"
+              placeholder="Inserisci password attuale"
+            />
           </div>
           <div class="mb-4">
             <label class="form-label field-label">Nuova Password</label>
-            <input type="password"
-                   class="form-control password-input"
-                   [(ngModel)]="passwordData.newPassword"
-                   name="newPassword"
-                   placeholder="Inserisci nuova password">
+            <input
+              type="password"
+              class="form-control password-input"
+              [(ngModel)]="passwordData.newPassword"
+              name="newPassword"
+              placeholder="Inserisci nuova password"
+            />
           </div>
           <div class="mb-4">
-            <label class="form-label field-label">Conferma Nuova Password</label>
-            <input type="password"
-                   class="form-control password-input"
-                   [(ngModel)]="passwordData.confirmPassword"
-                   name="confirmPassword"
-                   placeholder="Ripeti nuova password">
+            <label class="form-label field-label"
+              >Conferma Nuova Password</label
+            >
+            <input
+              type="password"
+              class="form-control password-input"
+              [(ngModel)]="passwordData.confirmPassword"
+              name="confirmPassword"
+              placeholder="Ripeti nuova password"
+            />
           </div>
         </form>
       </div>
       <div class="modal-footer border-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <button type="button"
-                class="btn password-save-btn"
-                (click)="changePassword()">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Annulla
+        </button>
+        <button
+          type="button"
+          class="btn password-save-btn"
+          (click)="changePassword()"
+        >
           Cambia Password
         </button>
       </div>

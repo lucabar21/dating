@@ -14,6 +14,7 @@ interface UserProfile {
   fotoProfilo: string;
   citta: string;
   eta: number;
+  dataNascita: string;
   notificheAttive: boolean;
   profileImageUrl?: string; // Per l'anteprima locale
 }
@@ -48,6 +49,8 @@ interface EditingFields {
   nome: boolean;
   username: boolean;
   bio: boolean;
+  citta: boolean;
+  dataNascita: boolean,
 }
 
 interface Interest {
@@ -92,6 +95,7 @@ export class Settings implements OnInit {
     fotoProfilo: '',
     citta: '',
     eta: 0,
+    dataNascita: '',
     notificheAttive: false,
     profileImageUrl: '',
   };
@@ -116,6 +120,8 @@ export class Settings implements OnInit {
     nome: false,
     username: false,
     bio: false,
+    citta: false,
+    dataNascita: false,
   };
 
   // Backup values per cancel edit
@@ -277,6 +283,7 @@ export class Settings implements OnInit {
           fotoProfilo: response.fotoProfilo || '',
           citta: response.citta || '',
           eta: response.eta || 0,
+          dataNascita: response.dataNascita || '', // Aggiungi data di nascita
           notificheAttive: response.notificheAttive || false,
           profileImageUrl: response.fotoProfilo || ''
         };
@@ -323,6 +330,26 @@ export class Settings implements OnInit {
   /****************************************************************************************************/
 
   /**
+ * Formatta data per input date
+ */
+private formatDateForInput(dateString: string): string {
+  if (!dateString) return '';
+  
+  // Se è già nel formato YYYY-MM-DD, ritorna così
+  if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    return dateString;
+  }
+  
+  // Altrimenti prova a parsarla e convertirla
+  try {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
+  } catch {
+    return '';
+  }
+}
+
+  /**
    * 🔥 CREA OGGETTO DATI PER AGGIORNAMENTO
    */
   private createUpdateData(): UpdateUserData {
@@ -333,7 +360,7 @@ export class Settings implements OnInit {
       bio: this.userProfile.bio,
       interessi: this.selectedInterests.join(', '), // Converti array in stringa
       città: this.userProfile.citta,
-      dataNascita: '1995-08-15', // TODO: gestire data nascita reale
+      dataNascita: this.formatDateForInput(this.userProfile.dataNascita), // Formatta data per input date
       genere: 'FEMMINA', // TODO: gestire genere reale
       fotoProfilo: this.userProfile.fotoProfilo
     };
