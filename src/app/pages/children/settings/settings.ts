@@ -24,6 +24,7 @@ interface UserProfile {
 interface UpdateUserData {
   username: string;
   password: string;
+  newPassword?: string;
   nome: string;
   bio: string;
   interessi: string;
@@ -31,6 +32,7 @@ interface UpdateUserData {
   dataNascita: string;
   genere: string;
   fotoProfilo: string;
+  notificheAttive?: boolean;
 }
 
 interface Preferences {
@@ -263,7 +265,7 @@ export class Settings implements OnInit {
   ngOnInit(): void {
     this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
     this.loadUserProfile(); // Carica dati reali
-    // this.loadPreferences(); // TODO: Implementare quando hai l'endpoint preferenze
+    this.loadPreferences(); 
   }
 
   /**
@@ -279,19 +281,19 @@ export class Settings implements OnInit {
 
         // Aggiorna il profilo utente
         this.userProfile = {
-          id: response.id,
-          nome: response.nome || '',
-          username: response.email || 'cinque.sabrina@gmail.com', // Usa email come username
-          genere: response.genere || null, // Aggiungi genere
-          bio: response.bio || '',
-          interessi: response.interessi || '',
-          fotoProfilo: response.fotoProfilo || '',
-          citta: response.citta || '',
-          eta: response.eta || 0,
-          dataNascita: response.dataNascita || '', // Aggiungi data di nascita
-          notificheAttive: response.notificheAttive || false,
-          profileImageUrl: response.fotoProfilo || ''
-        };
+        id: response.id,
+        nome: response.nome || '',
+        genere: response.genere || '', // 🔥 ORA FUNZIONA
+        username: response.username || '', // 🔥 ORA FUNZIONA (email reale)
+        bio: response.bio || '',
+        interessi: response.interessi || '',
+        fotoProfilo: response.fotoProfilo || '',
+        citta: response.citta || '',
+        eta: response.eta || 0,
+        dataNascita: this.formatDateForInput(response.dataNascita) || '', // 🔥 ORA FUNZIONA
+        notificheAttive: response.notificheAttive || false,
+        profileImageUrl: response.fotoProfilo || ''
+      };
 
         // Converte interessi da stringa a array
         this.updateSelectedInterestsFromString(response.interessi);
@@ -305,6 +307,49 @@ export class Settings implements OnInit {
       }
     });
   }
+
+  // 🔥 CARICA PREFERENZE REALI
+loadPreferences(): void {
+  this.userServ.getPreferences().subscribe({
+    next: (response: any) => {
+      console.log('✅ Preferenze caricate:', response);
+      this.preferences = {
+        generePreferito: response.generePreferito,
+        minEta: response.minEta || 18,
+        maxEta: response.maxEta || 65,
+        distanzaMax: response.distanzaMax || 50
+      };
+    },
+    error: (error) => {
+      console.error('❌ Errore caricamento preferenze:', error);
+    }
+  });
+}
+
+// 🔥 SALVA PREFERENZE REALI
+savePreferences(): void {
+  this.saving = true;
+  
+  const preferencesData = {
+    generePreferito: this.preferences.generePreferito,
+    minEta: this.preferences.minEta,
+    maxEta: this.preferences.maxEta,
+    distanzaMax: this.preferences.distanzaMax
+  };
+
+  this.userServ.updatePreferences(preferencesData).subscribe({
+    next: (response) => {
+      console.log('✅ Preferenze salvate:', response);
+      this.saving = false;
+      this.showSuccessMessage('✅ Preferenze salvate!');
+    },
+    error: (error) => {
+      console.error('❌ Errore salvataggio preferenze:', error);
+      this.saving = false;
+      this.showErrorMessage('❌ Errore durante il salvataggio');
+    }
+  });
+}
 
   /**
    * 🔥 CONVERTE STRINGA INTERESSI IN ARRAY
@@ -358,18 +403,19 @@ private formatDateForInput(dateString: string): string {
    * 🔥 CREA OGGETTO DATI PER AGGIORNAMENTO
    */
   private createUpdateData(): UpdateUserData {
-    return {
-      username: this.userProfile.username,
-      password: 'password123', // Mantieni la password attuale - TODO: gestire meglio
-      nome: this.userProfile.nome,
-      bio: this.userProfile.bio,
-      interessi: this.selectedInterests.join(', '), // Converti array in stringa
-      città: this.userProfile.citta,
-      dataNascita: this.formatDateForInput(this.userProfile.dataNascita), // Formatta data per input date
-      genere: this.userProfile.genere || '', // Aggiungi genere
-      fotoProfilo: this.userProfile.fotoProfilo
-    };
-  }
+  return {
+    username: this.userProfile.username,
+    password: '', // 🔥 VUOTO - non serve per aggiornamenti normali
+    nome: this.userProfile.nome,
+    bio: this.userProfile.bio,
+    interessi: this.selectedInterests.join(', '),
+    città: this.userProfile.citta,
+    dataNascita: this.userProfile.dataNascita,
+    genere: this.userProfile.genere || '',
+    fotoProfilo: this.userProfile.fotoProfilo,
+    notificheAttive: this.userProfile.notificheAttive
+  };
+}
 
   /**
    * 🔥 SALVA CAMPO MODIFICATO
@@ -543,19 +589,16 @@ private formatDateForInput(dateString: string): string {
 
   // Metodi per preferenze di matching
   selectGender(gender: 'MASCHIO' | 'FEMMINA'): void {
-    this.preferences.generePreferito = gender;
-    console.log('🔥 Genere preferito selezionato:', gender);
-    // TODO: Implementare salvataggio automatico delle preferenze
-  }
+  this.preferences.generePreferito = gender;
+   
+}
 
   updateAgeRange(): void {
-    console.log(`🔥 Fascia d'età aggiornata: ${this.preferences.minEta} - ${this.preferences.maxEta}`);
-    // TODO: Implementare salvataggio automatico
+    
   }
 
   updateDistance(): void {
-    console.log('🔥 Distanza massima aggiornata:', this.preferences.distanzaMax, 'km');
-    // TODO: Implementare salvataggio automatico
+    
   }
 
   // Metodi per notifiche
@@ -630,27 +673,64 @@ private formatDateForInput(dateString: string): string {
   }
 
   changePassword(): void {
-    // Validazione
-    if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
-      this.showErrorMessage('❌ Le password non coincidono!');
-      return;
-    }
-
-    if (this.passwordData.newPassword.length < 6) {
-      this.showErrorMessage('❌ La password deve contenere almeno 6 caratteri!');
-      return;
-    }
-
-    if (!this.passwordData.currentPassword) {
-      this.showErrorMessage('❌ Inserisci la password attuale per cambiarla!');
-      return;
-    }
-
-    console.log('🔥 Cambiando password...');
-    // TODO: Implementare cambio password reale
-    this.showSuccessMessage('✅ Password cambiata con successo!');
-    this.resetPasswordModal();
+  // Validazione
+  if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
+    this.showErrorMessage('❌ Le password non coincidono!');
+    return;
   }
+
+  if (this.passwordData.newPassword.length < 6) {
+    this.showErrorMessage('❌ La password deve contenere almeno 6 caratteri!');
+    return;
+  }
+
+  if (!this.passwordData.currentPassword) {
+    this.showErrorMessage('❌ Inserisci la password attuale per cambiarla!');
+    return;
+  }
+
+  this.saving = true;
+
+  // 🔥 CREA DATI SPECIFICI PER CAMBIO PASSWORD
+  const passwordChangeData = {
+    username: this.userProfile.username,
+    password: this.passwordData.currentPassword,     // Password attuale
+    newPassword: this.passwordData.newPassword,      // Nuova password
+    nome: this.userProfile.nome,
+    bio: this.userProfile.bio,
+    interessi: this.selectedInterests.join(', '),
+    città: this.userProfile.citta,
+    dataNascita: this.userProfile.dataNascita,
+    genere: this.userProfile.genere || '',
+    fotoProfilo: this.userProfile.fotoProfilo,
+    notificheAttive: this.userProfile.notificheAttive
+  };
+
+  console.log('🔥 Cambiando password...');
+
+  this.userServ.updateUser(passwordChangeData).subscribe({
+    next: (response) => {
+      console.log('✅ Password cambiata:', response);
+      this.saving = false;
+      this.showSuccessMessage('✅ Password cambiata con successo!');
+      this.resetPasswordModal();
+    },
+    error: (error) => {
+      console.error('❌ Errore cambio password:', error);
+      this.saving = false;
+      
+      // 🔥 GESTIONE ERRORI SPECIFICI
+      let errorMessage = 'Errore sconosciuto';
+      if (error.error && typeof error.error === 'string') {
+        errorMessage = error.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      this.showErrorMessage('❌ ' + errorMessage);
+    }
+  });
+}
 
   private resetPasswordModal(): void {
     this.passwordData = {
