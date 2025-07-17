@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   ReactiveFormsModule,
@@ -8,7 +8,8 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { CommonModule } from '@angular/common';
-
+import { ThemeServ } from '../../services/theme-serv';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -16,7 +17,9 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
-export class Login {
+export class Login implements OnInit, OnDestroy {
+  isDarkTheme: boolean = false;
+  private themeSub!: Subscription;
   hearts = Array.from({ length: 30 });
 
   loginForm = new FormGroup({
@@ -27,7 +30,17 @@ export class Login {
     ]),
   });
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private themeService: ThemeServ) {}
+
+  ngOnInit(): void {
+    this.themeSub = this.themeService.theme$.subscribe(theme => {
+      this.isDarkTheme = theme === 'dark';
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.themeSub?.unsubscribe();
+  }
 
   onLogin(): void {
     let email = this.loginForm.get('email')?.value ?? '';

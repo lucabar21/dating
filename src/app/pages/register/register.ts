@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -8,6 +8,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
 import { Router, RouterModule } from '@angular/router';
+import { ThemeServ } from '../../services/theme-serv';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -15,12 +17,25 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register {
+export class Register implements OnInit, OnDestroy {
+  isDarkTheme: boolean = false;
+  private themeSub!: Subscription;
   hearts = Array.from({ length: 30 });
 
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  constructor(private themeService: ThemeServ) {}
+
+  ngOnInit(): void {
+    this.themeSub = this.themeService.theme$.subscribe(theme => {
+      this.isDarkTheme = theme === 'dark';
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.themeSub?.unsubscribe();
+  }
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [

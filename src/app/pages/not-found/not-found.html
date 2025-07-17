@@ -1,5 +1,5 @@
 <div class="not-found-container">
-  <img src="/assets/image/lovvami_logo_light.svg" alt="Page not found" />
+  <img [src]="isDarkTheme ? '/assets/image/lovvami_logo_dark.svg' : '/assets/image/lovvami_logo_light.svg'" alt="Logo" />
   <h1>Pagina non trovata</h1>
   <span>404</span>
   <button type="button" (click)="goBack()">Torna indietro!</button>
