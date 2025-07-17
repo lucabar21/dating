@@ -12,7 +12,7 @@ export interface UserData {
   fotoProfilo: string;
   citta: string;
   eta: number;
-  accountType?: 'GOLD' | 'PLATINUM' | 'PREMIUM' | 'STANDARD'; // Tipi specifici
+  //accountType?: 'GOLD' | 'PLATINUM' | 'PREMIUM' | 'STANDARD'; // Tipi specifici
 }
 
 @Injectable({
