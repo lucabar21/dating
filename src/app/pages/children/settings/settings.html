@@ -264,27 +264,57 @@
             </div>
           </div>
 
-          <!-- 🔥 CITTÀ - EDITABILE -->
+          <!-- 🔥 CITTÀ - EDITABILE con AUTOCOMPLETAMENTO -->
           <div class="editable-field" [class.editing]="editingFields.citta">
             <div class="field-info">
               <div class="field-label">Città</div>
               <div class="field-value" *ngIf="!editingFields.citta">
-                {{ userProfile.citta || 'Città non specificata' }}
+                {{ selectedCity?.name || userProfile.citta || 'Città non
+                specificata' }}
               </div>
-              <input
-                type="text"
-                class="field-input"
-                [(ngModel)]="userProfile.citta"
+
+              <!-- INPUT CON AUTOCOMPLETAMENTO quando in editing -->
+              <div
                 *ngIf="editingFields.citta"
-                placeholder="Inserisci la tua città"
-                #cittaInput
-              />
+                class="city-autocomplete-container"
+              >
+                <input
+                  type="text"
+                  class="field-input"
+                  [(ngModel)]="cityQuery"
+                  (input)="searchCities(cityQuery)"
+                  (focus)="searchCities(cityQuery)"
+                  (blur)="hideCitySuggestions()"
+                  placeholder="Cerca città italiana..."
+                  [disabled]="saving"
+                  #cittaInput
+                />
+
+                <!-- Dropdown suggerimenti -->
+                <div class="city-suggestions" *ngIf="showCitySuggestions">
+                  <div
+                    *ngFor="let city of citySuggestions"
+                    class="city-suggestion-item"
+                    (click)="onCitySelect(city)"
+                  >
+                    <strong>{{ city.name }}</strong>
+                    <small>{{ city.fullName }}</small>
+                  </div>
+                  <div
+                    *ngIf="citySuggestions.length === 0"
+                    class="no-suggestions"
+                  >
+                    Nessuna città trovata
+                  </div>
+                </div>
+              </div>
             </div>
+
             <div class="field-actions">
               <button
                 class="edit-btn"
                 *ngIf="!editingFields.citta"
-                (click)="startEdit('citta')"
+                (click)="startEditCity()"
                 [disabled]="saving"
               >
                 Modifica <i class="fas fa-edit"></i>
@@ -292,15 +322,15 @@
               <button
                 class="save-btn"
                 *ngIf="editingFields.citta"
-                (click)="saveField('citta')"
-                [disabled]="saving"
+                (click)="saveCityField()"
+                [disabled]="saving || !selectedCity"
               >
                 {{ saving ? 'Salvando...' : 'Salva' }}
               </button>
               <button
                 class="cancel-btn"
                 *ngIf="editingFields.citta"
-                (click)="cancelEdit('citta')"
+                (click)="cancelEditCity()"
                 [disabled]="saving"
               >
                 Annulla
@@ -375,96 +405,116 @@
     </div>
 
     <!-- 🔥 MATCHING TAB -->
-<div *ngIf="selectedTab === 'matching'" class="ng-div">
-  <!-- Preferenze Matching Section -->
-  <div class="settings-card mb-4">
-    <div class="section-header">
-      <h3 class="mb-0">💕 Preferenze di Matching</h3>
-    </div>
-    <div class="p-4">
-      
-      <!-- Genere Preferito -->
-      <div class="editable-field">
-        <div class="field-info">
-          <div class="field-label">Genere Preferito</div>
-          <div class="field-value">Chi ti interessa incontrare</div>
+    <div *ngIf="selectedTab === 'matching'" class="ng-div">
+      <!-- Preferenze Matching Section -->
+      <div class="settings-card mb-4">
+        <div class="section-header">
+          <h3 class="mb-0">💕 Preferenze di Matching</h3>
         </div>
-        <div class="field-actions">
-          <div class="gender-badges">
-            <span class="gender-badge male" 
+        <div class="p-4">
+          <!-- Genere Preferito -->
+          <div class="editable-field">
+            <div class="field-info">
+              <div class="field-label">Genere Preferito</div>
+              <div class="field-value">Chi ti interessa incontrare</div>
+            </div>
+            <div class="field-actions">
+              <div class="gender-badges">
+                <span
+                  class="gender-badge male"
                   [class.selected]="preferences.generePreferito === 'MASCHIO'"
-                  (click)="selectGender('MASCHIO')">
-              👨 Uomini
-            </span>
-            <span class="gender-badge female" 
+                  (click)="selectGender('MASCHIO')"
+                >
+                  👨 Uomini
+                </span>
+                <span
+                  class="gender-badge female"
                   [class.selected]="preferences.generePreferito === 'FEMMINA'"
-                  (click)="selectGender('FEMMINA')">
-              👩 Donne
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Fascia d'Età -->
-      <div class="editable-field">
-        <div class="field-info">
-          <div class="field-label">Fascia d'Età</div>
-          <div class="field-value">Età minima e massima dei tuoi match</div>
-        </div>
-        <div class="field-actions w-100">
-          <div class="row g-3 mt-2">
-            <div class="col-6">
-              <label class="form-label small">Età Minima</label>
-              <div class="range-container">
-                <input type="range" class="range-slider" min="18" max="65"
-                       [(ngModel)]="preferences.minEta" 
-                       (input)="updateAgeRange()">
-                <span class="range-value">{{ preferences.minEta }}</span>
-              </div>
-            </div>
-            <div class="col-6">
-              <label class="form-label small">Età Massima</label>
-              <div class="range-container">
-                <input type="range" class="range-slider" min="18" max="65"
-                       [(ngModel)]="preferences.maxEta" 
-                       (input)="updateAgeRange()">
-                <span class="range-value">{{ preferences.maxEta }}</span>
+                  (click)="selectGender('FEMMINA')"
+                >
+                  👩 Donne
+                </span>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Distanza Massima -->
-      <div class="editable-field">
-        <div class="field-info">
-          <div class="field-label">Distanza Massima</div>
-          <div class="field-value">Raggio di ricerca per i match</div>
-        </div>
-        <div class="field-actions w-50">
-          <div class="range-container mt-2">
-            <input type="range" class="range-slider" 
-                   min="5" max="500" 
-                   [(ngModel)]="preferences.distanzaMax"
-                   (input)="updateDistance()">
-            <span class="range-value">{{ preferences.distanzaMax }} km</span>
+          <!-- Fascia d'Età -->
+          <div class="editable-field">
+            <div class="field-info">
+              <div class="field-label">Fascia d'Età</div>
+              <div class="field-value">Età minima e massima dei tuoi match</div>
+            </div>
+            <div class="field-actions w-100">
+              <div class="row g-3 mt-2">
+                <div class="col-6">
+                  <label class="form-label small">Età Minima</label>
+                  <div class="range-container">
+                    <input
+                      type="range"
+                      class="range-slider"
+                      min="18"
+                      max="65"
+                      [(ngModel)]="preferences.minEta"
+                      (input)="updateAgeRange()"
+                    />
+                    <span class="range-value">{{ preferences.minEta }}</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small">Età Massima</label>
+                  <div class="range-container">
+                    <input
+                      type="range"
+                      class="range-slider"
+                      min="18"
+                      max="65"
+                      [(ngModel)]="preferences.maxEta"
+                      (input)="updateAgeRange()"
+                    />
+                    <span class="range-value">{{ preferences.maxEta }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Distanza Massima -->
+          <div class="editable-field">
+            <div class="field-info">
+              <div class="field-label">Distanza Massima</div>
+              <div class="field-value">Raggio di ricerca per i match</div>
+            </div>
+            <div class="field-actions w-50">
+              <div class="range-container mt-2">
+                <input
+                  type="range"
+                  class="range-slider"
+                  min="5"
+                  max="500"
+                  [(ngModel)]="preferences.distanzaMax"
+                  (input)="updateDistance()"
+                />
+                <span class="range-value"
+                  >{{ preferences.distanzaMax }} km</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- 🔥 PULSANTE SALVA PREFERENZE -->
+          <div class="mt-4">
+            <button
+              class="btn btn-primary btn-lg w-100"
+              (click)="savePreferences()"
+              [disabled]="saving"
+            >
+              <i class="fas fa-save"></i>
+              {{ saving ? 'Salvando...' : 'Salva Preferenze' }}
+            </button>
           </div>
         </div>
       </div>
-
-      <!-- 🔥 PULSANTE SALVA PREFERENZE -->
-      <div class="mt-4">
-        <button class="btn btn-primary btn-lg w-100" 
-                (click)="savePreferences()" 
-                [disabled]="saving">
-          <i class="fas fa-save"></i> 
-          {{ saving ? 'Salvando...' : 'Salva Preferenze' }}
-        </button>
-      </div>
-      
     </div>
-  </div>
-</div>
 
     <!-- 🔥 THEME TAB -->
     <div *ngIf="selectedTab === 'theme'" class="ng-div">
