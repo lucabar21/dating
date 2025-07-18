@@ -17,6 +17,7 @@ html,
   --accent-color-bright-f: #ff44bb;
   --accent-color-bright-m: #549bff;
   --text-color-active: #172392;
+  --dark-button-color: #03254e;
 }
 
 .theme-dark {

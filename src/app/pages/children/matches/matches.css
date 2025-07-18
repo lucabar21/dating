@@ -62,7 +62,7 @@
         border: none;
         background-color: var(--accent-color-f);
         color: var(--bg-color);
-        border-radius: 4px;
+        border-radius: 8px;
         font-size: 32px;
       }
     }
