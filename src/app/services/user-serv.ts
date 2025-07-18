@@ -12,7 +12,7 @@ export interface UserData {
   fotoProfilo: string;
   citta: string;
   eta: number;
-  accountType?: 'GOLD' | 'PLATINUM' | 'PREMIUM' | 'STANDARD'; // Tipi specifici
+  //accountType?: 'GOLD' | 'PLATINUM' | 'PREMIUM' | 'STANDARD'; // Tipi specifici
 }
 
 @Injectable({
@@ -21,9 +21,7 @@ export interface UserData {
 export class UserServ {
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {
-    console.log('UserServ initialized with baseUrl:', this.baseUrl);
-  }
+  constructor(private http: HttpClient) {}
 
   /**
    * Ottiene il profilo dell'utente corrente
@@ -56,4 +54,12 @@ export class UserServ {
   getDiscoverableUsers() {
     return this.http.get<UserData>(`${this.baseUrl}utenti/discover`);
   }
+
+  getPreferences(): Observable<any> {
+  return this.http.get(`${this.baseUrl}preferenze/me`);
+}
+
+updatePreferences(preferences: any): Observable<any> {
+  return this.http.put(`${this.baseUrl}preferenze/me`, preferences);
+}
 }

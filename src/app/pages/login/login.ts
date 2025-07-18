@@ -10,10 +10,11 @@ import { AuthService } from '../../services/auth';
 import { CommonModule } from '@angular/common';
 import { ThemeServ } from '../../services/theme-serv';
 import { Subscription } from 'rxjs';
+import { Footer } from '../../components/footer/footer';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, Footer],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
@@ -30,10 +31,14 @@ export class Login implements OnInit, OnDestroy {
     ]),
   });
 
-  constructor(private authService: AuthService, private router: Router, private themeService: ThemeServ) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private themeService: ThemeServ
+  ) {}
 
   ngOnInit(): void {
-    this.themeSub = this.themeService.theme$.subscribe(theme => {
+    this.themeSub = this.themeService.theme$.subscribe((theme) => {
       this.isDarkTheme = theme === 'dark';
     });
   }

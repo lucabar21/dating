@@ -6,6 +6,7 @@
   justify-content: center;
   padding: 64px;
   gap: 64px;
+  padding: 0px 5%;
 
   .top-section {
     width: 100%;
@@ -13,7 +14,7 @@
     align-items: center;
     justify-content: flex-start;
     gap: 64px;
-
+    padding: 20px;
     img {
       width: 200px;
       height: 200px;

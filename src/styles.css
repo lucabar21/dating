@@ -17,6 +17,7 @@ html,
   --accent-color-bright-f: #ff44bb;
   --accent-color-bright-m: #549bff;
   --text-color-active: #172392;
+  --dark-button-color: #03254e;
 }
 
 .theme-dark {
@@ -37,8 +38,8 @@ app-profile,
 app-matches,
 app-messages,
 app-explore,
-app-settings,
-app-explore {
+app-explore-test,
+app-settings {
   width: 100%;
   height: 100%;
 }

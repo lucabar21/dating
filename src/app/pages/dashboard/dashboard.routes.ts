@@ -28,7 +28,9 @@ export const dashboardRoutes: Routes = [
       {
         path: 'explore',
         loadComponent: () =>
-          import('../children/explore/explore').then((m) => m.Explore),
+          import('../children/explore-test/explore-test').then(
+            (m) => m.ExploreTest
+          ),
       },
       { path: '', redirectTo: 'profile', pathMatch: 'full' },
     ],
