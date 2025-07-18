@@ -18,6 +18,9 @@ export class ExploreCard {
   // Variabile Input che riceve l'utente da visualizzare
   @Input() discoverableUser: any;
 
+  // Variabile Input che indica se l'utente è abilitato al SUPER_LIKE
+  @Input() canSuperLike: boolean = false;
+
   // Variabile Output che emette l'evento di swipe
   @Output() swipeEvent = new EventEmitter<'LIKE' | 'PASS' | 'SUPER_LIKE'>();
 
@@ -65,8 +68,10 @@ export class ExploreCard {
       this.deltaX = 0;
       this.deltaY = 0;
 
-      // Emette l'evento di swipe se il tipo è definito
-      if (tipo) {
+      // Emette l'evento di swipe se il tipo è definito e gestisce il caso del SUPER_LIKE
+      if (tipo === 'SUPER_LIKE' && !this.canSuperLike) {
+        alert('Il Super Like è disponibile solo per account Premium!');
+      } else if (tipo) {
         this.swipeEvent.emit(tipo);
       }
     });

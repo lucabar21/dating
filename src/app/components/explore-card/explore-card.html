@@ -41,7 +41,11 @@
           </g>
         </svg>
       </button>
-      <button class="superlike" (click)="emitSwipe('SUPER_LIKE')">
+      <button
+        *ngIf="canSuperLike"
+        class="superlike"
+        (click)="emitSwipe('SUPER_LIKE')"
+      >
         <svg
           fill="#000000"
           version="1.1"

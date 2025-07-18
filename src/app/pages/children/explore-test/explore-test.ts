@@ -21,7 +21,8 @@ export class ExploreTest {
   // Indice corrente per la visualizzazione dei profili
   currentIndex = 0;
 
-  /* testUsers: UserData[] = [
+  /*
+  testUsers: UserData[] = [
     {
       id: 1,
       nome: 'Maria',
@@ -53,8 +54,8 @@ export class ExploreTest {
       accountType: 'STANDARD',
     },
   ];
-  ARRAY MOCKATO PER AVERE PIU' PROFILI E TESTARE IL CAMBIO CARD
   */
+  // ARRAY MOCKATO PER AVERE PIU' PROFILI E TESTARE IL CAMBIO CARD
 
   private userService = inject(UserServ);
   private swipeService = inject(Swipe);
@@ -75,7 +76,7 @@ export class ExploreTest {
   // Metodo che restituisce l'utente corrente da visualizzare
   get CurrentUser() {
     return this.discoverableUsers()[this.currentIndex];
-    // return this.testUsers[this.currentIndex]; TEST PER AVERE PIU' PROFILI
+    /* return this.testUsers[this.currentIndex];  TEST PER AVERE PIU' PROFILI*/
   }
 
   // Metodo che recupera gli utenti da esplorare
@@ -98,7 +99,10 @@ export class ExploreTest {
     };
 
     this.swipeService.makeSwipe(data);
-    // console.log('Swipe action:', data); PER TESTARE SENZA INVIO REALE AL BE
+    /*   console.log(
+      'Swipe action:',
+      data
+    );  PER TESTARE SENZA INVIO REALE AL BE */
 
     this.nextCard();
   }
@@ -111,12 +115,16 @@ export class ExploreTest {
     } else {
       alert('Non ci sono più profili per te!');
     }
-    /* if (this.currentIndex < this.testUsers.length - 1) {
+
+    /*
+    if (this.currentIndex < this.testUsers.length - 1) {
       this.currentIndex++;
       console.log('Nuovo currentIndex:', this.currentIndex);
     } else {
       alert('Non ci sono più profili per te!');
-    }  TEST PER AVERE PIU' PROFILI */
+    }
+      */
+    //  TEST PER AVERE PIU' PROFILI
   }
 
   ngOnInit() {

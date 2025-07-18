@@ -1,6 +1,7 @@
 <div class="explore-container">
   <app-explore-card
     *ngIf="CurrentUser"
+    [canSuperLike]="isPremium()"
     [discoverableUser]="CurrentUser"
     (swipeEvent)="handleSwipe($event, CurrentUser.id)"
   ></app-explore-card>

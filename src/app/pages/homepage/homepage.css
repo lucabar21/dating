@@ -25,7 +25,8 @@
   /* margin: 200px auto; */
   /* gap: 30px; */
   /* padding: 40px; */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+
   animation: fadeInUp 1s ease-out;
   /* flex-wrap: wrap; */
   padding-inline: 16px;
