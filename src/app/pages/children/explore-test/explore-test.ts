@@ -83,6 +83,7 @@ export class ExploreTest {
   getDiscoverableUsers() {
     this.userService.getDiscoverableUsers().subscribe({
       next: (users) => {
+        console.log('✅ UTENTI EXPLORE RICEVUTI:', users);
         this.discoverableUsers.set(Array.isArray(users) ? users : [users]);
       },
       error: (error) => {
