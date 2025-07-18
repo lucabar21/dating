@@ -9,7 +9,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0px 5%; 
     overflow-y: auto;
   }
 }

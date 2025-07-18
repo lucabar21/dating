@@ -4,11 +4,10 @@
     <router-outlet></router-outlet>
   </div>
   <app-bottom-nav *ngIf="isMobile"></app-bottom-nav>
- 
 </div>
-   <app-footer></app-footer>
 <!-- Welcome Modal -->
 <app-welcome-modal
   [showModal]="showWelcomeModal"
-  (closeModal)="onCloseWelcomeModal()">
+  (closeModal)="onCloseWelcomeModal()"
+>
 </app-welcome-modal>

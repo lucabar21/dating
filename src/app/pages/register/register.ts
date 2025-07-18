@@ -10,10 +10,11 @@ import { AuthService } from '../../services/auth';
 import { Router, RouterModule } from '@angular/router';
 import { ThemeServ } from '../../services/theme-serv';
 import { Subscription } from 'rxjs';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, Footer],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -28,7 +29,7 @@ export class Register implements OnInit, OnDestroy {
   constructor(private themeService: ThemeServ) {}
 
   ngOnInit(): void {
-    this.themeSub = this.themeService.theme$.subscribe(theme => {
+    this.themeSub = this.themeService.theme$.subscribe((theme) => {
       this.isDarkTheme = theme === 'dark';
     });
   }

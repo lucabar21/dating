@@ -8,7 +8,10 @@
 <div class="container1">
   <div class="login-container">
     <div class="heart-login-title">
-      <img [src]="isDarkTheme ?  '/assets/image/lovvami_logo_light.svg' : '/assets/image/lovvami_logo_dark.svg'" alt="Logo" />
+      <img
+        [src]="isDarkTheme ?  '/assets/image/lovvami_logo_light.svg' : '/assets/image/lovvami_logo_dark.svg'"
+        alt="Logo"
+      />
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
@@ -32,3 +35,4 @@
     </form>
   </div>
 </div>
+<app-footer></app-footer>
