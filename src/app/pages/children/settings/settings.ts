@@ -4,12 +4,35 @@ import { FormsModule } from '@angular/forms';
 import { ThemeServ } from '../../../services/theme-serv';
 import { UserServ } from '../../../services/user-serv';
 
+// Interface per i dati utente dal backend
 interface UserProfile {
+  id: number;
   nome: string;
-  username: string;
+  username: string; // Email dell'utente
+  genere: 'MASCHIO' | 'FEMMINA' | null; // Genere dell'utente
   bio: string;
+  interessi: string; // Stringa dal backend (da convertire in array)
+  fotoProfilo: string;
+  citta: string;
+  eta: number;
+  dataNascita: string;
   notificheAttive: boolean;
-  profileImageUrl?: string;
+  profileImageUrl?: string; // Per l'anteprima locale
+}
+
+// Interface per i dati di aggiornamento profilo
+interface UpdateUserData {
+  username: string;
+  password: string;
+  newPassword?: string;
+  nome: string;
+  bio: string;
+  interessi: string;
+  città: string;
+  dataNascita: string;
+  genere: string;
+  fotoProfilo: string;
+  notificheAttive?: boolean;
 }
 
 interface Preferences {
@@ -29,6 +52,9 @@ interface EditingFields {
   nome: boolean;
   username: boolean;
   bio: boolean;
+  citta: boolean;
+  dataNascita: boolean,
+  genere: boolean;
 }
 
 interface Interest {
@@ -48,8 +74,12 @@ export class Settings implements OnInit {
 
   @ViewChild('interestsModal') interestsModal!: ElementRef;
   @ViewChild('passwordModal') passwordModal!: ElementRef;
-
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
+  // 🔥 NUOVI STATI PER LOADING
+  loading: boolean = true;
+  error: string | null = null;
+  saving: boolean = false;
 
   // Variabili per tema
   isDarkTheme: boolean = false;
@@ -59,21 +89,28 @@ export class Settings implements OnInit {
   maxFileSize: number = 5 * 1024 * 1024; // 5MB
   allowedImageTypes: string[] = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
-  // Profilo utente
+  // 🔥 PROFILO UTENTE - INIZIALIZZATO VUOTO (CARICATO DAL BACKEND)
   userProfile: UserProfile = {
-    nome: 'Alex Rossi',
-    username: 'alex.rossi@example.com',
-    bio: 'Amo viaggiare e scoprire nuove culture...',
-    notificheAttive: true,
+    id: 0,
+    nome: '',
+    username: '',
+    genere: null,
+    bio: '',
+    interessi: '',
+    fotoProfilo: '',
+    citta: '',
+    eta: 0,
+    dataNascita: '',
+    notificheAttive: false,
     profileImageUrl: '',
   };
 
-  // Preferenze di matching
+  // 🔥 PREFERENZE - CARICATE DAL BACKEND
   preferences: Preferences = {
-    generePreferito: 'FEMMINA',
-    minEta: 22,
-    maxEta: 35,
-    distanzaMax: 25,
+    generePreferito: null,
+    minEta: 18,
+    maxEta: 65,
+    distanzaMax: 50,
   };
 
   // Dati per cambio password
@@ -88,26 +125,24 @@ export class Settings implements OnInit {
     nome: false,
     username: false,
     bio: false,
+    citta: false,
+    dataNascita: false,
+    genere: false,
   };
 
   // Backup values per cancel edit
   private backupValues: any = {};
 
-  // Interessi selezionati
-  selectedInterests: string[] = [
-    'sport',
-    'musica',
-    'viaggi',
-    'cucina',
-    'lettura',
-  ];
+  // 🔥 INTERESSI - CARICATI DAL BACKEND
+  selectedInterests: string[] = [];
 
   // Termine di ricerca per filtro interessi
   searchTerm: string = '';
 
-  // Mappa degli interessi per display
+  // Mappa degli interessi per display (già esistente)
   interestDisplayMap: { [key: string]: string } = {
     sport: '⚽ Sport',
+    calcio: '⚽ Calcio',
     musica: '🎵 Musica',
     viaggi: '✈️ Viaggi',
     cucina: '🍕 Cucina',
@@ -125,16 +160,18 @@ export class Settings implements OnInit {
     pittura: '🎨 Pittura',
     teatro: '🎭 Teatro',
     danza: '💃 Danza',
+    tecnologia: '💻 Tecnologia',
     backpacking: '🎒 Backpacking',
     camping: '⛺ Camping',
     escursionismo: '🥾 Escursionismo',
     montagna: '🏔️ Montagna',
   };
 
-  // Categorie di interessi
+  // Categorie di interessi (già esistenti)
   interestCategories = {
     sport: [
-      { key: 'sport', label: '⚽ Calcio' },
+      { key: 'sport', label: '⚽ Sport' },
+      { key: 'calcio', label: '⚽ Calcio' },
       { key: 'palestra', label: '🏋️ Palestra' },
       { key: 'corsa', label: '🏃 Corsa' },
       { key: 'nuoto', label: '🏊 Nuoto' },
@@ -178,7 +215,7 @@ export class Settings implements OnInit {
     tech: [
       { key: 'gaming', label: '🎮 Gaming' },
       { key: 'programmazione', label: '💻 Programmazione' },
-      { key: 'tech', label: '📱 Tecnologia' },
+      { key: 'tecnologia', label: '📱 Tecnologia' },
       { key: 'ai', label: '🤖 AI' },
       { key: 'crypto', label: '₿ Crypto' },
       { key: 'gadget', label: '⌚ Gadget' },
@@ -222,19 +259,283 @@ export class Settings implements OnInit {
   constructor(private themeService: ThemeServ, private userServ: UserServ) {}
 
   /****************************************************************************************************/
+  // 🔥 METODI PER CARICAMENTO DATI REALI
+  /****************************************************************************************************/
 
-  triggerFileInput(): void {
-  if (this.fileInput) {
-    this.fileInput.nativeElement.click();
+  ngOnInit(): void {
+    this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
+    this.loadUserProfile(); // Carica dati reali
+    this.loadPreferences(); 
+  }
+
+  /**
+   * 🔥 CARICA PROFILO UTENTE DAL BACKEND
+   */
+  loadUserProfile(): void {
+    this.loading = true;
+    this.error = null;
+
+    this.userServ.getCurrentUser().subscribe({
+      next: (response: any) => {
+        console.log('✅ Profilo caricato in Settings:', response);
+
+        // Aggiorna il profilo utente
+        this.userProfile = {
+        id: response.id,
+        nome: response.nome || '',
+        genere: response.genere || '', // 🔥 ORA FUNZIONA
+        username: response.username || '', // 🔥 ORA FUNZIONA (email reale)
+        bio: response.bio || '',
+        interessi: response.interessi || '',
+        fotoProfilo: response.fotoProfilo || '',
+        citta: response.citta || '',
+        eta: response.eta || 0,
+        dataNascita: this.formatDateForInput(response.dataNascita) || '', // 🔥 ORA FUNZIONA
+        notificheAttive: response.notificheAttive || false,
+        profileImageUrl: response.fotoProfilo || ''
+      };
+
+        // Converte interessi da stringa a array
+        this.updateSelectedInterestsFromString(response.interessi);
+
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('❌ Errore caricamento profilo:', error);
+        this.error = 'Errore nel caricamento del profilo. Riprova più tardi.';
+        this.loading = false;
+      }
+    });
+  }
+
+  // 🔥 CARICA PREFERENZE REALI
+loadPreferences(): void {
+  this.userServ.getPreferences().subscribe({
+    next: (response: any) => {
+      console.log('✅ Preferenze caricate:', response);
+      this.preferences = {
+        generePreferito: response.generePreferito,
+        minEta: response.minEta || 18,
+        maxEta: response.maxEta || 65,
+        distanzaMax: response.distanzaMax || 50
+      };
+    },
+    error: (error) => {
+      console.error('❌ Errore caricamento preferenze:', error);
+    }
+  });
+}
+
+// 🔥 SALVA PREFERENZE REALI
+savePreferences(): void {
+  this.saving = true;
+  
+  const preferencesData = {
+    generePreferito: this.preferences.generePreferito,
+    minEta: this.preferences.minEta,
+    maxEta: this.preferences.maxEta,
+    distanzaMax: this.preferences.distanzaMax
+  };
+
+  this.userServ.updatePreferences(preferencesData).subscribe({
+    next: (response) => {
+      console.log('✅ Preferenze salvate:', response);
+      this.saving = false;
+      this.showSuccessMessage('✅ Preferenze salvate!');
+    },
+    error: (error) => {
+      console.error('❌ Errore salvataggio preferenze:', error);
+      this.saving = false;
+      this.showErrorMessage('❌ Errore durante il salvataggio');
+    }
+  });
+}
+
+  /**
+   * 🔥 CONVERTE STRINGA INTERESSI IN ARRAY
+   */
+  updateSelectedInterestsFromString(interessiString: string): void {
+    if (!interessiString || interessiString.trim() === '') {
+      this.selectedInterests = [];
+      return;
+    }
+
+    this.selectedInterests = interessiString
+      .split(',')
+      .map(interest => interest.trim().toLowerCase())
+      .filter(interest => interest.length > 0);
+
+    console.log('🔥 Interessi convertiti:', this.selectedInterests);
+  }
+
+  /**
+   * 🔥 RICARICA PROFILO IN CASO DI ERRORE
+   */
+  retryLoadProfile(): void {
+    this.loadUserProfile();
+  }
+
+  /****************************************************************************************************/
+  // 🔥 METODI PER SALVATAGGIO DATI REALI
+  /****************************************************************************************************/
+
+  /**
+ * Formatta data per input date
+ */
+private formatDateForInput(dateString: string): string {
+  if (!dateString) return '';
+  
+  // Se è già nel formato YYYY-MM-DD, ritorna così
+  if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    return dateString;
+  }
+  
+  // Altrimenti prova a parsarla e convertirla
+  try {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
+  } catch {
+    return '';
   }
 }
 
-onImageError(event: Event): void {
-  const img = event.target as HTMLImageElement;
-  img.src = 'assets/default-avatar.png';
+  /**
+   * 🔥 CREA OGGETTO DATI PER AGGIORNAMENTO
+   */
+  private createUpdateData(): UpdateUserData {
+  return {
+    username: this.userProfile.username,
+    password: '', // 🔥 VUOTO - non serve per aggiornamenti normali
+    nome: this.userProfile.nome,
+    bio: this.userProfile.bio,
+    interessi: this.selectedInterests.join(', '),
+    città: this.userProfile.citta,
+    dataNascita: this.userProfile.dataNascita,
+    genere: this.userProfile.genere || '',
+    fotoProfilo: this.userProfile.fotoProfilo,
+    notificheAttive: this.userProfile.notificheAttive
+  };
 }
 
-onFileSelected(event: Event): void {
+  /**
+   * 🔥 SALVA CAMPO MODIFICATO
+   */
+  saveField(fieldName: keyof EditingFields): void {
+    this.editingFields[fieldName] = false;
+    delete this.backupValues[fieldName];
+
+    this.saving = true;
+    const updateData = this.createUpdateData();
+
+    console.log(`🔥 Salvando ${fieldName}:`, updateData);
+
+    this.userServ.updateUser(updateData).subscribe({
+      next: (response) => {
+        console.log('✅ Campo salvato:', response);
+        this.saving = false;
+
+        // Aggiorna il profilo con i dati ricevuti
+        if (response) {
+          this.userProfile = { ...this.userProfile, ...response };
+        }
+
+        // Mostra feedback
+        this.showSuccessMessage(`✅ ${fieldName} aggiornato con successo!`);
+      },
+      error: (error) => {
+        console.error('❌ Errore salvataggio:', error);
+        this.saving = false;
+        this.showErrorMessage(`❌ Errore durante l'aggiornamento di ${fieldName}`);
+      }
+    });
+  }
+
+  /**
+   * 🔥 SALVA INTERESSI
+   */
+  saveInterests(): void {
+    if (this.selectedInterests.length === 0) {
+      alert('⚠️ Seleziona almeno un interesse!');
+      return;
+    }
+
+    this.saving = true;
+    const updateData = this.createUpdateData();
+
+    console.log('🔥 Salvando interessi:', updateData);
+
+    this.userServ.updateUser(updateData).subscribe({
+      next: (response) => {
+        console.log('✅ Interessi salvati:', response);
+        this.saving = false;
+
+        // Aggiorna il profilo
+        this.userProfile.interessi = this.selectedInterests.join(', ');
+
+        // Chiudi modal
+        this.closeModal('interestsModal');
+
+        // Mostra feedback
+        this.showSuccessMessage('✅ Interessi salvati con successo!');
+      },
+      error: (error) => {
+        console.error('❌ Errore salvataggio interessi:', error);
+        this.saving = false;
+        this.showErrorMessage('❌ Errore durante il salvataggio degli interessi');
+      }
+    });
+  }
+
+  /****************************************************************************************************/
+  // 🔥 METODI DI UTILITÀ
+  /****************************************************************************************************/
+
+  /**
+   * 🔥 MOSTRA MESSAGGIO DI SUCCESSO
+   */
+  private showSuccessMessage(message: string): void {
+    // TODO: Implementare toast/notifica più elegante
+    alert(message);
+  }
+
+  /**
+   * 🔥 MOSTRA MESSAGGIO DI ERRORE
+   */
+  private showErrorMessage(message: string): void {
+    // TODO: Implementare toast/notifica più elegante
+    alert(message);
+  }
+
+  /**
+   * 🔥 CHIUDE MODAL
+   */
+  private closeModal(modalName: string): void {
+    const modalElement = modalName === 'interestsModal' ?
+      this.interestsModal.nativeElement :
+      this.passwordModal.nativeElement;
+
+    const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
+    if (modal) {
+      modal.hide();
+    }
+  }
+
+  /****************************************************************************************************/
+  // METODI ESISTENTI (mantenuti uguali ma aggiornati)
+  /****************************************************************************************************/
+
+  triggerFileInput(): void {
+    if (this.fileInput) {
+      this.fileInput.nativeElement.click();
+    }
+  }
+
+  onImageError(event: Event): void {
+  const img = event.target as HTMLImageElement;
+  img.src = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
+}
+
+  onFileSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
   if (!input.files || input.files.length === 0) return;
 
@@ -242,34 +543,53 @@ onFileSelected(event: Event): void {
 
   // Verifica tipo immagine
   if (!this.allowedImageTypes.includes(file.type)) {
-    alert('Formato immagine non supportato. Usa JPG, PNG, GIF o WEBP.');
+    this.showErrorMessage('Formato immagine non supportato. Usa JPG, PNG, GIF o WEBP.');
     return;
   }
 
   // Verifica dimensione
   if (file.size > this.maxFileSize) {
-    alert('L\'immagine supera la dimensione massima di 5MB.');
+    this.showErrorMessage('L\'immagine supera la dimensione massima di 5MB.');
     return;
   }
 
-  // Legge l'immagine come base64 per anteprima immediata
+  // 🔥 MOSTRA LOADING
+  this.isUploadingImage = true;
+
+  // Legge l'immagine come base64
   const reader = new FileReader();
   reader.onload = () => {
     this.userProfile.profileImageUrl = reader.result as string;
+    this.userProfile.fotoProfilo = reader.result as string;
+
+    // 🔥 SALVA AUTOMATICAMENTE L'IMMAGINE
+    const updateData = this.createUpdateData();
+    
+    console.log('🔥 Salvando immagine automaticamente...');
+    
+    this.userServ.updateUser(updateData).subscribe({
+      next: (response) => {
+        console.log('✅ Immagine salvata:', response);
+        this.isUploadingImage = false;
+        this.showSuccessMessage('✅ Immagine profilo aggiornata!');
+        
+        // Aggiorna il profilo con i dati ricevuti
+        if (response) {
+          this.userProfile = { ...this.userProfile, ...response };
+        }
+      },
+      error: (error) => {
+        console.error('❌ Errore salvataggio immagine:', error);
+        this.isUploadingImage = false;
+        this.showErrorMessage('❌ Errore durante il salvataggio dell\'immagine');
+        
+        // Ripristina l'immagine precedente in caso di errore
+        this.userProfile.profileImageUrl = this.userProfile.fotoProfilo;
+      }
+    });
   };
   reader.readAsDataURL(file);
-  
-  
-   setTimeout(() => {
-      alert('Immagine caricata: ' + this.userProfile.profileImageUrl);
-    }, 1000);
 }
-
-
-  ngOnInit(): void {
-    this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
-    this.testConnection();
-  }
 
   // METODO FUNZIONANTE - Toggle del tema
   toggleTheme(): void {
@@ -287,17 +607,6 @@ onFileSelected(event: Event): void {
     }
   }
 
-  saveField(fieldName: keyof EditingFields): void {
-    this.editingFields[fieldName] = false;
-    delete this.backupValues[fieldName];
-
-    // TODO: Implementare chiamata API per salvare il campo
-    console.log(`Salvando ${fieldName}:`, this.userProfile[fieldName]);
-
-    // Placeholder per ora
-    // this.userService.updateField(fieldName, this.userProfile[fieldName]);
-  }
-
   cancelEdit(fieldName: keyof EditingFields): void {
     (this.userProfile as any)[fieldName] = this.backupValues[fieldName];
     this.editingFields[fieldName] = false;
@@ -306,40 +615,23 @@ onFileSelected(event: Event): void {
 
   // Metodi per preferenze di matching
   selectGender(gender: 'MASCHIO' | 'FEMMINA'): void {
-    this.preferences.generePreferito = gender;
-    console.log('Genere preferito selezionato:', gender);
-
-    // TODO: Implementare salvataggio automatico delle preferenze
-    // this.preferencesService.updateGender(gender);
-  }
+  this.preferences.generePreferito = gender;
+   
+}
 
   updateAgeRange(): void {
-    console.log(
-      `Fascia d'età aggiornata: ${this.preferences.minEta} - ${this.preferences.maxEta}`
-    );
-
-    // TODO: Implementare salvataggio automatico
-    // this.preferencesService.updateAgeRange(this.preferences.minEta, this.preferences.maxEta);
+    
   }
 
   updateDistance(): void {
-    console.log(
-      'Distanza massima aggiornata:',
-      this.preferences.distanzaMax,
-      'km'
-    );
-
-    // TODO: Implementare salvataggio automatico
-    // this.preferencesService.updateDistance(this.preferences.distanzaMax);
+    
   }
 
   // Metodi per notifiche
   toggleNotifications(): void {
     this.userProfile.notificheAttive = !this.userProfile.notificheAttive;
-    console.log('Notifiche attive:', this.userProfile.notificheAttive);
-
+    console.log('🔥 Notifiche attive:', this.userProfile.notificheAttive);
     // TODO: Implementare salvataggio
-    // this.userService.updateNotifications(this.userProfile.notificheAttive);
   }
 
   // Metodi per gestione interessi
@@ -350,22 +642,24 @@ onFileSelected(event: Event): void {
   }
 
   isInterestSelected(interestKey: string): boolean {
-    return this.selectedInterests.includes(interestKey);
+    return this.selectedInterests.includes(interestKey.toLowerCase());
   }
 
   toggleInterest(interestKey: string): void {
-    if (this.isInterestSelected(interestKey)) {
-      this.selectedInterests = this.selectedInterests.filter(
-        (i) => i !== interestKey
-      );
+    const lowerKey = interestKey.toLowerCase();
+
+    if (this.isInterestSelected(lowerKey)) {
+      this.selectedInterests = this.selectedInterests.filter(i => i !== lowerKey);
     } else {
       if (this.selectedInterests.length < 10) {
-        this.selectedInterests.push(interestKey);
+        this.selectedInterests.push(lowerKey);
       } else {
-        alert('Puoi selezionare massimo 10 interessi!');
+        this.showErrorMessage('Puoi selezionare massimo 10 interessi!');
         return;
       }
     }
+
+    console.log('🔥 Interessi selezionati:', this.selectedInterests);
   }
 
   filterInterests(): void {
@@ -375,10 +669,7 @@ onFileSelected(event: Event): void {
   getCategoryDisplay(categoryKey: string): string {
     if (!this.searchTerm.trim()) return 'block';
 
-    const category =
-      this.interestCategories[
-        categoryKey as keyof typeof this.interestCategories
-      ];
+    const category = this.interestCategories[categoryKey as keyof typeof this.interestCategories];
     const hasVisibleInterests = category.some((interest) =>
       interest.label.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
@@ -395,21 +686,9 @@ onFileSelected(event: Event): void {
   }
 
   getSelectedInterestsDisplay(): string[] {
-    return this.selectedInterests.map(
-      (key) => this.interestDisplayMap[key] || key
+    return this.selectedInterests.map(key =>
+      this.interestDisplayMap[key] || `🔸 ${key}`
     );
-  }
-
-  saveInterests(): void {
-    console.log('Interessi salvati:', this.selectedInterests);
-
-    // TODO: Implementare salvataggio
-    // this.userService.updateInterests(this.selectedInterests);
-
-    // Chiudi modal
-    const modalElement = this.interestsModal.nativeElement;
-    const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
-    modal.hide();
   }
 
   // Metodi per cambio password
@@ -420,32 +699,64 @@ onFileSelected(event: Event): void {
   }
 
   changePassword(): void {
-    // Validazione
-    if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
-      alert('❌ Le password non coincidono!');
-      return;
-    }
-
-    if (this.passwordData.newPassword.length < 6) {
-      alert('❌ La password deve contenere almeno 6 caratteri!');
-      return;
-    }
-
-    if (!this.passwordData.currentPassword) {
-      alert('❌ Inserisci la password attuale per cambiarla!');
-      return;
-    }
-
-    console.log('Cambiando password...');
-
-    // TODO: Implementare cambio password
-    // this.authService.changePassword(this.passwordData);
-
-    alert('✅ Password cambiata con successo!');
-
-    // Reset e chiudi modal
-    this.resetPasswordModal();
+  // Validazione
+  if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
+    this.showErrorMessage('❌ Le password non coincidono!');
+    return;
   }
+
+  if (this.passwordData.newPassword.length < 6) {
+    this.showErrorMessage('❌ La password deve contenere almeno 6 caratteri!');
+    return;
+  }
+
+  if (!this.passwordData.currentPassword) {
+    this.showErrorMessage('❌ Inserisci la password attuale per cambiarla!');
+    return;
+  }
+
+  this.saving = true;
+
+  // 🔥 CREA DATI SPECIFICI PER CAMBIO PASSWORD
+  const passwordChangeData = {
+    username: this.userProfile.username,
+    password: this.passwordData.currentPassword,     // Password attuale
+    newPassword: this.passwordData.newPassword,      // Nuova password
+    nome: this.userProfile.nome,
+    bio: this.userProfile.bio,
+    interessi: this.selectedInterests.join(', '),
+    città: this.userProfile.citta,
+    dataNascita: this.userProfile.dataNascita,
+    genere: this.userProfile.genere || '',
+    fotoProfilo: this.userProfile.fotoProfilo,
+    notificheAttive: this.userProfile.notificheAttive
+  };
+
+  console.log('🔥 Cambiando password...');
+
+  this.userServ.updateUser(passwordChangeData).subscribe({
+    next: (response) => {
+      console.log('✅ Password cambiata:', response);
+      this.saving = false;
+      this.showSuccessMessage('✅ Password cambiata con successo!');
+      this.resetPasswordModal();
+    },
+    error: (error) => {
+      console.error('❌ Errore cambio password:', error);
+      this.saving = false;
+      
+      // 🔥 GESTIONE ERRORI SPECIFICI
+      let errorMessage = 'Errore sconosciuto';
+      if (error.error && typeof error.error === 'string') {
+        errorMessage = error.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      this.showErrorMessage('❌ ' + errorMessage);
+    }
+  });
+}
 
   private resetPasswordModal(): void {
     this.passwordData = {
@@ -454,50 +765,27 @@ onFileSelected(event: Event): void {
       confirmPassword: '',
     };
 
-    const modalElement = this.passwordModal.nativeElement;
-    const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
-    modal.hide();
+    this.closeModal('passwordModal');
   }
 
   // Metodo per disattivazione account
   deactivateAccount(): void {
-    if (
-      confirm(
-        '⚠️ Sei sicuro di voler disattivare il tuo account? Questa azione non può essere annullata.'
-      )
-    ) {
-      console.log('Disattivando account...');
-
-      // TODO: Implementare disattivazione account
-      // this.userService.deactivateAccount();
-
-      alert('Account disattivato. Ci mancherai! 💔');
+    if (confirm('⚠️ Sei sicuro di voler disattivare il tuo account? Questa azione non può essere annullata.')) {
+      console.log('🔥 Disattivando account...');
+      // TODO: Implementare disattivazione account reale
+      this.showSuccessMessage('Account disattivato. Ci mancherai! 💔');
     }
   }
 
-  // Metodo di test
+  // Metodo di test (mantenuto per debug)
   testConnection() {
-    console.log('🔥 Testing connection to:', this.userServ['baseUrl']); // Mostra quale URL sta usando
-
+    console.log('🔥 Testing connection to:', this.userServ['baseUrl']);
     this.userServ.getAllUsers().subscribe({
       next: (users: any) => {
         console.log('✅ SUCCESS! Users received:', users);
-        console.log('📊 Number of users:', users.length);
-
-        // Mostra dettagli di ogni utente
-        users.forEach((user: any, index: number) => {
-          console.log(`👤 User ${index + 1}:`, {
-            id: user.id,
-            nome: user.nome,
-            eta: user.eta,
-            citta: user.citta,
-          });
-        });
       },
       error: (error) => {
         console.error('❌ ERROR:', error);
-        console.error('🔗 URL used:', this.userServ['baseUrl']);
-        console.error('🔗 Check if backend is running on localhost:8080');
       },
     });
   }
