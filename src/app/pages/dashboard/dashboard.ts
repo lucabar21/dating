@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { BottomNav } from '../../components/bottom-nav/bottom-nav';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { WelcomeModal } from '../../components/welcome-modal/welcome-modal';
+import { Footer } from '../../components/footer/footer';
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, Sidebar, BottomNav,WelcomeModal],
+  imports: [RouterOutlet, CommonModule, Sidebar, BottomNav,WelcomeModal, Footer],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
