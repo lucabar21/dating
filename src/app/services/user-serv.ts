@@ -23,28 +23,28 @@ export class UserServ {
 
   constructor(private http: HttpClient) {}
 
-  /**
+  /*
    * Ottiene il profilo dell'utente corrente
    */
   getCurrentUser(): Observable<UserData> {
     return this.http.get<UserData>(`${this.baseUrl}utenti/me`);
   }
 
-  /**
+  /*
    * Aggiorna il profilo dell'utente
    */
   updateUser(userData: any): Observable<any> {
     return this.http.put(`${this.baseUrl}utenti/me`, userData);
   }
 
-  /**
+  /*
    * Ottiene tutti gli utenti (per test/admin)
    */
   getAllUsers(): Observable<UserData[]> {
     return this.http.get<UserData[]>(`${this.baseUrl}utenti`);
   }
 
-  /**
+  /*
    * Ottiene il profilo pubblico di un utente
    */
   getUserProfile(userId: number): Observable<UserData> {
@@ -56,10 +56,10 @@ export class UserServ {
   }
 
   getPreferences(): Observable<any> {
-  return this.http.get(`${this.baseUrl}preferenze/me`);
-}
+    return this.http.get(`${this.baseUrl}preferenze/me`);
+  }
 
-updatePreferences(preferences: any): Observable<any> {
-  return this.http.put(`${this.baseUrl}preferenze/me`, preferences);
-}
+  updatePreferences(preferences: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}preferenze/me`, preferences);
+  }
 }

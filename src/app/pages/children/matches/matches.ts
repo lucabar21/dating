@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatchServ } from '../../../services/matchServ';
+import { UserServ } from '../../../services/user-serv';
 
 @Component({
   selector: 'app-matches',
@@ -17,62 +18,44 @@ import { MatchServ } from '../../../services/matchServ';
 })
 export class Matches implements OnInit {
   private matchService = inject(MatchServ);
+  private userService = inject(UserServ);
 
+  currentUser = signal<any>(null);
   matches = signal<any[]>([]);
-  /*
-  userProfiles = [
-    {
-      id: 101,
-      name: 'Alice',
-      profilePicture:
-        'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg',
-      age: 25,
-      location: 'Roma',
-    },
-    {
-      id: 102,
-      name: 'Bob',
-      profilePicture:
-        'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg',
-      age: 28,
-      location: 'Napoli',
-    },
-    {
-      id: 103,
-      name: 'Charlie',
-      profilePicture:
-        'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg',
-      age: 30,
-      location: 'Milano',
-    },
-    {
-      id: 104,
-      name: 'Diana',
-      profilePicture:
-        'https://images.pexels.com/photos/1542085/pexels-photo-1542085.jpeg',
-      age: 27,
-      location: 'Torino',
-    },
-    {
-      id: 105,
-      name: 'Ethan',
-      profilePicture:
-        'https://images.pexels.com/photos/26607971/pexels-photo-26607971.jpeg',
-      age: 29,
-      location: 'Firenze',
-    },
-  ];
-  */
 
-  getMatches() {
-    this.matchService.getMatches().subscribe((data: any[]) => {
-      console.log('Matches fetched:', data);
-      this.matches.set(data);
+  // Metodo per ottenere l'utente corrente e per settarlo nel signal currentUser
+  getCurrentUser() {
+    this.userService.getCurrentUser().subscribe((user) => {
+      this.currentUser.set(user);
     });
   }
 
-  ngOnInit() {
-    this.getMatches();
+  // Metodo per ottenere i match e per settarli nel signal matches
+  getMatches() {
+    this.matchService.getMatches().subscribe((data: any[]) => {
+      this.matches.set(data);
+      data.forEach((match) => {
+        this.getOtherUserProfile(match);
+      });
+    });
+  }
+
+  // Metodo per ottenere il profilo dell'altro utente nel match
+  getOtherUserProfile(match: any) {
+    const otherUserId =
+      match.utente1Id === this.currentUser()?.id
+        ? match.utente2Id
+        : match.utente1Id;
+
+    this.userService.getUserProfile(otherUserId).subscribe({
+      next: (profile) => {
+        match.otherUserProfile = profile;
+        this.matches.update((matches) => [...matches]);
+      },
+      error: (error) => {
+        console.error('Error loading profile:', error);
+      },
+    });
   }
 
   // Metodo per convertire il timestamp del match in quanto tempo è passato da quando è stato creato
@@ -92,5 +75,14 @@ export class Matches implements OnInit {
     } else {
       return `${seconds} secondi fa`;
     }
+  }
+
+  ngOnInit() {
+    this.userService.getCurrentUser().subscribe((user) => {
+      // setta l'utente corrente nel signal
+      this.currentUser.set(user);
+      // chiamata solo dopo aver ottenuto l'utente
+      this.getMatches();
+    });
   }
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ThemeServ } from '../../../services/theme-serv';
 import { UserServ } from '../../../services/user-serv';
+import { Spinner } from '../../../components/spinner/spinner';
 
 // Interface per i dati utente dal backend
 interface UserProfile {
@@ -53,7 +54,7 @@ interface EditingFields {
   username: boolean;
   bio: boolean;
   citta: boolean;
-  dataNascita: boolean,
+  dataNascita: boolean;
   genere: boolean;
 }
 
@@ -65,7 +66,7 @@ interface Interest {
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Spinner],
   templateUrl: './settings.html',
   styleUrls: ['./settings.css'],
 })
@@ -87,7 +88,12 @@ export class Settings implements OnInit {
   // Variabili per gestione immagine di profilo
   isUploadingImage: boolean = false;
   maxFileSize: number = 5 * 1024 * 1024; // 5MB
-  allowedImageTypes: string[] = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+  allowedImageTypes: string[] = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+  ];
 
   // 🔥 PROFILO UTENTE - INIZIALIZZATO VUOTO (CARICATO DAL BACKEND)
   userProfile: UserProfile = {
@@ -265,7 +271,7 @@ export class Settings implements OnInit {
   ngOnInit(): void {
     this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
     this.loadUserProfile(); // Carica dati reali
-    this.loadPreferences(); 
+    this.loadPreferences();
   }
 
   /**
@@ -281,19 +287,19 @@ export class Settings implements OnInit {
 
         // Aggiorna il profilo utente
         this.userProfile = {
-        id: response.id,
-        nome: response.nome || '',
-        genere: response.genere || '', // 🔥 ORA FUNZIONA
-        username: response.username || '', // 🔥 ORA FUNZIONA (email reale)
-        bio: response.bio || '',
-        interessi: response.interessi || '',
-        fotoProfilo: response.fotoProfilo || '',
-        citta: response.citta || '',
-        eta: response.eta || 0,
-        dataNascita: this.formatDateForInput(response.dataNascita) || '', // 🔥 ORA FUNZIONA
-        notificheAttive: response.notificheAttive || false,
-        profileImageUrl: response.fotoProfilo || ''
-      };
+          id: response.id,
+          nome: response.nome || '',
+          genere: response.genere || '', // 🔥 ORA FUNZIONA
+          username: response.username || '', // 🔥 ORA FUNZIONA (email reale)
+          bio: response.bio || '',
+          interessi: response.interessi || '',
+          fotoProfilo: response.fotoProfilo || '',
+          citta: response.citta || '',
+          eta: response.eta || 0,
+          dataNascita: this.formatDateForInput(response.dataNascita) || '', // 🔥 ORA FUNZIONA
+          notificheAttive: response.notificheAttive || false,
+          profileImageUrl: response.fotoProfilo || '',
+        };
 
         // Converte interessi da stringa a array
         this.updateSelectedInterestsFromString(response.interessi);
@@ -304,52 +310,52 @@ export class Settings implements OnInit {
         console.error('❌ Errore caricamento profilo:', error);
         this.error = 'Errore nel caricamento del profilo. Riprova più tardi.';
         this.loading = false;
-      }
+      },
     });
   }
 
   // 🔥 CARICA PREFERENZE REALI
-loadPreferences(): void {
-  this.userServ.getPreferences().subscribe({
-    next: (response: any) => {
-      console.log('✅ Preferenze caricate:', response);
-      this.preferences = {
-        generePreferito: response.generePreferito,
-        minEta: response.minEta || 18,
-        maxEta: response.maxEta || 65,
-        distanzaMax: response.distanzaMax || 50
-      };
-    },
-    error: (error) => {
-      console.error('❌ Errore caricamento preferenze:', error);
-    }
-  });
-}
+  loadPreferences(): void {
+    this.userServ.getPreferences().subscribe({
+      next: (response: any) => {
+        console.log('✅ Preferenze caricate:', response);
+        this.preferences = {
+          generePreferito: response.generePreferito,
+          minEta: response.minEta || 18,
+          maxEta: response.maxEta || 65,
+          distanzaMax: response.distanzaMax || 50,
+        };
+      },
+      error: (error) => {
+        console.error('❌ Errore caricamento preferenze:', error);
+      },
+    });
+  }
 
-// 🔥 SALVA PREFERENZE REALI
-savePreferences(): void {
-  this.saving = true;
-  
-  const preferencesData = {
-    generePreferito: this.preferences.generePreferito,
-    minEta: this.preferences.minEta,
-    maxEta: this.preferences.maxEta,
-    distanzaMax: this.preferences.distanzaMax
-  };
+  // 🔥 SALVA PREFERENZE REALI
+  savePreferences(): void {
+    this.saving = true;
 
-  this.userServ.updatePreferences(preferencesData).subscribe({
-    next: (response) => {
-      console.log('✅ Preferenze salvate:', response);
-      this.saving = false;
-      this.showSuccessMessage('✅ Preferenze salvate!');
-    },
-    error: (error) => {
-      console.error('❌ Errore salvataggio preferenze:', error);
-      this.saving = false;
-      this.showErrorMessage('❌ Errore durante il salvataggio');
-    }
-  });
-}
+    const preferencesData = {
+      generePreferito: this.preferences.generePreferito,
+      minEta: this.preferences.minEta,
+      maxEta: this.preferences.maxEta,
+      distanzaMax: this.preferences.distanzaMax,
+    };
+
+    this.userServ.updatePreferences(preferencesData).subscribe({
+      next: (response) => {
+        console.log('✅ Preferenze salvate:', response);
+        this.saving = false;
+        this.showSuccessMessage('✅ Preferenze salvate!');
+      },
+      error: (error) => {
+        console.error('❌ Errore salvataggio preferenze:', error);
+        this.saving = false;
+        this.showErrorMessage('❌ Errore durante il salvataggio');
+      },
+    });
+  }
 
   /**
    * 🔥 CONVERTE STRINGA INTERESSI IN ARRAY
@@ -362,8 +368,8 @@ savePreferences(): void {
 
     this.selectedInterests = interessiString
       .split(',')
-      .map(interest => interest.trim().toLowerCase())
-      .filter(interest => interest.length > 0);
+      .map((interest) => interest.trim().toLowerCase())
+      .filter((interest) => interest.length > 0);
 
     console.log('🔥 Interessi convertiti:', this.selectedInterests);
   }
@@ -380,42 +386,42 @@ savePreferences(): void {
   /****************************************************************************************************/
 
   /**
- * Formatta data per input date
- */
-private formatDateForInput(dateString: string): string {
-  if (!dateString) return '';
-  
-  // Se è già nel formato YYYY-MM-DD, ritorna così
-  if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
-    return dateString;
+   * Formatta data per input date
+   */
+  private formatDateForInput(dateString: string): string {
+    if (!dateString) return '';
+
+    // Se è già nel formato YYYY-MM-DD, ritorna così
+    if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return dateString;
+    }
+
+    // Altrimenti prova a parsarla e convertirla
+    try {
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0];
+    } catch {
+      return '';
+    }
   }
-  
-  // Altrimenti prova a parsarla e convertirla
-  try {
-    const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
-  } catch {
-    return '';
-  }
-}
 
   /**
    * 🔥 CREA OGGETTO DATI PER AGGIORNAMENTO
    */
   private createUpdateData(): UpdateUserData {
-  return {
-    username: this.userProfile.username,
-    password: '', // 🔥 VUOTO - non serve per aggiornamenti normali
-    nome: this.userProfile.nome,
-    bio: this.userProfile.bio,
-    interessi: this.selectedInterests.join(', '),
-    città: this.userProfile.citta,
-    dataNascita: this.userProfile.dataNascita,
-    genere: this.userProfile.genere || '',
-    fotoProfilo: this.userProfile.fotoProfilo,
-    notificheAttive: this.userProfile.notificheAttive
-  };
-}
+    return {
+      username: this.userProfile.username,
+      password: '', // 🔥 VUOTO - non serve per aggiornamenti normali
+      nome: this.userProfile.nome,
+      bio: this.userProfile.bio,
+      interessi: this.selectedInterests.join(', '),
+      città: this.userProfile.citta,
+      dataNascita: this.userProfile.dataNascita,
+      genere: this.userProfile.genere || '',
+      fotoProfilo: this.userProfile.fotoProfilo,
+      notificheAttive: this.userProfile.notificheAttive,
+    };
+  }
 
   /**
    * 🔥 SALVA CAMPO MODIFICATO
@@ -445,8 +451,10 @@ private formatDateForInput(dateString: string): string {
       error: (error) => {
         console.error('❌ Errore salvataggio:', error);
         this.saving = false;
-        this.showErrorMessage(`❌ Errore durante l'aggiornamento di ${fieldName}`);
-      }
+        this.showErrorMessage(
+          `❌ Errore durante l'aggiornamento di ${fieldName}`
+        );
+      },
     });
   }
 
@@ -481,8 +489,10 @@ private formatDateForInput(dateString: string): string {
       error: (error) => {
         console.error('❌ Errore salvataggio interessi:', error);
         this.saving = false;
-        this.showErrorMessage('❌ Errore durante il salvataggio degli interessi');
-      }
+        this.showErrorMessage(
+          '❌ Errore durante il salvataggio degli interessi'
+        );
+      },
     });
   }
 
@@ -510,9 +520,10 @@ private formatDateForInput(dateString: string): string {
    * 🔥 CHIUDE MODAL
    */
   private closeModal(modalName: string): void {
-    const modalElement = modalName === 'interestsModal' ?
-      this.interestsModal.nativeElement :
-      this.passwordModal.nativeElement;
+    const modalElement =
+      modalName === 'interestsModal'
+        ? this.interestsModal.nativeElement
+        : this.passwordModal.nativeElement;
 
     const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
     if (modal) {
@@ -531,65 +542,70 @@ private formatDateForInput(dateString: string): string {
   }
 
   onImageError(event: Event): void {
-  const img = event.target as HTMLImageElement;
-  img.src = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
-}
+    const img = event.target as HTMLImageElement;
+    img.src =
+      'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
+  }
 
   onFileSelected(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  if (!input.files || input.files.length === 0) return;
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
 
-  const file = input.files[0];
+    const file = input.files[0];
 
-  // Verifica tipo immagine
-  if (!this.allowedImageTypes.includes(file.type)) {
-    this.showErrorMessage('Formato immagine non supportato. Usa JPG, PNG, GIF o WEBP.');
-    return;
+    // Verifica tipo immagine
+    if (!this.allowedImageTypes.includes(file.type)) {
+      this.showErrorMessage(
+        'Formato immagine non supportato. Usa JPG, PNG, GIF o WEBP.'
+      );
+      return;
+    }
+
+    // Verifica dimensione
+    if (file.size > this.maxFileSize) {
+      this.showErrorMessage("L'immagine supera la dimensione massima di 5MB.");
+      return;
+    }
+
+    // 🔥 MOSTRA LOADING
+    this.isUploadingImage = true;
+
+    // Legge l'immagine come base64
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.userProfile.profileImageUrl = reader.result as string;
+      this.userProfile.fotoProfilo = reader.result as string;
+
+      // 🔥 SALVA AUTOMATICAMENTE L'IMMAGINE
+      const updateData = this.createUpdateData();
+
+      console.log('🔥 Salvando immagine automaticamente...');
+
+      this.userServ.updateUser(updateData).subscribe({
+        next: (response) => {
+          console.log('✅ Immagine salvata:', response);
+          this.isUploadingImage = false;
+          this.showSuccessMessage('✅ Immagine profilo aggiornata!');
+
+          // Aggiorna il profilo con i dati ricevuti
+          if (response) {
+            this.userProfile = { ...this.userProfile, ...response };
+          }
+        },
+        error: (error) => {
+          console.error('❌ Errore salvataggio immagine:', error);
+          this.isUploadingImage = false;
+          this.showErrorMessage(
+            "❌ Errore durante il salvataggio dell'immagine"
+          );
+
+          // Ripristina l'immagine precedente in caso di errore
+          this.userProfile.profileImageUrl = this.userProfile.fotoProfilo;
+        },
+      });
+    };
+    reader.readAsDataURL(file);
   }
-
-  // Verifica dimensione
-  if (file.size > this.maxFileSize) {
-    this.showErrorMessage('L\'immagine supera la dimensione massima di 5MB.');
-    return;
-  }
-
-  // 🔥 MOSTRA LOADING
-  this.isUploadingImage = true;
-
-  // Legge l'immagine come base64
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.userProfile.profileImageUrl = reader.result as string;
-    this.userProfile.fotoProfilo = reader.result as string;
-
-    // 🔥 SALVA AUTOMATICAMENTE L'IMMAGINE
-    const updateData = this.createUpdateData();
-    
-    console.log('🔥 Salvando immagine automaticamente...');
-    
-    this.userServ.updateUser(updateData).subscribe({
-      next: (response) => {
-        console.log('✅ Immagine salvata:', response);
-        this.isUploadingImage = false;
-        this.showSuccessMessage('✅ Immagine profilo aggiornata!');
-        
-        // Aggiorna il profilo con i dati ricevuti
-        if (response) {
-          this.userProfile = { ...this.userProfile, ...response };
-        }
-      },
-      error: (error) => {
-        console.error('❌ Errore salvataggio immagine:', error);
-        this.isUploadingImage = false;
-        this.showErrorMessage('❌ Errore durante il salvataggio dell\'immagine');
-        
-        // Ripristina l'immagine precedente in caso di errore
-        this.userProfile.profileImageUrl = this.userProfile.fotoProfilo;
-      }
-    });
-  };
-  reader.readAsDataURL(file);
-}
 
   // METODO FUNZIONANTE - Toggle del tema
   toggleTheme(): void {
@@ -615,17 +631,12 @@ private formatDateForInput(dateString: string): string {
 
   // Metodi per preferenze di matching
   selectGender(gender: 'MASCHIO' | 'FEMMINA'): void {
-  this.preferences.generePreferito = gender;
-   
-}
-
-  updateAgeRange(): void {
-    
+    this.preferences.generePreferito = gender;
   }
 
-  updateDistance(): void {
-    
-  }
+  updateAgeRange(): void {}
+
+  updateDistance(): void {}
 
   // Metodi per notifiche
   toggleNotifications(): void {
@@ -649,7 +660,9 @@ private formatDateForInput(dateString: string): string {
     const lowerKey = interestKey.toLowerCase();
 
     if (this.isInterestSelected(lowerKey)) {
-      this.selectedInterests = this.selectedInterests.filter(i => i !== lowerKey);
+      this.selectedInterests = this.selectedInterests.filter(
+        (i) => i !== lowerKey
+      );
     } else {
       if (this.selectedInterests.length < 10) {
         this.selectedInterests.push(lowerKey);
@@ -669,7 +682,10 @@ private formatDateForInput(dateString: string): string {
   getCategoryDisplay(categoryKey: string): string {
     if (!this.searchTerm.trim()) return 'block';
 
-    const category = this.interestCategories[categoryKey as keyof typeof this.interestCategories];
+    const category =
+      this.interestCategories[
+        categoryKey as keyof typeof this.interestCategories
+      ];
     const hasVisibleInterests = category.some((interest) =>
       interest.label.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
@@ -686,8 +702,8 @@ private formatDateForInput(dateString: string): string {
   }
 
   getSelectedInterestsDisplay(): string[] {
-    return this.selectedInterests.map(key =>
-      this.interestDisplayMap[key] || `🔸 ${key}`
+    return this.selectedInterests.map(
+      (key) => this.interestDisplayMap[key] || `🔸 ${key}`
     );
   }
 
@@ -699,64 +715,66 @@ private formatDateForInput(dateString: string): string {
   }
 
   changePassword(): void {
-  // Validazione
-  if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
-    this.showErrorMessage('❌ Le password non coincidono!');
-    return;
-  }
-
-  if (this.passwordData.newPassword.length < 6) {
-    this.showErrorMessage('❌ La password deve contenere almeno 6 caratteri!');
-    return;
-  }
-
-  if (!this.passwordData.currentPassword) {
-    this.showErrorMessage('❌ Inserisci la password attuale per cambiarla!');
-    return;
-  }
-
-  this.saving = true;
-
-  // 🔥 CREA DATI SPECIFICI PER CAMBIO PASSWORD
-  const passwordChangeData = {
-    username: this.userProfile.username,
-    password: this.passwordData.currentPassword,     // Password attuale
-    newPassword: this.passwordData.newPassword,      // Nuova password
-    nome: this.userProfile.nome,
-    bio: this.userProfile.bio,
-    interessi: this.selectedInterests.join(', '),
-    città: this.userProfile.citta,
-    dataNascita: this.userProfile.dataNascita,
-    genere: this.userProfile.genere || '',
-    fotoProfilo: this.userProfile.fotoProfilo,
-    notificheAttive: this.userProfile.notificheAttive
-  };
-
-  console.log('🔥 Cambiando password...');
-
-  this.userServ.updateUser(passwordChangeData).subscribe({
-    next: (response) => {
-      console.log('✅ Password cambiata:', response);
-      this.saving = false;
-      this.showSuccessMessage('✅ Password cambiata con successo!');
-      this.resetPasswordModal();
-    },
-    error: (error) => {
-      console.error('❌ Errore cambio password:', error);
-      this.saving = false;
-      
-      // 🔥 GESTIONE ERRORI SPECIFICI
-      let errorMessage = 'Errore sconosciuto';
-      if (error.error && typeof error.error === 'string') {
-        errorMessage = error.error;
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      this.showErrorMessage('❌ ' + errorMessage);
+    // Validazione
+    if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
+      this.showErrorMessage('❌ Le password non coincidono!');
+      return;
     }
-  });
-}
+
+    if (this.passwordData.newPassword.length < 6) {
+      this.showErrorMessage(
+        '❌ La password deve contenere almeno 6 caratteri!'
+      );
+      return;
+    }
+
+    if (!this.passwordData.currentPassword) {
+      this.showErrorMessage('❌ Inserisci la password attuale per cambiarla!');
+      return;
+    }
+
+    this.saving = true;
+
+    // 🔥 CREA DATI SPECIFICI PER CAMBIO PASSWORD
+    const passwordChangeData = {
+      username: this.userProfile.username,
+      password: this.passwordData.currentPassword, // Password attuale
+      newPassword: this.passwordData.newPassword, // Nuova password
+      nome: this.userProfile.nome,
+      bio: this.userProfile.bio,
+      interessi: this.selectedInterests.join(', '),
+      città: this.userProfile.citta,
+      dataNascita: this.userProfile.dataNascita,
+      genere: this.userProfile.genere || '',
+      fotoProfilo: this.userProfile.fotoProfilo,
+      notificheAttive: this.userProfile.notificheAttive,
+    };
+
+    console.log('🔥 Cambiando password...');
+
+    this.userServ.updateUser(passwordChangeData).subscribe({
+      next: (response) => {
+        console.log('✅ Password cambiata:', response);
+        this.saving = false;
+        this.showSuccessMessage('✅ Password cambiata con successo!');
+        this.resetPasswordModal();
+      },
+      error: (error) => {
+        console.error('❌ Errore cambio password:', error);
+        this.saving = false;
+
+        // 🔥 GESTIONE ERRORI SPECIFICI
+        let errorMessage = 'Errore sconosciuto';
+        if (error.error && typeof error.error === 'string') {
+          errorMessage = error.error;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
+        this.showErrorMessage('❌ ' + errorMessage);
+      },
+    });
+  }
 
   private resetPasswordModal(): void {
     this.passwordData = {
@@ -770,7 +788,11 @@ private formatDateForInput(dateString: string): string {
 
   // Metodo per disattivazione account
   deactivateAccount(): void {
-    if (confirm('⚠️ Sei sicuro di voler disattivare il tuo account? Questa azione non può essere annullata.')) {
+    if (
+      confirm(
+        '⚠️ Sei sicuro di voler disattivare il tuo account? Questa azione non può essere annullata.'
+      )
+    ) {
       console.log('🔥 Disattivando account...');
       // TODO: Implementare disattivazione account reale
       this.showSuccessMessage('Account disattivato. Ci mancherai! 💔');
