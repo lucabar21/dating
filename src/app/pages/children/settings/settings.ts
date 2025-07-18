@@ -536,34 +536,60 @@ private formatDateForInput(dateString: string): string {
 }
 
   onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
+  const input = event.target as HTMLInputElement;
+  if (!input.files || input.files.length === 0) return;
 
-    const file = input.files[0];
+  const file = input.files[0];
 
-    // Verifica tipo immagine
-    if (!this.allowedImageTypes.includes(file.type)) {
-      this.showErrorMessage('Formato immagine non supportato. Usa JPG, PNG, GIF o WEBP.');
-      return;
-    }
-
-    // Verifica dimensione
-    if (file.size > this.maxFileSize) {
-      this.showErrorMessage('L\'immagine supera la dimensione massima di 5MB.');
-      return;
-    }
-
-    // Legge l'immagine come base64 per anteprima immediata
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.userProfile.profileImageUrl = reader.result as string;
-      this.userProfile.fotoProfilo = reader.result as string;
-
-      // TODO: Implementare upload reale dell'immagine
-      console.log('🔥 Immagine caricata (anteprima):', this.userProfile.profileImageUrl);
-    };
-    reader.readAsDataURL(file);
+  // Verifica tipo immagine
+  if (!this.allowedImageTypes.includes(file.type)) {
+    this.showErrorMessage('Formato immagine non supportato. Usa JPG, PNG, GIF o WEBP.');
+    return;
   }
+
+  // Verifica dimensione
+  if (file.size > this.maxFileSize) {
+    this.showErrorMessage('L\'immagine supera la dimensione massima di 5MB.');
+    return;
+  }
+
+  // 🔥 MOSTRA LOADING
+  this.isUploadingImage = true;
+
+  // Legge l'immagine come base64
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.userProfile.profileImageUrl = reader.result as string;
+    this.userProfile.fotoProfilo = reader.result as string;
+
+    // 🔥 SALVA AUTOMATICAMENTE L'IMMAGINE
+    const updateData = this.createUpdateData();
+    
+    console.log('🔥 Salvando immagine automaticamente...');
+    
+    this.userServ.updateUser(updateData).subscribe({
+      next: (response) => {
+        console.log('✅ Immagine salvata:', response);
+        this.isUploadingImage = false;
+        this.showSuccessMessage('✅ Immagine profilo aggiornata!');
+        
+        // Aggiorna il profilo con i dati ricevuti
+        if (response) {
+          this.userProfile = { ...this.userProfile, ...response };
+        }
+      },
+      error: (error) => {
+        console.error('❌ Errore salvataggio immagine:', error);
+        this.isUploadingImage = false;
+        this.showErrorMessage('❌ Errore durante il salvataggio dell\'immagine');
+        
+        // Ripristina l'immagine precedente in caso di errore
+        this.userProfile.profileImageUrl = this.userProfile.fotoProfilo;
+      }
+    });
+  };
+  reader.readAsDataURL(file);
+}
 
   // METODO FUNZIONANTE - Toggle del tema
   toggleTheme(): void {
