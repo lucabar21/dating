@@ -20,10 +20,19 @@ export class Dashboard implements OnInit {
   isMobile: boolean = false;
   private breakpointObserver = inject(BreakpointObserver);
   showWelcomeModal: boolean = false;
-
+/*
   ngOnInit() {
     this.breakpointObserver
       .observe([Breakpoints.Handset])
+      .subscribe((result) => {
+        this.isMobile = result.matches;
+      });
+       this.checkFirstAccess();
+  }*/
+//soluzione forzata per il problema del breakpointObserver che non funzionava da 600 a 960
+  ngOnInit() {
+    this.breakpointObserver
+      .observe(['(max-width: 768px)'])
       .subscribe((result) => {
         this.isMobile = result.matches;
       });
