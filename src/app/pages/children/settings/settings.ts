@@ -800,11 +800,12 @@ private formatDateForInput(dateString: string): string {
 
 
 
-  // 🔥 METODI PER AUTOCOMPLETAMENTO CITTÀ
+// 🔥 METODI AGGIORNATI PER SISTEMA IBRIDO
 async searchCities(query: string): Promise<void> {
   this.cityQuery = query;
 
   if (query.length >= 2) {
+    // 🔥 Autocompletamento veloce da file JSON
     this.citySuggestions = await this.cityService.searchItalianCities(query);
     this.showCitySuggestions = this.citySuggestions.length > 0;
     console.log('🔍 Città trovate:', this.citySuggestions);
@@ -816,15 +817,15 @@ async searchCities(query: string): Promise<void> {
 
 onCitySelect(city: City): void {
   this.selectedCity = city;
-  this.userProfile.citta = city.name;
   this.cityQuery = city.name;
   this.showCitySuggestions = false;
 
   console.log('🎯 Città selezionata:', city);
-  console.log('📍 Coordinate:', city.latitude, city.longitude);
-
-  
+  // 🔥 NESSUN SALVATAGGIO QUI - solo selezione
 }
+
+// 🔥 NUOVO METODO per salvare con coordinate
+
 
 hideCitySuggestions(): void {
   setTimeout(() => this.showCitySuggestions = false, 200);
@@ -869,17 +870,38 @@ cancelEditCity(): void {
   this.showCitySuggestions = false;
 }
 
-saveCityField(): void {
+async saveCityField(): Promise<void> {
   if (!this.selectedCity) {
     this.showErrorMessage('❌ Seleziona una città dalla lista!');
     return;
   }
 
+  this.saving = true;
   this.editingFields.citta = false;
   this.userProfile.citta = this.selectedCity.name;
   this.showCitySuggestions = false;
 
-  // Salva con coordinate
-  this.saveFieldWithCoordinates('citta', this.selectedCity.latitude, this.selectedCity.longitude);
+  try {
+    // 🔥 Ottieni coordinate in background
+    console.log('📍 Cercando coordinate per:', this.selectedCity.name);
+    const coordinates = await this.cityService.getCityCoordinates(
+      this.selectedCity.name,
+      this.selectedCity.provincia
+    );
+
+    if (coordinates) {
+      console.log('✅ Coordinate trovate:', coordinates);
+      // Salva con coordinate
+      this.saveFieldWithCoordinates('citta', coordinates.latitude, coordinates.longitude);
+    } else {
+      console.log('⚠️ Coordinate non trovate, salvo solo nome città');
+      // Salva solo nome città
+      this.saveField('citta');
+    }
+  } catch (error) {
+    console.error('❌ Errore nel salvataggio:', error);
+    this.saving = false;
+    this.showErrorMessage('❌ Errore durante il salvataggio');
+  }
 }
 }

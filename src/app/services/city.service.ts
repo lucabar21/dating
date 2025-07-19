@@ -1,45 +1,87 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 export interface City {
   name: string;
   fullName: string;
-  latitude: number;
-  longitude: number;
+  provincia: string;
+  regione: string;
+  latitude?: number;
+  longitude?: number;
+}
+
+interface ComuneJson {
+  nome: string;
+  provincia: { nome: string; };
+  regione: { nome: string; };
+  cap: string[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class CityService {
+  private comuni: ComuneJson[] = [];
+  private comuniLoaded = false;
 
+  constructor(private http: HttpClient) {}
+
+  // 🔥 CARICA COMUNI DAL JSON
+  private async loadComuni(): Promise<void> {
+    if (this.comuniLoaded) return;
+
+    try {
+      const data = await this.http.get<ComuneJson[]>('../../assets/comuni.json').toPromise();
+      this.comuni = data || [];
+      this.comuniLoaded = true;
+      console.log('✅ Caricati', this.comuni.length, 'comuni italiani');
+    } catch (error) {
+      console.error('❌ Errore caricamento comuni:', error);
+      this.comuni = [];
+    }
+  }
+
+  // 🔥 AUTOCOMPLETAMENTO VELOCE da file JSON
   async searchItalianCities(query: string): Promise<City[]> {
     if (query.length < 2) return [];
 
+    await this.loadComuni();
+    const searchTerm = query.toLowerCase().trim();
+
+    return this.comuni
+      .filter(comune => comune.nome.toLowerCase().includes(searchTerm))
+      .slice(0, 8)
+      .map(comune => ({
+        name: comune.nome,
+        fullName: `${comune.nome}, ${comune.provincia.nome}, ${comune.regione.nome}`,
+        provincia: comune.provincia.nome,
+        regione: comune.regione.nome
+      }));
+  }
+
+  // 🔥 OTTIENI COORDINATE da Nominatim (per salvataggio)
+  async getCityCoordinates(cityName: string, provincia: string): Promise<{latitude: number, longitude: number} | null> {
     try {
-      // 🔥 NOMINATIM per città italiane
+      const query = `${cityName}, ${provincia}, Italia`;
       const url = `https://nominatim.openstreetmap.org/search?` +
         `q=${encodeURIComponent(query)}&` +
         `countrycodes=it&` +
-        `format=json&limit=8&addressdetails=1&` +
-        `class=place&type=city,town,village`;
+        `format=json&limit=1`;
 
       const response = await fetch(url);
       const data = await response.json();
 
-      return data.map((item: any) => ({
-        name: this.extractCityName(item.display_name),
-        fullName: item.display_name,
-        latitude: parseFloat(item.lat),
-        longitude: parseFloat(item.lon)
-      }));
-    } catch (error) {
-      console.error('❌ Errore ricerca città:', error);
-      return [];
-    }
-  }
+      if (data && data.length > 0) {
+        return {
+          latitude: parseFloat(data[0].lat),
+          longitude: parseFloat(data[0].lon)
+        };
+      }
 
-  private extractCityName(displayName: string): string {
-    // Estrae solo il nome della città dal display_name completo
-    return displayName.split(',')[0].trim();
+      return null;
+    } catch (error) {
+      console.error('❌ Errore coordinate:', error);
+      return null;
+    }
   }
 }
