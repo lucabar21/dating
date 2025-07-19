@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -27,4 +28,17 @@ export class AuthService {
     this.isLoggedIn.set(false);
     this.router.navigate(['/']);
   }
+
+  // 🔥 METODO RECUPERO PASSWORD
+   forgotPassword(email: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}auth/forgot-password`, { email });
+}
+
+// 🔥 METODO RESET PASSWORD
+resetPassword(token: string, newPassword: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}auth/reset-password`, {
+    token: token,
+    newPassword: newPassword
+  });
+}
 }
