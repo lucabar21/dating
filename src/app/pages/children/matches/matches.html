@@ -2,15 +2,15 @@
   <h2>I TUOI MATCHES</h2>
   <div class="matches-grid">
     <div class="card" *ngFor="let profile of matches()">
-      <img
-        src="{{profile.profilePicture || 'http://placedog.net/350'}}"
-        alt="Foto profilo"
-      />
+      <img src="{{profile.profilePicture || 'http://placedog.net/350'}}" alt="Foto profilo" />
       <p class="username">{{profile.utente1Nome}}</p>
       <div class="user-info">
         <p>{{timeAgo(profile.timestamp)}}</p>
       </div>
       <button type="button">Chatta!</button>
+      <a [routerLink]="['/dashboard/utente', profile.utente1Id]">
+        Profilo
+      </a>
     </div>
   </div>
 </div>

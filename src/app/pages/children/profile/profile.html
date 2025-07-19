@@ -30,21 +30,21 @@
       <div class="location">
         <p>{{ getLocation() }}</p>
       </div>
-    </div>
-    <div class="settings-btn">
-      <button class="edit" routerLink="/dashboard/settings">
-        Modifica Profilo
-      </button>
+      <div class="settings-btn">
+        <button class="edit" routerLink="/dashboard/settings">
+          Modifica Profilo
+        </button>
+      </div>
     </div>
   </div>
-
+  <hr />
   <div class="description">
-    <h2>Su di me</h2>
+    <h3>Su di me</h3>
     <p>{{ getBio() }}</p>
   </div>
-
+  <hr />
   <div class="interests">
-    <h2>Interessi</h2>
+    <h3>Interessi</h3>
     <div class="wrapper">
       <p class="badge" *ngFor="let interest of getInterests()">
         {{ interest }}

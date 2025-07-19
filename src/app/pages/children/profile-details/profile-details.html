@@ -1,0 +1,45 @@
+<div class="profile-container" *ngIf="loading">
+    <button class="close-btn" (click)="goBack()">Chiudi X</button>
+    <p>Caricamento profilo...</p>
+</div>
+
+<div class="profile-container" *ngIf="error && !loading">
+    <button class="close-btn" (click)="goBack()">Chiudi X</button>
+    <p>{{ error }}</p>
+</div>
+
+
+<div class="profile-container" *ngIf="user && !loading && !error">
+    <div class="border-container">
+        <button class="close-btn" (click)="goBack()">Chiudi X</button>
+
+        <div class="top-section">
+            <div class="profile-picture">
+                <img [src]="getProfilePicture()" [alt]="user.nome + ' - Foto profilo'" />
+            </div>
+            <div class="user-info">
+                <div class="name-age">
+                    <p>{{ user.nome }} ({{ user.eta }})</p>
+                </div>
+                <div class="location">
+                    <p>{{ user.citta }}</p>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="description">
+            <h3>Su di me</h3>
+            <p>{{ user.bio || 'Nessuna bio disponibile' }}</p>
+        </div>
+        <hr />
+        <div class="interests">
+            <h3>Interessi</h3>
+            <div class="wrapper">
+                <p class="badge" *ngFor="let interest of getDisplayInterests()">{{ interest }}</p>
+            </div>
+            <div class="no-interests" *ngIf="getDisplayInterests().length === 0">
+                <p>Nessun interesse disponibile.</p>
+            </div>
+        </div>
+    </div>
+</div>

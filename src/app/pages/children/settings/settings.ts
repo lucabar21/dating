@@ -410,12 +410,13 @@ private formatDateForInput(dateString: string): string {
     bio: this.userProfile.bio,
     interessi: this.selectedInterests.join(', '),
     città: this.userProfile.citta,
-    dataNascita: this.userProfile.dataNascita,
-    genere: this.userProfile.genere || '',
+    dataNascita: this.userProfile.dataNascita || '1990-01-01', // 🔥 DATA DEFAULT
+    genere: this.userProfile.genere || 'MASCHIO', // 🔥 GENERE DEFAULT
     fotoProfilo: this.userProfile.fotoProfilo,
     notificheAttive: this.userProfile.notificheAttive
   };
 }
+
 
   /**
    * 🔥 SALVA CAMPO MODIFICATO
