@@ -33,6 +33,10 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'dashboard/utente/:id',
+    loadComponent: () => import('./pages/children/profile-details/profile-details').then(m => m.ProfileDetails),
+  },
+  {
     path: '404',
     loadComponent: () =>
       import('./pages/not-found/not-found').then((m) => m.NotFound),

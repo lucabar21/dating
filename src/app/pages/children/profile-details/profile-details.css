@@ -1,0 +1,203 @@
+.profile-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 64px 5%;
+
+    .border-container {
+        box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        padding: 2rem;
+        .top-section {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 64px;
+            padding: 20px;
+
+            img {
+                width: 250px;
+                height: 250px;
+                border-radius: 10%;
+                object-fit: cover;
+                margin-top: -40px;
+            }
+
+            .user-info {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                .name-age {
+                    align-items: center;
+                    display: flex;
+                    line-height: 32px;
+                    color: var(--text-color);
+
+                    :nth-child(1) {
+                        font-size: 3rem;
+                        font-weight: bold;
+                    }
+
+                    :nth-child(2) {
+                        font-size: 3rem;
+                    }
+                }
+
+                .location {
+                    width: 100%;
+                    line-height: 64px;
+                    font-size: 2.5rem;
+                    color: var(--text-color);
+
+                    p {
+                        width: 100%;
+                        line-height: 2.5rem;
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    hr {
+        height: 2px;
+        background-color: var(--text-color);
+        border: none;
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .description,
+    .interests {
+        width: 100%;
+        line-height: 64px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        h2 {
+            font-size: 64px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        h3 {
+            font-size: 40px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        p {
+            font-size: 24px;
+            color: var(--text-color);
+            line-height: 24px;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px 16px;
+
+            .badge {
+                padding: 6px 20px 4px 14px;
+                /*background: linear-gradient(135deg, var(--accent-color-f), var(--accent-color-m));*/
+                background-color: var(--neutral-button-color);
+                color: var(--text-color);
+                border-radius: 10px;
+                font-size: 20px;
+            }
+        }
+    }
+}
+
+
+.close-btn {
+    position:relative;
+    top: 0px;
+    right: -85%;
+    background: var(--accent-color-f);
+    color: var(--bg-color);
+    border: none;
+    font-size: 30px;
+    padding: 2px 16px 0px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 16px;
+        gap: 20px;
+
+        hr {
+            margin: 0px;
+        }
+
+        .top-section {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            .profile-picture {
+                width: 200px;
+                height: 200px;
+            }
+
+            .user-info {
+                align-items: center;
+
+                .name-age {
+                    display: flex;
+                    align-items: center;
+                    font-size: 3rem;
+                    margin-top: 10px;
+                }
+
+                .location {
+                    font-size: 2.5rem;
+                    text-align: center;
+                }
+
+                p {
+                    line-height: 0.8rem;
+                }
+            }
+
+            .settings-btn {
+                align-items: center;
+                margin: auto;
+            }
+        }
+
+        .description,
+        .interests {
+            h2 {
+                font-size: 48px;
+            }
+
+            p {
+                font-size: 24px;
+            }
+        }
+
+        .description,
+        .interests {
+            justify-content: center;
+            align-items: center;
+        }
+    }
+.close-btn {
+    top: -20px;
+    right: -85%;
+    font-size: 24px;
+
+}
+
+}

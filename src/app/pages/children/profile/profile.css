@@ -5,8 +5,8 @@
   align-items: center;
   justify-content: center;
   padding: 64px;
-  gap: 64px;
-  padding: 0px 5%;
+  gap: 30px;
+  padding: 64px 5% 0;
 
   .top-section {
     width: 100%;
@@ -25,35 +25,35 @@
     .user-info {
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
 
       .name-age {
         align-items: center;
         display: flex;
         line-height: 32px;
+        color: var(--text-color);
 
         :nth-child(1) {
-          font-size: 64px;
+          font-size: 3rem;
           font-weight: bold;
         }
         :nth-child(2) {
-          font-size: 64px;
+          font-size: 3rem;
         }
       }
       .location {
         width: 100%;
         line-height: 64px;
-        font-size: 56px;
+        font-size: 2.5rem;
         color: var(--text-color);
 
         p {
           width: 100%;
+          line-height: 2.5rem;
         }
       }
     }
     .settings-btn {
-      margin-left: auto;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -63,11 +63,21 @@
         background-color: var(--accent-color-f);
         border: none;
         color: var(--bg-color);
-        padding: 8px 16px;
+        padding: 8px 12px;
         border-radius: 8px;
-        font-size: 32px;
+        font-size: 24px;
+        /*
         min-width: 176px;
         max-width: 200px;
+        */
+        
+      }
+
+      .edit:hover {
+        color: var(--text-color);
+        padding: 8px 12px;
+
+    
       }
 
       .badge-account {
@@ -81,9 +91,20 @@
         min-width: 176px;
         max-width: 200px;
         justify-content: center;
+        justify-items: center;
       }
     }
   }
+
+ hr {
+  height: 2px;
+  background-color: var(--text-color);
+  border: none;
+  width: 100%;
+  margin: 10px 0;
+}
+
+
 
   .description,
   .interests {
@@ -98,35 +119,46 @@
       font-weight: bold;
       color: var(--text-color);
     }
-    p {
-      font-size: 32px;
+    h3 {
+      font-size: 40px;
+      font-weight: bold;
       color: var(--text-color);
-      line-height: 32px;
+    }
+    p {
+      font-size: 24px;
+      color: var(--text-color);
+      line-height: 24px;
     }
 
     .wrapper {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 16px;
+      gap: 4px 16px;
       .badge {
-        padding: 8px 16px;
-        background-color: var(--text-color);
-        color: var(--bg-color);
-        border-radius: 8px;
+        padding: 6px 20px 4px 14px;
+        /*background: linear-gradient(135deg, var(--accent-color-f), var(--accent-color-m));*/
+        background-color: var(--neutral-button-color);
+        color: var(--text-color);
+        border-radius: 10px;
+        font-size: 20px;
       }
     }
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   .profile-container {
     padding: 16px;
-    gap: 32px;
+    gap: 20px;
 
+    hr{
+      margin: 0px;
+    }
     .top-section {
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
 
       .profile-picture {
         width: 200px;
@@ -137,13 +169,18 @@
         align-items: center;
 
         .name-age {
-          flex-direction: column;
+          display: flex;
           align-items: center;
-          font-size: 48px;
+          font-size: 3rem;
+          margin-top: 10px;
         }
         .location {
-          font-size: 48px;
+          font-size: 2.5rem;
           text-align: center;
+        }
+
+        p {
+          line-height: 0.8rem;
         }
       }
 
@@ -168,4 +205,6 @@
       align-items: center;
     }
   }
+
+  
 }
