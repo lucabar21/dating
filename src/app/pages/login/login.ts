@@ -116,4 +116,5 @@ export class Login implements OnInit, OnDestroy {
       '--random-blur': (Math.random() * 4).toFixed(1) + 'px',
     } as any;
   }
+  
 }
