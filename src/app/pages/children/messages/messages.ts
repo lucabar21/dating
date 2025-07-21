@@ -1,112 +1,113 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterModule,
+  RouterOutlet,
+} from '@angular/router';
+import { MatchServ } from '../../../services/matchServ';
+import { MessageServ } from '../../../services/message-serv';
+import { UserServ } from '../../../services/user-serv';
+import { Chat } from '../../../components/chat/chat';
 
 @Component({
   selector: 'app-messages',
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, RouterOutlet],
   templateUrl: './messages.html',
   styleUrl: './messages.css',
 })
-export class Messages {
-  users = [
-    {
-      id: 101,
-      name: 'Alice',
-      profilePicture:
-        'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg',
-      age: 25,
-      location: 'Roma',
-    },
-    {
-      id: 102,
-      name: 'Bob',
-      profilePicture:
-        'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg',
-      age: 28,
-      location: 'Napoli',
-    },
-    {
-      id: 103,
-      name: 'Charlie',
-      profilePicture:
-        'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg',
-      age: 30,
-      location: 'Milano',
-    },
-    {
-      id: 104,
-      name: 'Diana',
-      profilePicture:
-        'https://images.pexels.com/photos/1542085/pexels-photo-1542085.jpeg',
-      age: 27,
-      location: 'Torino',
-    },
-    {
-      id: 105,
-      name: 'Ethan',
-      profilePicture:
-        'https://images.pexels.com/photos/26607971/pexels-photo-26607971.jpeg',
-      age: 29,
-      location: 'Firenze',
-    },
-  ];
+export class Messages implements OnInit {
+  chats = signal<any[]>([]);
+  currentUser = signal<any>(null);
 
-  chats = [
-    {
-      id: 1,
-      userId: 101,
-      lastMessage: 'Ciao! Come stai?',
-      timestamp: new Date('2023-10-01T10:00:00'),
-    },
-    {
-      id: 2,
-      userId: 102,
-      lastMessage: 'Pronto per il nostro incontro?',
-      timestamp: new Date('2023-10-02T12:30:00'),
-    },
-    {
-      id: 3,
-      userId: 103,
-      lastMessage: "Hai visto l'ultimo film?",
-      timestamp: new Date('2023-10-03T15:45:00'),
-    },
-    {
-      id: 4,
-      userId: 104,
-      lastMessage: 'Dove ci vediamo domani?',
-      timestamp: new Date('2023-10-04T09:15:00'),
-    },
-    {
-      id: 5,
-      userId: 105,
-      lastMessage: "Non vedo l'ora di rivederti!",
-      timestamp: new Date('2023-10-05T11:20:00'),
-    },
-  ];
+  private userService = inject(UserServ);
+  private matchService = inject(MatchServ);
+  private messageService = inject(MessageServ);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   chatForm = new FormGroup({
     message: new FormControl('', [
       Validators.required,
-      Validators.minLength(5),
+      Validators.minLength(2),
       Validators.maxLength(500),
     ]),
   });
 
-  submitForm() {
+  sendMessage() {
     if (this.chatForm.valid) {
-      const message = this.chatForm.value.message;
-      console.log('Message sent:', message);
-      // Here you would typically send the message to the server
-      this.chatForm.reset();
+      const messageContent = this.chatForm.value.message;
+      const matchId = Number(
+        this.route.snapshot.firstChild?.paramMap.get('matchId')
+      );
+      this.messageService
+        .sendMessage(matchId, { contenuto: messageContent })
+        .subscribe({
+          next: (response) => {
+            console.log('Message sent successfully: ' + response);
+            this.chatForm.reset();
+            this.getChats();
+          },
+          error: (error) => {
+            console.error('Error sending message: ' + error);
+          },
+        });
     } else {
-      console.error('Form is invalid');
+      alert('Assicurati di inserire un messaggio valido.');
     }
+  }
+
+  getChats() {
+    this.matchService.getMatches().subscribe((data: any[]) => {
+      this.chats.set(data);
+      data.forEach((chat) => {
+        this.getOtherUserProfile(chat);
+      });
+    });
+  }
+
+  // Metodo per ottenere l'utente corrente e per settarlo nel signal currentUser
+  getCurrentUser() {
+    this.userService.getCurrentUser().subscribe((user) => {
+      this.currentUser.set(user);
+    });
+  }
+
+  // Metodo per ottenere il profilo dell'altro utente nel match
+  getOtherUserProfile(match: any) {
+    const otherUserId =
+      match.utente1Id === this.currentUser()?.id
+        ? match.utente2Id
+        : match.utente1Id;
+
+    this.userService.getUserProfile(otherUserId).subscribe({
+      next: (profile) => {
+        match.otherUserProfile = profile;
+        this.chats.update((chats) => [...chats]);
+      },
+      error: (error) => {
+        console.error('Error loading profile:', error);
+      },
+    });
+  }
+
+  goToChat(matchId: number) {
+    this.router.navigate(['/dashboard/messages/chat', matchId]).then(() => {});
+  }
+
+  ngOnInit() {
+    this.userService.getCurrentUser().subscribe((user) => {
+      // setta l'utente corrente nel signal
+      this.currentUser.set(user);
+      // chiamata solo dopo aver ottenuto l'utente
+      this.getChats();
+    });
   }
 }

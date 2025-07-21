@@ -1,0 +1,39 @@
+.chat-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+
+  .message-box {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    border-radius: 5px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+    margin-left: auto;
+
+    p {
+      font-size: 32px;
+      line-height: 0.5;
+      margin: 0;
+    }
+
+    span {
+      font-size: 16px;
+      line-height: 0.5;
+      opacity: 0.7;
+    }
+  }
+
+  .received {
+    background-color: var(--accent-color-f);
+    color: var(--bg-color);
+    align-items: flex-start;
+    margin-left: 0;
+    margin-right: auto;
+  }
+}

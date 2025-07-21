@@ -1,36 +1,37 @@
 <div class="messages-container">
   <!-- Sezione header con chat avviate -->
   <nav class="messages-navbar">
-    <div class="user-card" *ngFor="let user of users">
+    <div
+      class="user-card"
+      *ngFor="let user of chats()"
+      (click)="goToChat(user.id)"
+    >
       <div class="user-avatar">
-        <img [src]="user.profilePicture" alt="{{ user.name }}'s avatar" />
+        <img
+          src="{{user.otherUserProfile?.fotoProfilo || 'http://placedog.net/350'}}"
+          alt="{{ user.otherUserProfile?.nome }}'s avatar"
+        />
       </div>
       <div class="user-info">
-        <h3>{{ user.name }}</h3>
-        <p>({{ user.age }})</p>
+        <h3>{{ user.otherUserProfile?.nome }}</h3>
       </div>
     </div>
   </nav>
 
   <!-- Sezione dove sarà presente la chat -->
   <div class="messages-content">
-    <div class="profile-box-msg">
-      <p>Ciao, come stai?</p>
-    </div>
-    <div class="user-box-msg">Bene grazie e tu?</div>
-
-    <div class="profile-box-msg">Molto bene!</div>
+    <router-outlet></router-outlet>
   </div>
 
   <!-- Form di invio messaggi -->
   <div class="input-chat">
-    <form [formGroup]="chatForm" onsubmit="submitForm">
+    <form [formGroup]="chatForm">
       <textarea
         formControlName="message"
         placeholder="Scrivi un messaggio"
         rows="3"
       ></textarea>
-      <button type="submit">Invia</button>
+      <button type="button" (click)="sendMessage()">Invia</button>
     </form>
   </div>
 </div>

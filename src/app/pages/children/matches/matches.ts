@@ -1,12 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  ɵsetAllowDuplicateNgModuleIdsForTest,
-} from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { MatchServ } from '../../../services/matchServ';
 import { UserServ } from '../../../services/user-serv';
 
@@ -19,6 +13,7 @@ import { UserServ } from '../../../services/user-serv';
 export class Matches implements OnInit {
   private matchService = inject(MatchServ);
   private userService = inject(UserServ);
+  private router = inject(Router);
 
   currentUser = signal<any>(null);
   matches = signal<any[]>([]);
@@ -56,6 +51,10 @@ export class Matches implements OnInit {
         console.error('Error loading profile:', error);
       },
     });
+  }
+
+  goToChat(matchId: number) {
+    this.router.navigate(['/dashboard/messages/chat', matchId]).then(() => {});
   }
 
   // Metodo per convertire il timestamp del match in quanto tempo è passato da quando è stato creato

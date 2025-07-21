@@ -1,0 +1,10 @@
+<div class="chat-wrapper" #chatComponent>
+  <div
+    class="message-box"
+    *ngFor="let message of messages()"
+    [ngClass]="message.mittenteId === currentUser().id ? 'sent' : 'received'"
+  >
+    <p>{{ message.contenuto }}</p>
+    <span class="timestamp">{{ message.timestamp | date: 'short' }}</span>
+  </div>
+</div>

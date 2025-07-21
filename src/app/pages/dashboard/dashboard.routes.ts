@@ -17,8 +17,10 @@ export const dashboardRoutes: Routes = [
       },
       {
         path: 'messages',
-        loadComponent: () =>
-          import('../children/messages/messages').then((m) => m.Messages),
+        loadChildren: () =>
+          import('../children/messages/messages.routes').then(
+            (m) => m.messagesRoutes
+          ),
       },
       {
         path: 'matches',
