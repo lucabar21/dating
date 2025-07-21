@@ -6,7 +6,7 @@
   ></span>
 </div>
 <div class="container1">
-  <div class="login-container">
+  <div class="login-container" [ngClass]="{ 'shake': shake }">
     <div class="heart-login-title">
       <img
         [src]="isDarkTheme ?  '/assets/image/lovvami_logo_light.svg' : '/assets/image/lovvami_logo_dark.svg'"
@@ -26,6 +26,9 @@
     formControlName="password"
     placeholder="Inserisci la tua password"
   />
+
+  <!-- Login Error -->
+  <p class="login-error" *ngIf="loginError">{{ loginError }}</p>
 
   <button type="submit" [disabled]="loginForm.invalid">Accedi</button>
 

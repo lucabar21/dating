@@ -4,6 +4,8 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  AbstractControl,
+  ValidatorFn
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
@@ -37,13 +39,32 @@ export class Register implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.themeSub?.unsubscribe();
   }
+
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
+      //Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/)
     ]),
-  });
+    confirmPassword: new FormControl('', [Validators.required]),
+    }, 
+    { validators: passwordsMatchValidator }
+);
+
+  /*get passwordMatchError(): boolean {
+    const password = this.registerForm.get('password')?.value;
+    const confirm = this.registerForm.get('confirmPassword')?.value;
+    const touched = this.registerForm.get('confirmPassword')?.touched;
+
+    return password !== confirm && !!touched;
+  }*/
+  get passwordMatchError(): boolean {
+    return (
+      this.registerForm.hasError('passwordMismatch') &&
+      !!this.registerForm.get('confirmPassword')?.touched
+    );
+  }
 
   registra() {
     let email = this.registerForm.get('email')?.value ?? '';
@@ -80,3 +101,12 @@ export class Register implements OnInit, OnDestroy {
     } as any;
   }
 }
+
+
+// ✅ Custom validator
+export const passwordsMatchValidator: ValidatorFn = (form: AbstractControl): { [key: string]: any } | null => {
+  const password = form.get('password')?.value;
+  const confirmPassword = form.get('confirmPassword')?.value;
+
+  return password === confirmPassword ? null : { passwordMismatch: true };
+};

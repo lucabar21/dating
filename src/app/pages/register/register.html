@@ -1,31 +1,59 @@
 <div class="heart-rain">
-  <span
-    class="heart"
-    *ngFor="let h of hearts"
-    [ngStyle]="generateStyle()"
-  ></span>
+  <span class="heart" *ngFor="let h of hearts" [ngStyle]="generateStyle()"></span>
 </div>
 <div class="container1">
   <div class="login-container">
     <div class="heart-login-title">
-      <img
-        [src]="isDarkTheme ?  '/assets/image/lovvami_logo_light.svg' : '/assets/image/lovvami_logo_dark.svg'"
-        alt="Logo"
-      />
+      <img [src]="isDarkTheme ?  '/assets/image/lovvami_logo_light.svg' : '/assets/image/lovvami_logo_dark.svg'"
+        alt="Logo" />
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="registra()">
-      <input
-        type="email"
-        formControlName="email"
-        placeholder="Inserisci una mail"
-      />
+      <!-- Email Field -->
+      <input type="email" formControlName="email" placeholder="Inserisci una mail" />
+      <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+        <div class="register-validity" *ngIf="registerForm.get('email')?.errors?.['required']">
+          L'email è obbligatoria.
+        </div>
+        <div class="register-validity" *ngIf="registerForm.get('email')?.errors?.['email']">
+          Inserisci un'email valida.
+        </div>
+      </div>
 
-      <input
-        type="password"
-        formControlName="password"
-        placeholder="Inserisci una password"
-      />
+      <!-- Password Field -->
+      <input type="password" formControlName="password" placeholder="Inserisci una password" />
+      <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+        <div class="register-validity" *ngIf="registerForm.get('password')?.errors?.['required']">
+          La password è obbligatoria.
+        </div>
+        <div class="register-validity" *ngIf="registerForm.get('password')?.errors?.['minlength']">
+          La password deve contenere almeno 6 caratteri.
+        </div>
+        <!--
+        <div class="register-validity" *ngIf="registerForm.get('password')?.errors?.['pattern']">
+          La password deve contenere almeno una maiuscola, una minuscola e un numero.
+        </div>
+        -->
+      </div>
+
+      <!-- Confirm Password -->
+      <input type="password" placeholder="Conferma Password" formControlName="confirmPassword" />
+
+      <!-- Field is empty -->
+      <div
+        *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors?.['required']">
+        <div class="register-validity">
+          Conferma la password.
+        </div>
+      </div>
+
+      <!-- Passwords don't match -->
+      <div *ngIf="!registerForm.get('confirmPassword')?.errors && passwordMatchError">
+        <div class="register-validity">
+          Le password non coincidono.
+        </div>
+      </div>
+
 
       <button type="submit" [disabled]="registerForm.invalid">
         Registrati
