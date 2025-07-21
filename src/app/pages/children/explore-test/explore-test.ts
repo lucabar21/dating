@@ -98,6 +98,7 @@ export class ExploreTest {
     } else {
       // Non ci sono più profili - il template mostrerà automaticamente il placeholder
       console.log('Fine profili raggiunti');
+      this.currentIndex++;
     }
   }
 

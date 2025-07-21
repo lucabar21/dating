@@ -23,35 +23,41 @@
     align-items: center;
     gap: 16px;
     position: absolute;
-    bottom: 0;
+    /* 🔥 CENTRA VERTICALMENTE E ORIZZONTALMENTE */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     padding: 32px;
   }
+
   .profile-info {
-    background-color: #ffffff50;
-    text-align:center;
+    background-color: #ffffff90; /* 🔥 Più opaco per leggibilità */
+    text-align: center;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    align-content: space-between;
+    justify-content: center;
     padding: 32px 16px;
     border-radius: 10px;
     gap: 32px;
+    backdrop-filter: blur(10px); /* 🔥 Effetto blur per eleganza */
 
     .name-age {
       width: 100%;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center; /* 🔥 Centra il titolo */
 
       h2 {
         font-size: 64px;
         margin: 0;
-        line-height: 0.5;
+        line-height: 1.1; /* 🔥 Migliora la leggibilità */
         font-weight: 700;
+        text-align: center;
       }
     }
+
     .badge {
       background-color: var(--bg-color);
       color: var(--text-color);
@@ -60,33 +66,32 @@
       margin: 0px 6px 6px 0px;
     }
   }
+
   p {
     font-size: 32px;
     font-weight: 400;
     margin: 0;
-    line-height: 1;
+    line-height: 1.2; /* 🔥 Migliora la leggibilità */
+    text-align: center;
   }
 
   .edit {
-        background-color: var(--accent-color-f);
-        border: none;
-        color: var(--bg-color);
-        padding: 8px 12px;
-        border-radius: 8px;
-        font-size: 24px;
-        /*
-        min-width: 176px;
-        max-width: 200px;
-        */
+    background-color: var(--accent-color-f);
+    border: none;
+    color: var(--bg-color);
+    padding: 12px 24px; /* 🔥 Padding più generoso */
+    border-radius: 8px;
+    font-size: 24px;
+    font-weight: 600;
+    transition: all 0.2s ease; /* 🔥 Transizione smooth */
+    cursor: pointer;
+  }
 
-      }
-
-      .edit:hover {
-        color: var(--text-color);
-        padding: 8px 12px;
-
-
-      }
+  .edit:hover {
+    color: var(--text-color);
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px); /* 🔥 Effetto hover elegante */
+  }
 
   .btns-container {
     width: 100%;
@@ -144,7 +149,15 @@
     .info-wrapper {
       padding: 16px;
     }
+
+    .profile-info {
+      .name-age h2 {
+        font-size: 48px; /* 🔥 Font più piccolo su mobile */
+      }
+
+      p {
+        font-size: 24px; /* 🔥 Font più piccolo su mobile */
+      }
+    }
   }
 }
-
-
