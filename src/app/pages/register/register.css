@@ -90,6 +90,18 @@
   text-decoration: underline;
 }
 
+.register-validity{
+  color: var(--accent-color-f);
+  font-size: 1.5rem;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  text-align: left!important;
+}
+input.ng-invalid.ng-touched {
+  border: 1px solid var(--accent-color-f);
+}
+
+
 .heart-icon {
   font-size: 2rem;
   color: var(--accent-color-f); /* hot pink */

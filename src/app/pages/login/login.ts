@@ -29,6 +29,10 @@ export class Login implements OnInit, OnDestroy {
   isLoading: boolean = false;
   resetMessage: string = '';
 
+  //Gestione errore
+  loginError: string = '';
+  shake: boolean = false;
+
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
@@ -61,15 +65,25 @@ export class Login implements OnInit, OnDestroy {
   onLogin(): void {
     let email = this.loginForm.get('email')?.value ?? '';
     let password = this.loginForm.get('password')?.value ?? '';
+    this.loginError = '';
 
     if (this.loginForm.valid) {
-      this.authService.login(email, password).subscribe((response: any) => {
-        if (response && response.token) {
-          localStorage.setItem('auth_token', response.token);
-          localStorage.setItem('primo_accesso', response.primoAccesso.toString());
-          localStorage.setItem('account_type', response.accountType);
-          this.authService.isLoggedIn.set(true);
-          this.router.navigate(['/dashboard']);
+      this.authService.login(email, password).subscribe({
+        next: (response: any) => {
+          if (response && response.token) {
+            localStorage.setItem('auth_token', response.token);
+            localStorage.setItem('primo_accesso', response.primoAccesso.toString());
+            localStorage.setItem('account_type', response.accountType);
+            this.authService.isLoggedIn.set(true);
+            this.router.navigate(['/dashboard']);
+          }
+        },
+        error: (error: any) => {
+          console.error('Errore durante il login:', error);
+          this.loginError = 'Email o password errati! Riprova!';
+
+          this.shake = true;
+          setTimeout(() => this.shake = false, 500); // remove after animation
         }
       });
     }
