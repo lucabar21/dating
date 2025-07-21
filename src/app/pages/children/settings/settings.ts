@@ -529,7 +529,7 @@ export class Settings implements OnInit {
    */
   private showSuccessMessage(message: string): void {
     // TODO: Implementare toast/notifica più elegante
-    alert(message);
+
     Swal.fire({
       icon: 'success',
       title: message,

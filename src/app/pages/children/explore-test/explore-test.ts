@@ -14,9 +14,6 @@ import { Spinner } from '../../../components/spinner/spinner';
   styleUrl: './explore-test.css',
 })
 export class ExploreTest {
-  // Stati per loading ed errori
-  loading: boolean = false;
-
   // Variabile signal per memorizzare gli utenti da esplorare
   discoverableUsers = signal<UserData[]>([]);
 

@@ -1,6 +1,4 @@
-<app-spinner *ngIf="loading" class="spinner"></app-spinner>
 <div class="explore-container">
-
   <!-- 🔄 LOADING STATE -->
   <app-spinner *ngIf="loading()"></app-spinner>
 
@@ -14,5 +12,4 @@
     [discoverableUser]="CurrentUser"
     (swipeEvent)="handleSwipe($event, CurrentUser.id)"
   ></app-explore-card>
-
 </div>
