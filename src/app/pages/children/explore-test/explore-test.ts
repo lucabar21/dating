@@ -4,10 +4,12 @@ import { RouterModule } from '@angular/router';
 import { UserData, UserServ } from '../../../services/user-serv';
 import { Swipe, SwipeData } from '../../../services/swipe';
 import { ExploreCard } from '../../../components/explore-card/explore-card';
+import { PlaceholderCard } from '../../../components/placeholder-card/placeholder-card';
+import { Spinner } from '../../../components/spinner/spinner';
 
 @Component({
   selector: 'app-explore-test',
-  imports: [CommonModule, RouterModule, ExploreCard],
+  imports: [CommonModule, RouterModule, ExploreCard, PlaceholderCard, Spinner],
   templateUrl: './explore-test.html',
   styleUrl: './explore-test.css',
 })
@@ -18,44 +20,11 @@ export class ExploreTest {
   // Variabile signal per verificare se l'utente ha un account premium
   isPremium = signal(false);
 
+  // Variabile signal per gestire lo stato di loading
+  loading = signal(true);
+
   // Indice corrente per la visualizzazione dei profili
   currentIndex = 0;
-
-  /*
-  testUsers: UserData[] = [
-    {
-      id: 1,
-      nome: 'Maria',
-      bio: 'Biografia test',
-      interessi: 'viaggi, animali',
-      fotoProfilo: 'http://placedog.net/400',
-      citta: 'Roma',
-      eta: 25,
-      accountType: 'STANDARD',
-    },
-    {
-      id: 2,
-      nome: 'Luca',
-      bio: 'Biografia test',
-      interessi: 'sport, musica',
-      fotoProfilo: 'http://placedog.net/390',
-      citta: 'Milano',
-      eta: 30,
-      accountType: 'STANDARD',
-    },
-    {
-      id: 3,
-      nome: 'Giulia',
-      bio: 'Biografia test',
-      interessi: 'arte, cinema',
-      fotoProfilo: 'http://placedog.net/490',
-      citta: 'Firenze',
-      eta: 28,
-      accountType: 'STANDARD',
-    },
-  ];
-  */
-  // ARRAY MOCKATO PER AVERE PIU' PROFILI E TESTARE IL CAMBIO CARD
 
   private userService = inject(UserServ);
   private swipeService = inject(Swipe);
@@ -75,19 +44,37 @@ export class ExploreTest {
 
   // Metodo che restituisce l'utente corrente da visualizzare
   get CurrentUser() {
-    return this.discoverableUsers()[this.currentIndex];
-    /* return this.testUsers[this.currentIndex];  TEST PER AVERE PIU' PROFILI*/
+    const users = this.discoverableUsers();
+    return users.length > 0 && this.currentIndex < users.length
+      ? users[this.currentIndex]
+      : null;
+  }
+
+  // Metodo che verifica se ci sono ancora utenti da mostrare
+  get hasMoreUsers() {
+    const users = this.discoverableUsers();
+    return users.length > 0 && this.currentIndex < users.length;
+  }
+
+  // Metodo che verifica se mostrare il placeholder
+  get shouldShowPlaceholder() {
+    return !this.loading() && (!this.hasMoreUsers || this.discoverableUsers().length === 0);
   }
 
   // Metodo che recupera gli utenti da esplorare
   getDiscoverableUsers() {
+    this.loading.set(true);
+
     this.userService.getDiscoverableUsers().subscribe({
       next: (users) => {
         console.log('✅ UTENTI EXPLORE RICEVUTI:', users);
         this.discoverableUsers.set(Array.isArray(users) ? users : [users]);
+        this.loading.set(false);
       },
       error: (error) => {
         console.error('Errore nel recupero dei profili pertinenti:', error);
+        this.discoverableUsers.set([]);
+        this.loading.set(false);
       },
     });
   }
@@ -100,11 +87,6 @@ export class ExploreTest {
     };
 
     this.swipeService.makeSwipe(data);
-    /*   console.log(
-      'Swipe action:',
-      data
-    );  PER TESTARE SENZA INVIO REALE AL BE */
-
     this.nextCard();
   }
 
@@ -114,18 +96,9 @@ export class ExploreTest {
       this.currentIndex++;
       console.log('Nuovo currentIndex:', this.currentIndex);
     } else {
-      alert('Non ci sono più profili per te!');
+      // Non ci sono più profili - il template mostrerà automaticamente il placeholder
+      console.log('Fine profili raggiunti');
     }
-
-    /*
-    if (this.currentIndex < this.testUsers.length - 1) {
-      this.currentIndex++;
-      console.log('Nuovo currentIndex:', this.currentIndex);
-    } else {
-      alert('Non ci sono più profili per te!');
-    }
-      */
-    //  TEST PER AVERE PIU' PROFILI
   }
 
   ngOnInit() {

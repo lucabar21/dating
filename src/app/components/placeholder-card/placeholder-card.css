@@ -1,0 +1,150 @@
+.profile-card {
+  width: 40dvw;
+  height: 70dvh;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  touch-action: pan-y;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .info-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    position: absolute;
+    bottom: 0;
+    padding: 32px;
+  }
+  .profile-info {
+    background-color: #ffffff50;
+    text-align:center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    align-content: space-between;
+    padding: 32px 16px;
+    border-radius: 10px;
+    gap: 32px;
+
+    .name-age {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h2 {
+        font-size: 64px;
+        margin: 0;
+        line-height: 0.5;
+        font-weight: 700;
+      }
+    }
+    .badge {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-size: 20px;
+      padding: 10px 16px 8px 8px;
+      margin: 0px 6px 6px 0px;
+    }
+  }
+  p {
+    font-size: 32px;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .edit {
+        background-color: var(--accent-color-f);
+        border: none;
+        color: var(--bg-color);
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 24px;
+        /*
+        min-width: 176px;
+        max-width: 200px;
+        */
+
+      }
+
+      .edit:hover {
+        color: var(--text-color);
+        padding: 8px 12px;
+
+
+      }
+
+  .btns-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+
+    button {
+      width: 100%;
+      padding: 16px;
+      font-size: 24px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+
+      svg {
+        width: 40px;
+        height: auto;
+      }
+
+      &.superlike {
+        background-color: #fdb833;
+        svg {
+          fill: var(--bg-color);
+        }
+      }
+
+      &.like {
+        background-color: var(--accent-color-m);
+        svg {
+          fill: var(--bg-color);
+        }
+      }
+
+      &.pass {
+        background-color: var(--accent-color-f);
+        svg {
+          fill: var(--bg-color);
+        }
+      }
+
+      &:hover {
+        opacity: 0.8;
+        transition: 0.1s;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-card {
+    width: 90dvw;
+    height: calc(95dvh - 80px);
+
+    .info-wrapper {
+      padding: 16px;
+    }
+  }
+}
+
+

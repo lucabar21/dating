@@ -1,8 +1,17 @@
 <div class="explore-container">
+
+  <!-- 🔄 LOADING STATE -->
+  <app-spinner *ngIf="loading()"></app-spinner>
+
+  <!-- 📋 PLACEHOLDER CARD (array vuoto o fine swipe) -->
+  <app-placeholder-card *ngIf="shouldShowPlaceholder"></app-placeholder-card>
+
+  <!-- 🎯 EXPLORE CARD (utente corrente disponibile) -->
   <app-explore-card
-    *ngIf="CurrentUser"
+    *ngIf="!loading() && CurrentUser"
     [canSuperLike]="isPremium()"
     [discoverableUser]="CurrentUser"
     (swipeEvent)="handleSwipe($event, CurrentUser.id)"
   ></app-explore-card>
+
 </div>
