@@ -1,8 +1,5 @@
 <!-- 🔥 LOADING STATE -->
-<div class="loading-container" *ngIf="loading">
-  <div class="loading-spinner"></div>
-  <p class="loading-text">Caricamento impostazioni...</p>
-</div>
+<app-spinner *ngIf="loading" class="spinner"></app-spinner>
 
 <!-- 🔥 ERROR STATE -->
 <div class="error-container" *ngIf="error && !loading">

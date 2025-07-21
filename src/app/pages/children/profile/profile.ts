@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UserServ } from '../../../services/user-serv';
+import { Spinner } from '../../../components/spinner/spinner';
 
 // Interface per i dati utente dal backend
 interface UserData {
@@ -16,7 +17,7 @@ interface UserData {
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Spinner],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -139,8 +140,8 @@ export class Profile implements OnInit {
   }
 
   getProfilePicture(): any {
-    return this.user?.fotoProfilo ||
-    'https://via.placeholder.com/200x200?text=Foto+Profilo';
+    return this.user?.fotoProfilo;
+    // 'https://via.placeholder.com/200x200?text=Foto+Profilo';
   }
 
   getInterests(): string[] {

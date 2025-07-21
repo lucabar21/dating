@@ -1,16 +1,17 @@
 <div class="matches-container">
   <h2>I TUOI MATCHES</h2>
   <div class="matches-grid">
-    <div class="card" *ngFor="let profile of matches()">
-      <img src="{{profile.profilePicture || 'http://placedog.net/350'}}" alt="Foto profilo" />
-      <p class="username">{{profile.utente1Nome}}</p>
+    <div class="card" *ngFor="let match of matches()">
+      <img
+        src="{{match.otherUserProfile?.profilePicture || 'http://placedog.net/350'}}"
+        alt="Foto profilo"
+      />
+      <p class="username">{{match.otherUserProfile?.nome}}</p>
       <div class="user-info">
-        <p>{{timeAgo(profile.timestamp)}}</p>
+        <p>{{timeAgo(match.timestamp)}}</p>
       </div>
       <button type="button">Chatta!</button>
-      <a [routerLink]="['/dashboard/utente', profile.utente1Id]">
-        Profilo
-      </a>
+      <a [routerLink]="['/dashboard/utente', profile.utente1Id]"> Profilo </a>
     </div>
   </div>
 </div>

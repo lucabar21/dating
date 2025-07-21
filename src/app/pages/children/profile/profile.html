@@ -1,10 +1,5 @@
 <!-- Loading State -->
-<div class="profile-container" *ngIf="loading">
-  <div class="loading-container">
-    <div class="loading-spinner"></div>
-    <p class="loading-text">Caricamento profilo...</p>
-  </div>
-</div>
+<app-spinner *ngIf="loading" class="spinner"></app-spinner>
 
 <!-- Error State -->
 <div class="profile-container" *ngIf="error && !loading">
