@@ -31,6 +31,7 @@ import { Spinner } from '../../../components/spinner/spinner';
   styleUrl: './messages.css',
 })
 export class Messages implements OnInit {
+  loading: boolean = false;
   chats = signal<any[]>([]);
   currentUser = signal<any>(null);
 
@@ -72,11 +73,13 @@ export class Messages implements OnInit {
   }
 
   getChats() {
+    this.loading = true;
     this.matchService.getMatches().subscribe((data: any[]) => {
       this.chats.set(data);
       data.forEach((chat) => {
         this.getOtherUserProfile(chat);
       });
+      this.loading = false;
     });
   }
 
