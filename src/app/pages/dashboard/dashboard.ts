@@ -6,7 +6,6 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { BottomNav } from '../../components/bottom-nav/bottom-nav';
 import { WelcomeModal } from '../../components/welcome-modal/welcome-modal';
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -15,6 +14,7 @@ import { WelcomeModal } from '../../components/welcome-modal/welcome-modal';
   styleUrl: './dashboard.css',
 })
 export class Dashboard implements OnInit {
+  // Stati per loading ed errori
   isMobile: boolean = false;
   private breakpointObserver = inject(BreakpointObserver);
   showWelcomeModal: boolean = false;

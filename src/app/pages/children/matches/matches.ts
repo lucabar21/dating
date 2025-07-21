@@ -3,14 +3,18 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MatchServ } from '../../../services/matchServ';
 import { UserServ } from '../../../services/user-serv';
+import { Spinner } from '../../../components/spinner/spinner';
 
 @Component({
   selector: 'app-matches',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Spinner],
   templateUrl: './matches.html',
   styleUrl: './matches.css',
 })
 export class Matches implements OnInit {
+ // Stati per loading ed errori
+  loading: boolean = false;
+
   private matchService = inject(MatchServ);
   private userService = inject(UserServ);
   private router = inject(Router);
@@ -27,11 +31,13 @@ export class Matches implements OnInit {
 
   // Metodo per ottenere i match e per settarli nel signal matches
   getMatches() {
+     this.loading = true;
     this.matchService.getMatches().subscribe((data: any[]) => {
       this.matches.set(data);
       data.forEach((match) => {
         this.getOtherUserProfile(match);
       });
+       this.loading = false;
     });
   }
 

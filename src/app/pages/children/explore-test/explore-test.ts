@@ -14,6 +14,9 @@ import { Spinner } from '../../../components/spinner/spinner';
   styleUrl: './explore-test.css',
 })
 export class ExploreTest {
+  // Stati per loading ed errori
+  loading: boolean = false;
+
   // Variabile signal per memorizzare gli utenti da esplorare
   discoverableUsers = signal<UserData[]>([]);
 
@@ -58,7 +61,10 @@ export class ExploreTest {
 
   // Metodo che verifica se mostrare il placeholder
   get shouldShowPlaceholder() {
-    return !this.loading() && (!this.hasMoreUsers || this.discoverableUsers().length === 0);
+    return (
+      !this.loading() &&
+      (!this.hasMoreUsers || this.discoverableUsers().length === 0)
+    );
   }
 
   // Metodo che recupera gli utenti da esplorare

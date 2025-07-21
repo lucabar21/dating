@@ -16,10 +16,17 @@ import { MatchServ } from '../../../services/matchServ';
 import { MessageServ } from '../../../services/message-serv';
 import { UserServ } from '../../../services/user-serv';
 import { Chat } from '../../../components/chat/chat';
+import { Spinner } from '../../../components/spinner/spinner';
 
 @Component({
   selector: 'app-messages',
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, RouterOutlet],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    RouterOutlet,
+    Spinner,
+  ],
   templateUrl: './messages.html',
   styleUrl: './messages.css',
 })
