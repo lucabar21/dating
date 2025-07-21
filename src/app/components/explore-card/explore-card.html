@@ -8,9 +8,16 @@
     <div class="profile-info">
       <div class="name-age">
         <h2>{{discoverableUser.nome}},{{discoverableUser.eta}}</h2>
-        <p class="badge">{{discoverableUser.interessi}}</p>
       </div>
       <p>{{discoverableUser.bio}}</p>
+      <div class="wrapper">
+          <p class="badge" *ngFor="let interest of getDisplayInterests()">
+            {{ interest }}
+          </p>
+      </div>
+      <div class="no-interests" *ngIf="getDisplayInterests().length === 0">
+        <p>Nessun interesse disponibile.</p>
+      </div>
     </div>
     <div class="btns-container">
       <button class="like" (click)="emitSwipe('LIKE')">

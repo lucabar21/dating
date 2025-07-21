@@ -51,10 +51,11 @@
       }
     }
     .badge {
-      background-color: var(--text-color);
-      color: var(--bg-color);
+      background-color: var(--bg-color);
+      color: var(--text-color);
       font-size: 20px;
-      padding: 8px 16px;
+      padding: 10px 16px 8px 8px;
+      margin: 0px 6px 6px 0px; 
     }
   }
   p {

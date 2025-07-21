@@ -33,6 +33,46 @@ export class ExploreCard {
   private deltaX = 0;
   private deltaY = 0;
 
+  interestDisplayMap: { [key: string]: string } = {
+    sport: '⚽ Sport',
+    calcio: '⚽ Calcio',
+    musica: '🎵 Musica',
+    viaggi: '✈️ Viaggi',
+    cucina: '🍕 Cucina',
+    lettura: '📚 Lettura',
+    gaming: '🎮 Gaming',
+    fotografia: '📸 Fotografia',
+    cinema: '🎬 Cinema',
+    yoga: '🧘 Yoga',
+    vino: '🍷 Vino',
+    palestra: '🏋️ Palestra',
+    corsa: '🏃 Corsa',
+    nuoto: '🏊 Nuoto',
+    tennis: '🎾 Tennis',
+    concerti: '🎤 Concerti',
+    pittura: '🎨 Pittura',
+    teatro: '🎭 Teatro',
+    danza: '💃 Danza',
+    tecnologia: '💻 Tecnologia',
+    backpacking: '🎒 Backpacking',
+    camping: '⛺ Camping',
+    escursionismo: '🥾 Escursionismo',
+    montagna: '🏔️ Montagna',
+  };
+
+  getDisplayInterests(): string[] {
+    if (!this.discoverableUser?.interessi) return [];
+
+    return this.discoverableUser.interessi
+      .split(',')
+      .map((interest: string) => interest.trim())
+      .filter((i: string) => i.length > 0)
+      .map((interest: string) => {
+        const lower = interest.toLowerCase();
+        return this.interestDisplayMap[lower] || `🔸 ${interest}`;
+      });
+  }
+
   // Metodo che gestisce gli eventi touch per lo swipe all'inizializzazione del componente
   ngAfterViewInit(): void {
     // Costante che racchiude l'elemento card

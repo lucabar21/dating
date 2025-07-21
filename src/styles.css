@@ -18,7 +18,7 @@ html,
   --accent-color-bright-m: #549bff;
   --text-color-active: #172392;
   --dark-button-color: #03254e;
-  --neutral-button-color: rgba(166, 180, 198, 0.7);
+  --neutral-button-color: rgb(158, 167, 180);
 }
 
 .theme-dark {
