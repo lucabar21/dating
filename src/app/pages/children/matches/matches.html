@@ -11,7 +11,9 @@
         <p>{{timeAgo(match.timestamp)}}</p>
       </div>
       <button type="button">Chatta!</button>
-      <a [routerLink]="['/dashboard/utente', profile.utente1Id]"> Profilo </a>
+      <a [routerLink]="['/dashboard/utente', match.otherUserProfile?.id]">
+        Profilo
+      </a>
     </div>
   </div>
 </div>
