@@ -5,6 +5,7 @@ import { ThemeServ } from '../../../services/theme-serv';
 import { UserServ } from '../../../services/user-serv';
 import { Spinner } from '../../../components/spinner/spinner';
 import { CityService, City } from '../../../services/city.service';
+import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
 
 // Interface per i dati utente dal backend
@@ -285,7 +286,7 @@ export class Settings implements OnInit {
     this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
     this.loadUserProfile(); // Carica dati reali
     this.loadPreferences();
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params['tab']) {
         this.selectedTab = params['tab'];
       }
@@ -365,12 +366,17 @@ export class Settings implements OnInit {
       next: (response) => {
         console.log('✅ Preferenze salvate:', response);
         this.saving = false;
-        this.showSuccessMessage('✅ Preferenze salvate!');
+        this.showSuccessMessage('Preferenze salvate!');
       },
       error: (error) => {
         console.error('❌ Errore salvataggio preferenze:', error);
         this.saving = false;
-        this.showErrorMessage('❌ Errore durante il salvataggio');
+        //this.showErrorMessage('❌ Errore durante il salvataggio');
+        Swal.fire({
+          icon: 'error',
+          title: 'Errore durante il salvataggio',
+          confirmButtonText: 'OK',
+        });
       },
     });
   }
@@ -464,7 +470,7 @@ export class Settings implements OnInit {
         }
 
         // Mostra feedback
-        this.showSuccessMessage(`✅ ${fieldName} aggiornato con successo!`);
+        this.showSuccessMessage(`${fieldName} aggiornato con successo!`);
       },
       error: (error) => {
         console.error('❌ Errore salvataggio:', error);
@@ -502,7 +508,7 @@ export class Settings implements OnInit {
         this.closeModal('interestsModal');
 
         // Mostra feedback
-        this.showSuccessMessage('✅ Interessi salvati con successo!');
+        this.showSuccessMessage('Interessi salvati con successo!');
       },
       error: (error) => {
         console.error('❌ Errore salvataggio interessi:', error);
@@ -524,6 +530,11 @@ export class Settings implements OnInit {
   private showSuccessMessage(message: string): void {
     // TODO: Implementare toast/notifica più elegante
     alert(message);
+    Swal.fire({
+      icon: 'success',
+      title: message,
+      confirmButtonText: 'OK',
+    });
   }
 
   /**
@@ -603,7 +614,7 @@ export class Settings implements OnInit {
         next: (response) => {
           console.log('✅ Immagine salvata:', response);
           this.isUploadingImage = false;
-          this.showSuccessMessage('✅ Immagine profilo aggiornata!');
+          this.showSuccessMessage('Immagine profilo aggiornata!');
 
           // Aggiorna il profilo con i dati ricevuti
           if (response) {
@@ -774,7 +785,7 @@ export class Settings implements OnInit {
       next: (response) => {
         console.log('✅ Password cambiata:', response);
         this.saving = false;
-        this.showSuccessMessage('✅ Password cambiata con successo!');
+        this.showSuccessMessage('Password cambiata con successo!');
         this.resetPasswordModal();
       },
       error: (error) => {
@@ -875,7 +886,7 @@ export class Settings implements OnInit {
       next: (response) => {
         console.log('✅ Campo salvato con coordinate:', response);
         this.saving = false;
-        this.showSuccessMessage(`✅ ${fieldName} aggiornato con successo!`);
+        this.showSuccessMessage(`${fieldName} aggiornato con successo!`);
       },
       error: (error) => {
         console.error('❌ Errore salvataggio:', error);
