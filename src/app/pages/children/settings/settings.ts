@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ThemeServ } from '../../../services/theme-serv';
 import { UserServ } from '../../../services/user-serv';
+import { CityService, City } from '../../../services/city.service';
 
 // Interface per i dati utente dal backend
 interface UserProfile {
@@ -18,6 +19,7 @@ interface UserProfile {
   dataNascita: string;
   notificheAttive: boolean;
   profileImageUrl?: string; // Per l'anteprima locale
+
 }
 
 // Interface per i dati di aggiornamento profilo
@@ -139,6 +141,12 @@ export class Settings implements OnInit {
   // Termine di ricerca per filtro interessi
   searchTerm: string = '';
 
+  // 🔥 PROPRIETÀ PER AUTOCOMPLETAMENTO CITTÀ
+selectedCity: any = null;
+citySuggestions: City[] = [];
+showCitySuggestions: boolean = false;
+cityQuery: string = '';
+
   // Mappa degli interessi per display (già esistente)
   interestDisplayMap: { [key: string]: string } = {
     sport: '⚽ Sport',
@@ -256,7 +264,7 @@ export class Settings implements OnInit {
     ],
   };
 
-  constructor(private themeService: ThemeServ, private userServ: UserServ) {}
+  constructor(private themeService: ThemeServ, private userServ: UserServ,private cityService: CityService) {}
 
   /****************************************************************************************************/
   // 🔥 METODI PER CARICAMENTO DATI REALI
@@ -265,7 +273,7 @@ export class Settings implements OnInit {
   ngOnInit(): void {
     this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
     this.loadUserProfile(); // Carica dati reali
-    this.loadPreferences(); 
+    this.loadPreferences();
   }
 
   /**
@@ -329,7 +337,7 @@ loadPreferences(): void {
 // 🔥 SALVA PREFERENZE REALI
 savePreferences(): void {
   this.saving = true;
-  
+
   const preferencesData = {
     generePreferito: this.preferences.generePreferito,
     minEta: this.preferences.minEta,
@@ -384,12 +392,12 @@ savePreferences(): void {
  */
 private formatDateForInput(dateString: string): string {
   if (!dateString) return '';
-  
+
   // Se è già nel formato YYYY-MM-DD, ritorna così
   if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
     return dateString;
   }
-  
+
   // Altrimenti prova a parsarla e convertirla
   try {
     const date = new Date(dateString);
@@ -405,15 +413,15 @@ private formatDateForInput(dateString: string): string {
   private createUpdateData(): UpdateUserData {
   return {
     username: this.userProfile.username,
-    password: '', // 🔥 VUOTO - non serve per aggiornamenti normali
-    nome: this.userProfile.nome,
-    bio: this.userProfile.bio,
+    password: '',
+    nome: this.userProfile.nome || '', // Sempre stringa
+    bio: this.userProfile.bio || '', // Sempre stringa
     interessi: this.selectedInterests.join(', '),
-    città: this.userProfile.citta,
+    città: this.userProfile.citta || '', // Sempre stringa
     dataNascita: this.userProfile.dataNascita || '1990-01-01', // 🔥 DATA DEFAULT
     genere: this.userProfile.genere || 'MASCHIO', // 🔥 GENERE DEFAULT
-    fotoProfilo: this.userProfile.fotoProfilo,
-    notificheAttive: this.userProfile.notificheAttive
+    fotoProfilo: this.userProfile.fotoProfilo || '',
+    notificheAttive: this.userProfile.notificheAttive || false
   };
 }
 
@@ -565,15 +573,15 @@ private formatDateForInput(dateString: string): string {
 
     // 🔥 SALVA AUTOMATICAMENTE L'IMMAGINE
     const updateData = this.createUpdateData();
-    
+
     console.log('🔥 Salvando immagine automaticamente...');
-    
+
     this.userServ.updateUser(updateData).subscribe({
       next: (response) => {
         console.log('✅ Immagine salvata:', response);
         this.isUploadingImage = false;
         this.showSuccessMessage('✅ Immagine profilo aggiornata!');
-        
+
         // Aggiorna il profilo con i dati ricevuti
         if (response) {
           this.userProfile = { ...this.userProfile, ...response };
@@ -583,7 +591,7 @@ private formatDateForInput(dateString: string): string {
         console.error('❌ Errore salvataggio immagine:', error);
         this.isUploadingImage = false;
         this.showErrorMessage('❌ Errore durante il salvataggio dell\'immagine');
-        
+
         // Ripristina l'immagine precedente in caso di errore
         this.userProfile.profileImageUrl = this.userProfile.fotoProfilo;
       }
@@ -617,15 +625,15 @@ private formatDateForInput(dateString: string): string {
   // Metodi per preferenze di matching
   selectGender(gender: 'MASCHIO' | 'FEMMINA'): void {
   this.preferences.generePreferito = gender;
-   
+
 }
 
   updateAgeRange(): void {
-    
+
   }
 
   updateDistance(): void {
-    
+
   }
 
   // Metodi per notifiche
@@ -745,7 +753,7 @@ private formatDateForInput(dateString: string): string {
     error: (error) => {
       console.error('❌ Errore cambio password:', error);
       this.saving = false;
-      
+
       // 🔥 GESTIONE ERRORI SPECIFICI
       let errorMessage = 'Errore sconosciuto';
       if (error.error && typeof error.error === 'string') {
@@ -753,7 +761,7 @@ private formatDateForInput(dateString: string): string {
       } else if (error.message) {
         errorMessage = error.message;
       }
-      
+
       this.showErrorMessage('❌ ' + errorMessage);
     }
   });
@@ -790,4 +798,111 @@ private formatDateForInput(dateString: string): string {
       },
     });
   }
+
+
+
+// 🔥 METODI AGGIORNATI PER SISTEMA IBRIDO
+async searchCities(query: string): Promise<void> {
+  this.cityQuery = query;
+
+  if (query.length >= 2) {
+    // 🔥 Autocompletamento veloce da file JSON
+    this.citySuggestions = await this.cityService.searchItalianCities(query);
+    this.showCitySuggestions = this.citySuggestions.length > 0;
+    console.log('🔍 Città trovate:', this.citySuggestions);
+  } else {
+    this.citySuggestions = [];
+    this.showCitySuggestions = false;
+  }
+}
+
+onCitySelect(city: City): void {
+  this.selectedCity = city;
+  this.cityQuery = city.name;
+  this.showCitySuggestions = false;
+
+  console.log('🎯 Città selezionata:', city);
+  // 🔥 NESSUN SALVATAGGIO QUI - solo selezione
+}
+
+// 🔥 NUOVO METODO per salvare con coordinate
+
+
+hideCitySuggestions(): void {
+  setTimeout(() => this.showCitySuggestions = false, 200);
+}
+
+// Metodo per salvare con coordinate
+saveFieldWithCoordinates(fieldName: string, lat: number, lng: number): void {
+  this.saving = true;
+  const updateData = this.createUpdateData();
+
+  // 🔥 AGGIUNGI coordinate ai dati
+  (updateData as any).latitudine = lat;
+  (updateData as any).longitudine = lng;
+
+  console.log('🔥 Salvando con coordinate:', updateData);
+
+  this.userServ.updateUser(updateData).subscribe({
+    next: (response) => {
+      console.log('✅ Campo salvato con coordinate:', response);
+      this.saving = false;
+      this.showSuccessMessage(`✅ ${fieldName} aggiornato con successo!`);
+    },
+    error: (error) => {
+      console.error('❌ Errore salvataggio:', error);
+      this.saving = false;
+      this.showErrorMessage(`❌ Errore durante l'aggiornamento di ${fieldName}`);
+    }
+  });
+}
+
+// 🔥 METODI SPECIFICI PER CAMPO CITTÀ
+startEditCity(): void {
+  this.editingFields.citta = true;
+  this.cityQuery = this.userProfile.citta || '';
+  this.selectedCity = null;
+}
+
+cancelEditCity(): void {
+  this.editingFields.citta = false;
+  this.cityQuery = '';
+  this.selectedCity = null;
+  this.showCitySuggestions = false;
+}
+
+async saveCityField(): Promise<void> {
+  if (!this.selectedCity) {
+    this.showErrorMessage('❌ Seleziona una città dalla lista!');
+    return;
+  }
+
+  this.saving = true;
+  this.editingFields.citta = false;
+  this.userProfile.citta = this.selectedCity.name;
+  this.showCitySuggestions = false;
+
+  try {
+    // 🔥 Ottieni coordinate in background
+    console.log('📍 Cercando coordinate per:', this.selectedCity.name);
+    const coordinates = await this.cityService.getCityCoordinates(
+      this.selectedCity.name,
+      this.selectedCity.provincia
+    );
+
+    if (coordinates) {
+      console.log('✅ Coordinate trovate:', coordinates);
+      // Salva con coordinate
+      this.saveFieldWithCoordinates('citta', coordinates.latitude, coordinates.longitude);
+    } else {
+      console.log('⚠️ Coordinate non trovate, salvo solo nome città');
+      // Salva solo nome città
+      this.saveField('citta');
+    }
+  } catch (error) {
+    console.error('❌ Errore nel salvataggio:', error);
+    this.saving = false;
+    this.showErrorMessage('❌ Errore durante il salvataggio');
+  }
+}
 }

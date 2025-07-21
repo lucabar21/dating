@@ -139,7 +139,8 @@ export class Profile implements OnInit {
   }
 
   getProfilePicture(): any {
-    return this.user?.fotoProfilo || 'https://via.placeholder.com/200x200?text=Foto+Profilo';
+    return this.user?.fotoProfilo ||
+    'https://via.placeholder.com/200x200?text=Foto+Profilo';
   }
 
   getInterests(): string[] {

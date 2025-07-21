@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Homepage } from './pages/homepage/homepage';
 import { adminGuard } from './auth/admin-guard';
+import { ResetPassword } from './pages/reset-password/reset-password';
 
 export const routes: Routes = [
   { path: '', component: Homepage },
@@ -18,6 +19,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/confirm/confirm').then((m) => m.Confirm),
   },
+  {
+  path: 'reset-password',
+  component: ResetPassword,
+  title: 'Reset Password - Lovvami'
+},
   {
     path: 'dashboard',
     canActivate: [adminGuard],
