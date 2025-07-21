@@ -5,6 +5,7 @@ import { ThemeServ } from '../../../services/theme-serv';
 import { UserServ } from '../../../services/user-serv';
 import { Spinner } from '../../../components/spinner/spinner';
 import { CityService, City } from '../../../services/city.service';
+import { ActivatedRoute } from '@angular/router';
 
 // Interface per i dati utente dal backend
 interface UserProfile {
@@ -272,7 +273,8 @@ export class Settings implements OnInit {
   constructor(
     private themeService: ThemeServ,
     private userServ: UserServ,
-    private cityService: CityService
+    private cityService: CityService,
+    private route: ActivatedRoute
   ) {}
 
   /****************************************************************************************************/
@@ -283,6 +285,11 @@ export class Settings implements OnInit {
     this.isDarkTheme = this.themeService.getCurrentTheme() === 'dark';
     this.loadUserProfile(); // Carica dati reali
     this.loadPreferences();
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        this.selectedTab = params['tab'];
+      }
+    });
   }
 
   /**
