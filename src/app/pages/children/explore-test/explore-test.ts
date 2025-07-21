@@ -4,14 +4,18 @@ import { RouterModule } from '@angular/router';
 import { UserData, UserServ } from '../../../services/user-serv';
 import { Swipe, SwipeData } from '../../../services/swipe';
 import { ExploreCard } from '../../../components/explore-card/explore-card';
+import { Spinner } from '../../../components/spinner/spinner';
 
 @Component({
   selector: 'app-explore-test',
-  imports: [CommonModule, RouterModule, ExploreCard],
+  imports: [CommonModule, RouterModule, ExploreCard, Spinner],
   templateUrl: './explore-test.html',
   styleUrl: './explore-test.css',
 })
 export class ExploreTest {
+// Stati per loading ed errori
+  loading: boolean = false;
+
   // Variabile signal per memorizzare gli utenti da esplorare
   discoverableUsers = signal<UserData[]>([]);
 
@@ -81,13 +85,16 @@ export class ExploreTest {
 
   // Metodo che recupera gli utenti da esplorare
   getDiscoverableUsers() {
+    this.loading = true;
     this.userService.getDiscoverableUsers().subscribe({
       next: (users) => {
         console.log('✅ UTENTI EXPLORE RICEVUTI:', users);
         this.discoverableUsers.set(Array.isArray(users) ? users : [users]);
+        this.loading = false;
       },
       error: (error) => {
         console.error('Errore nel recupero dei profili pertinenti:', error);
+        this.loading = false;
       },
     });
   }

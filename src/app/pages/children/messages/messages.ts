@@ -7,14 +7,17 @@ import {
   Validators,
 } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Spinner } from '../../../components/spinner/spinner';
 
 @Component({
   selector: 'app-messages',
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, Spinner],
   templateUrl: './messages.html',
   styleUrl: './messages.css',
 })
 export class Messages {
+   // Stati per loading ed errori
+  loading: boolean = false;
   users = [
     {
       id: 101,
@@ -100,13 +103,16 @@ export class Messages {
   });
 
   submitForm() {
+     this.loading = true;
     if (this.chatForm.valid) {
       const message = this.chatForm.value.message;
       console.log('Message sent:', message);
       // Here you would typically send the message to the server
       this.chatForm.reset();
+      this.loading = false;
     } else {
       console.error('Form is invalid');
+      this.loading = false;
     }
   }
 }

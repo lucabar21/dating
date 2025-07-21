@@ -2,17 +2,18 @@ import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserServ, UserData } from '../../../services/user-serv';
+import { Spinner } from '../../../components/spinner/spinner';
 
 @Component({
   selector: 'app-profile-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Spinner],
   templateUrl: './profile-details.html',
   styleUrl: './profile-details.css',
 })
 export class ProfileDetails implements OnInit {
   user: UserData | null = null;
-  loading = true;
+  loading = false;
   error: string | null = null;
 
   interestDisplayMap: { [key: string]: string } = {

@@ -26,7 +26,7 @@ export class Profile implements OnInit {
   user: UserData | null = null;
 
   // Stati per loading ed errori
-  loading: boolean = true;
+  loading: boolean = false;
   error: string | null = null;
 
   // Mappa per il display degli interessi (stessa del Settings)

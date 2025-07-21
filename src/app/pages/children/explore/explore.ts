@@ -10,15 +10,19 @@ import {
 import { CommonModule } from '@angular/common';
 import { UserServ, UserData } from '../../../services/user-serv';
 import { Swipe, SwipeData } from '../../../services/swipe';
+import { Spinner } from '../../../components/spinner/spinner';
 
 @Component({
   selector: 'app-explore',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Spinner],
   templateUrl: './explore.html',
   styleUrl: './explore.css',
 })
 export class Explore implements OnInit {
+// Stati per loading ed errori
+  loading: boolean = false;
+
   private userService = inject(UserServ);
   private swipeService = inject(Swipe);
 
@@ -43,12 +47,15 @@ export class Explore implements OnInit {
   }
 
   getDiscoverableUsers() {
+     this.loading = true;
     this.userService.getDiscoverableUsers().subscribe({
       next: (users) => {
         this.discoverableUsers.set(Array.isArray(users) ? users : [users]);
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error fetching discoverable users:', error);
+        this.loading = false;
       },
     });
   }

@@ -79,7 +79,7 @@ export class Settings implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   // 🔥 NUOVI STATI PER LOADING
-  loading: boolean = true;
+  loading: boolean = false;
   error: string | null = null;
   saving: boolean = false;
 
