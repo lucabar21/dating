@@ -1,220 +1,215 @@
 .profile-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  padding: 64px 5%;
+
+  .border-container {
+    box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 2rem;
+    background-color: var(--bg-color);
+
+    .top-section {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 64px;
+      padding: 20px;
+
+      img {
+        width: 250px;
+        height: 250px;
+        border-radius: 10%;
+        object-fit: cover;
+        margin-top: -30px;
+      }
+
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .name-age {
+          align-items: center;
+          display: flex;
+          color: var(--text-color);
+          min-width: 200px;
+          font-size: 30px;
+
+          :nth-child(1) {
+            font-size: 3rem;
+            font-weight: bold;
+            line-height: 20px;
+          }
+        }
+
+        .location {
+          width: 100%;
+          line-height: 40px;
+          font-size: 2.2rem;
+          color: var(--text-color);
+        }
+      }
+    }
+  }
+
+  hr {
+    height: 2px;
+    background-color: var(--text-color);
+    border: none;
     width: 100%;
+    margin: 10px 0;
+  }
+
+  .description,
+  .interests {
+    width: 100%;
+    line-height: 64px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
-    padding: 64px 5%;
+    align-items: flex-start;
 
-    .border-container {
-        box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-        padding: 2rem;
-        background-color: var(--bg-color);
-
-        .top-section {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 64px;
-            padding: 20px;
-
-            img {
-                width: 250px;
-                height: 250px;
-                border-radius: 10%;
-                object-fit: cover;
-                margin-top: -30px;
-            }
-
-            .user-info {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-
-                .name-age {
-                    align-items: center;
-                    display: flex;
-                    color: var(--text-color);
-                    min-width: 200px;
-                    font-size: 30px;
-
-                    :nth-child(1) {
-                        font-size: 3rem;
-                        font-weight: bold;
-                        line-height: 20px;
-                    }
-                }
-
-                .location {
-                    width: 100%;
-                    line-height: 40px;
-                    font-size: 2.2rem;
-                    color: var(--text-color);
-                }
-
-            }
-
-        }
+    h2 {
+      font-size: 64px;
+      font-weight: bold;
+      color: var(--text-color);
     }
 
+    h3 {
+      font-size: 40px;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    p {
+      font-size: 24px;
+      color: var(--text-color);
+      line-height: 24px;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px 16px;
+
+      .badge {
+        padding: 6px 20px 4px 14px;
+        /*background: linear-gradient(135deg, var(--accent-color-f), var(--accent-color-m));*/
+        background-color: var(--neutral-button-color);
+        color: var(--text-color);
+        border-radius: 10px;
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.close-btn {
+  position: relative;
+  top: 0px;
+  right: -85%;
+  background: var(--accent-color-f);
+  color: var(--bg-color);
+  border: none;
+  font-size: 24px;
+  padding: 2px 16px 0px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 16px;
+    gap: 20px;
+
     hr {
-        height: 2px;
-        background-color: var(--text-color);
-        border: none;
+      margin-bottom: 10px;
+    }
+
+    .border-container {
+      .top-section {
         width: 100%;
-        margin: 10px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        padding: 10px;
+
+        .profile-picture {
+          width: 200px;
+          height: 200px;
+        }
+
+        .profile-picture {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+        }
+
+        .user-info {
+          text-align: center;
+
+          .name-age {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            justify-items: center;
+            margin-top: 10px;
+          }
+
+          .location {
+            font-size: 2.5rem;
+            text-align: center;
+          }
+
+          p {
+            line-height: 0.6rem;
+            font-size: 34px;
+          }
+        }
+
+        .settings-btn {
+          align-items: center;
+          margin: auto;
+        }
+      }
     }
 
     .description,
     .interests {
-        width: 100%;
-        line-height: 64px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+      h2 {
+        font-size: 48px;
+      }
 
-        h2 {
-            font-size: 64px;
-            font-weight: bold;
-            color: var(--text-color);
-        }
+      h3 {
+        font-size: 36px;
+        font-weight: bold;
+        color: var(--text-color);
+      }
 
-        h3 {
-            font-size: 40px;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-
-        p {
-            font-size: 24px;
-            color: var(--text-color);
-            line-height: 24px;
-        }
-
-        .wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 4px 16px;
-
-            .badge {
-                padding: 6px 20px 4px 14px;
-                /*background: linear-gradient(135deg, var(--accent-color-f), var(--accent-color-m));*/
-                background-color: var(--neutral-button-color);
-                color: var(--text-color);
-                border-radius: 10px;
-                font-size: 20px;
-            }
-        }
+      p {
+        font-size: 24px;
+      }
     }
-}
 
+    .description,
+    .interests {
+      justify-content: center;
+      align-items: center;
+    }
+  }
 
-.close-btn {
-    position: relative;
-    top: 0px;
+  .close-btn {
+    top: -20px;
     right: -85%;
-    background: var(--accent-color-f);
-    color: var(--bg-color);
-    border: none;
-    font-size: 24px;
-    padding: 2px 16px 0px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-@media (max-width: 768px) {
-    .profile-container {
-        padding: 16px;
-        gap: 20px;
-
-        hr {
-            margin-bottom: 10px;
-        }
-
-        .border-container {
-
-            .top-section {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 30px;
-                padding: 10px;
-
-                .profile-picture {
-                    width: 200px;
-                    height: 200px;
-                }
-
-                .profile-picture {
-                    display: flex;
-                    justify-content: center;
-                    width: 100%;
-                }
-
-                .user-info {
-                    text-align: center;
-
-                    .name-age {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        justify-items: center;
-                        margin-top: 10px;
-                    }
-
-                    .location {
-                        font-size: 2.5rem;
-                        text-align: center;
-                    }
-
-                    p {
-                        line-height: 0.6rem;
-                        font-size: 34px;
-                    }
-                }
-
-                .settings-btn {
-                    align-items: center;
-                    margin: auto;
-                }
-            }
-        }
-
-        .description,
-        .interests {
-            h2 {
-                font-size: 48px;
-            }
-
-            h3 {
-                font-size: 36px;
-                font-weight: bold;
-                color: var(--text-color);
-            }
-
-            p {
-                font-size: 24px;
-            }
-        }
-
-        .description,
-        .interests {
-            justify-content: center;
-            align-items: center;
-        }
-    }
-
-    .close-btn {
-        top: -20px;
-        right: -85%;
-        font-size: 20px;
-
-    }
-
+    font-size: 20px;
+  }
 }

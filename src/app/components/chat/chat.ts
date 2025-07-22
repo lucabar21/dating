@@ -18,26 +18,14 @@ import { UserServ } from '../../services/user-serv';
   templateUrl: './chat.html',
   styleUrl: './chat.css',
 })
-export class Chat implements OnInit, AfterViewChecked {
+export class Chat implements OnInit {
   messages = signal<any[]>([]);
   currentUser = signal<any>(null);
   private currentMatchId: number = 0;
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   private route = inject(ActivatedRoute);
   private messageService = inject(MessageServ);
   private userService = inject(UserServ);
-
-  ngAfterViewChecked() {
-    this.scrollToBottom();
-  }
-
-  scrollToBottom(): void {
-    try {
-      this.scrollContainer.nativeElement.scrollTop =
-        this.scrollContainer.nativeElement.scrollHeight;
-    } catch (err) {}
-  }
 
   getCurrentUser() {
     this.userService.getCurrentUser().subscribe((user) => {

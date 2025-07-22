@@ -11,5 +11,15 @@
     [canSuperLike]="isPremium()"
     [discoverableUser]="CurrentUser"
     (swipeEvent)="handleSwipe($event, CurrentUser.id)"
+    (openProfile)="openProfileModal($event)"
   ></app-explore-card>
+</div>
+
+<div class="modal-overlay" *ngIf="showProfileModal">
+  <app-profile-details
+    *ngIf="CurrentUser && showProfileModal"
+    [userId]="CurrentUser.id"
+    (close)="closeProfileModal()"
+  >
+  </app-profile-details>
 </div>

@@ -6,10 +6,18 @@ import { Swipe, SwipeData } from '../../../services/swipe';
 import { ExploreCard } from '../../../components/explore-card/explore-card';
 import { PlaceholderCard } from '../../../components/placeholder-card/placeholder-card';
 import { Spinner } from '../../../components/spinner/spinner';
+import { ProfileDetails } from '../profile-details/profile-details';
 
 @Component({
   selector: 'app-explore-test',
-  imports: [CommonModule, RouterModule, ExploreCard, PlaceholderCard, Spinner],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ExploreCard,
+    PlaceholderCard,
+    Spinner,
+    ProfileDetails,
+  ],
   templateUrl: './explore-test.html',
   styleUrl: './explore-test.css',
 })
@@ -25,6 +33,9 @@ export class ExploreTest {
 
   // Indice corrente per la visualizzazione dei profili
   currentIndex = 0;
+
+  // Variabili per la visualizzazione del profilo
+  showProfileModal = false;
 
   private userService = inject(UserServ);
   private swipeService = inject(Swipe);
@@ -103,6 +114,15 @@ export class ExploreTest {
       console.log('Fine profili raggiunti');
       this.currentIndex++;
     }
+  }
+
+  openProfileModal($event: any) {
+    console.log("Apro il profilo per l'utente:");
+    this.showProfileModal = true;
+  }
+
+  closeProfileModal() {
+    this.showProfileModal = false;
   }
 
   ngOnInit() {

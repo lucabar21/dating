@@ -27,6 +27,8 @@ export class ExploreCard {
   // Riferimento all'elemento card per gestire gli eventi touch
   @ViewChild('card') cardRef!: ElementRef;
 
+  @Output() openProfile = new EventEmitter<any>();
+
   // Variabili per gestire il movimento del touch
   private startX = 0;
   private startY = 0;
@@ -115,6 +117,11 @@ export class ExploreCard {
         this.swipeEvent.emit(tipo);
       }
     });
+  }
+
+  emitOpenProfile($event: any) {
+    console.log("Emetto l'evento openProfile nel figlio");
+    this.openProfile.emit($event);
   }
 
   // Metodo che emette l'evento di swipe con il tipo specificato

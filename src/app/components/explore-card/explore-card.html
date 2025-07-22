@@ -1,5 +1,23 @@
 <div class="profile-card" #card>
-  <img src="{{discoverableUser.fotoProfilo || 'http://placedog.net/500'}} " alt="Foto Profilo" />
+  <button (click)="emitOpenProfile($event)" class="profile-button">
+    <svg
+      width="800px"
+      height="800px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M16.5 7.063C16.5 10.258 14.57 13 12 13c-2.572 0-4.5-2.742-4.5-5.938C7.5 3.868 9.16 2 12 2s4.5 1.867 4.5 5.063zM4.102 20.142C4.487 20.6 6.145 22 12 22c5.855 0 7.512-1.4 7.898-1.857a.416.416 0 0 0 .09-.317C19.9 18.944 19.106 15 12 15s-7.9 3.944-7.989 4.826a.416.416 0 0 0 .091.317z"
+      />
+    </svg>
+  </button>
+  <img
+    src="{{discoverableUser.fotoProfilo || 'http://placedog.net/500'}} "
+    alt="Foto Profilo"
+  />
 
   <div class="info-wrapper">
     <div class="profile-info">
@@ -8,11 +26,8 @@
       </div>
       <!-- <p>{{discoverableUser.bio}}</p> -->
       <p class="bio-preview">
-        {{
-        discoverableUser.bio?.length > 80
-        ? (discoverableUser.bio | slice:0:80) + '…'
-        : discoverableUser.bio
-        }}
+        {{ discoverableUser.bio?.length > 80 ? (discoverableUser.bio |
+        slice:0:80) + '…' : discoverableUser.bio }}
       </p>
       <div class="wrapper">
         <p class="badge" *ngFor="let interest of getDisplayInterests()">
@@ -25,38 +40,72 @@
     </div>
     <div class="btns-container">
       <button class="like" (click)="emitSwipe('LIKE')">
-        <svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve">
+        <svg
+          fill="#000000"
+          height="800px"
+          width="800px"
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 512 512"
+          xml:space="preserve"
+        >
           <g>
             <g>
               <path
-                d="M83.478,139.13H16.696C7.479,139.13,0,146.603,0,155.826v333.913c0,9.223,7.479,16.696,16.696,16.696h66.783    c9.217,0,16.696-7.473,16.696-16.696V155.826C100.174,146.603,92.695,139.13,83.478,139.13z M50.089,439.652    c-9.212,0-16.696-7.484-16.696-16.696s7.484-16.696,16.696-16.696s16.696,7.484,16.696,16.696S59.302,439.652,50.089,439.652z" />
+                d="M83.478,139.13H16.696C7.479,139.13,0,146.603,0,155.826v333.913c0,9.223,7.479,16.696,16.696,16.696h66.783    c9.217,0,16.696-7.473,16.696-16.696V155.826C100.174,146.603,92.695,139.13,83.478,139.13z M50.089,439.652    c-9.212,0-16.696-7.484-16.696-16.696s7.484-16.696,16.696-16.696s16.696,7.484,16.696,16.696S59.302,439.652,50.089,439.652z"
+              />
             </g>
           </g>
           <g>
             <g>
               <path
-                d="M512,222.609c0-27.619-22.468-50.087-50.087-50.087H334.054c21.989-51.386,18.391-114.603,18.228-116.87    c0-27.619-22.468-50.087-50.087-50.087s-50.087,22.468-50.087,50.087c0,44.07-26.75,84.749-66.554,101.222l-41.673,17.233    c-6.24,2.581-10.316,8.674-10.316,15.429v266.81c0,9.223,7.479,16.696,16.696,16.696h211.478    c27.619,0,50.087-22.468,50.087-50.087c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332    c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332c0-6.511-1.25-12.739-3.522-18.45    C496.337,265.142,512,245.669,512,222.609z" />
+                d="M512,222.609c0-27.619-22.468-50.087-50.087-50.087H334.054c21.989-51.386,18.391-114.603,18.228-116.87    c0-27.619-22.468-50.087-50.087-50.087s-50.087,22.468-50.087,50.087c0,44.07-26.75,84.749-66.554,101.222l-41.673,17.233    c-6.24,2.581-10.316,8.674-10.316,15.429v266.81c0,9.223,7.479,16.696,16.696,16.696h211.478    c27.619,0,50.087-22.468,50.087-50.087c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332    c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332c0-6.511-1.25-12.739-3.522-18.45    C496.337,265.142,512,245.669,512,222.609z"
+              />
             </g>
           </g>
         </svg>
       </button>
-      <button *ngIf="canSuperLike" class="superlike" (click)="emitSwipe('SUPER_LIKE')">
-        <svg fill="#000000" version="1.1" baseProfile="tiny" id="Layer_1"
-          xmlns:x="http://ns.adobe.com/Extensibility/1.0/" xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/"
-          xmlns:graph="http://ns.adobe.com/Graphs/1.0/" xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-          width="800px" height="800px" viewBox="-0.5 0.5 42 42" xml:space="preserve">
+      <button
+        *ngIf="canSuperLike"
+        class="superlike"
+        (click)="emitSwipe('SUPER_LIKE')"
+      >
+        <svg
+          fill="#000000"
+          version="1.1"
+          baseProfile="tiny"
+          id="Layer_1"
+          xmlns:x="http://ns.adobe.com/Extensibility/1.0/"
+          xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/"
+          xmlns:graph="http://ns.adobe.com/Graphs/1.0/"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+          width="800px"
+          height="800px"
+          viewBox="-0.5 0.5 42 42"
+          xml:space="preserve"
+        >
           <path
-            d="M20.938,10.725C14.51,0.796,1.5,6.205,1.5,17.021c0,8.122,17.836,20.827,19.438,22.479  C22.551,37.848,39.5,25.143,39.5,17.021C39.5,6.287,27.378,0.796,20.938,10.725z" />
+            d="M20.938,10.725C14.51,0.796,1.5,6.205,1.5,17.021c0,8.122,17.836,20.827,19.438,22.479  C22.551,37.848,39.5,25.143,39.5,17.021C39.5,6.287,27.378,0.796,20.938,10.725z"
+          />
         </svg>
       </button>
       <button class="pass" (click)="emitSwipe('PASS')">
-        <svg fill="#000000" width="800px" height="800px" viewBox="0 0 32 32" version="1.1"
-          xmlns="http://www.w3.org/2000/svg">
+        <svg
+          fill="#000000"
+          width="800px"
+          height="800px"
+          viewBox="0 0 32 32"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <title>cancel2</title>
           <path
-            d="M19.587 16.001l6.096 6.096c0.396 0.396 0.396 1.039 0 1.435l-2.151 2.151c-0.396 0.396-1.038 0.396-1.435 0l-6.097-6.096-6.097 6.096c-0.396 0.396-1.038 0.396-1.434 0l-2.152-2.151c-0.396-0.396-0.396-1.038 0-1.435l6.097-6.096-6.097-6.097c-0.396-0.396-0.396-1.039 0-1.435l2.153-2.151c0.396-0.396 1.038-0.396 1.434 0l6.096 6.097 6.097-6.097c0.396-0.396 1.038-0.396 1.435 0l2.151 2.152c0.396 0.396 0.396 1.038 0 1.435l-6.096 6.096z" />
+            d="M19.587 16.001l6.096 6.096c0.396 0.396 0.396 1.039 0 1.435l-2.151 2.151c-0.396 0.396-1.038 0.396-1.435 0l-6.097-6.096-6.097 6.096c-0.396 0.396-1.038 0.396-1.434 0l-2.152-2.151c-0.396-0.396-0.396-1.038 0-1.435l6.097-6.096-6.097-6.097c-0.396-0.396-0.396-1.039 0-1.435l2.153-2.151c0.396-0.396 1.038-0.396 1.434 0l6.096 6.097 6.097-6.097c0.396-0.396 1.038-0.396 1.435 0l2.151 2.152c0.396 0.396 0.396 1.038 0 1.435l-6.096 6.096z"
+          />
         </svg>
       </button>
     </div>
