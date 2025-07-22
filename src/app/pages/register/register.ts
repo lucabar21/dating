@@ -13,6 +13,7 @@ import { Router, RouterModule } from '@angular/router';
 import { ThemeServ } from '../../services/theme-serv';
 import { Subscription } from 'rxjs';
 import { Footer } from '../../components/footer/footer';
+import Swal from 'sweetalert2'; // 🔥 IMPORT SWEETALERT
 
 @Component({
   selector: 'app-register',
@@ -45,20 +46,12 @@ export class Register implements OnInit, OnDestroy {
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
-      //Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/)
     ]),
     confirmPassword: new FormControl('', [Validators.required]),
-    }, 
+    },
     { validators: passwordsMatchValidator }
-);
+  );
 
-  /*get passwordMatchError(): boolean {
-    const password = this.registerForm.get('password')?.value;
-    const confirm = this.registerForm.get('confirmPassword')?.value;
-    const touched = this.registerForm.get('confirmPassword')?.touched;
-
-    return password !== confirm && !!touched;
-  }*/
   get passwordMatchError(): boolean {
     return (
       this.registerForm.hasError('passwordMismatch') &&
@@ -74,18 +67,51 @@ export class Register implements OnInit, OnDestroy {
       this.authService.register(email, password).subscribe({
         next: (response: any) => {
           console.log('Risposta ricevuta:', response);
-          if (response && response.token) {
-            this.router.navigate(['/login']);
-          }
+
+          // 🔥 MOSTRA MESSAGGIO DI CONFERMA EMAIL CON SWEETALERT
+          Swal.fire({
+            icon: 'success',
+            title: 'Registrazione completata!',
+            html: `
+              <p><strong>Controlla la tua email</strong> e clicca sul link di conferma per attivare l'account.</p>
+              <p>📧 Email inviata a: <strong>${email}</strong></p>
+              <br>
+              <small>Non vedi l'email? Controlla anche la cartella spam.</small>
+            `,
+            confirmButtonText: 'Vai al Login',
+            confirmButtonColor: '#e91e63',
+            allowOutsideClick: false,
+            customClass: {
+              popup: 'swal-register-success'
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/login']);
+            }
+          });
+
           this.registerForm.reset();
         },
         error: (error: any) => {
           console.error('Errore nella registrazione:', error);
+
+          // 🔥 GESTIONE ERRORI CON SWEETALERT
+          let errorMessage = 'Errore durante la registrazione';
+
           if (error.status === 409 || error.status === 400) {
-            alert('Email già in uso');
-          } else {
-            alert('Errore durante la registrazione');
+            if (error.error?.message && error.error.message.includes('Email già in uso')) {
+              errorMessage = 'Questa email è già registrata. Prova con un\'altra email o accedi al tuo account.';
+            }
           }
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Registrazione fallita',
+            text: errorMessage,
+            confirmButtonText: 'Riprova',
+            confirmButtonColor: '#e91e63'
+          });
+
           this.registerForm.reset();
         },
       });
@@ -97,11 +123,10 @@ export class Register implements OnInit, OnDestroy {
       '--random-left': Math.random().toString(),
       '--random-speed': Math.random().toString(),
       '--random-size': (Math.random() * 1.5 + 1).toString(),
-      '--random-blur': (Math.random() * 4).toFixed(1) + 'px', // 0 – 3px
+      '--random-blur': (Math.random() * 4).toFixed(1) + 'px',
     } as any;
   }
 }
-
 
 // ✅ Custom validator
 export const passwordsMatchValidator: ValidatorFn = (form: AbstractControl): { [key: string]: any } | null => {

@@ -3,24 +3,43 @@
   <!-- Sezione header con chat avviate -->
   <nav class="messages-navbar">
     <div
-      class="user-card"
       *ngFor="let user of chats()"
+      [class]="getChatClass(user)"
       (click)="goToChat(user.id)"
     >
       <div class="user-avatar">
         <img
-          src="{{user.otherUserProfile?.fotoProfilo || 'http://placedog.net/350'}}"
-          alt="{{ user.otherUserProfile?.nome }}'s avatar"
+          [src]="user.otherUserProfile?.fotoProfilo || 'http://placedog.net/350'"
+          [alt]="getOtherUserDisplayName(user) + '\'s avatar'"
         />
+        <!-- 🔥 BADGE PER UTENTE DISATTIVATO -->
+        <div *ngIf="!user.isOtherUserActive" class="deactivated-badge">
+          ⚠️
+        </div>
       </div>
       <div class="user-info">
-        <h3>{{ user.otherUserProfile?.nome }}</h3>
+        <h3>{{ getOtherUserDisplayName(user) }}</h3>
+        <!-- 🔥 SOTTOTITOLO PER UTENTE DISATTIVATO -->
+        <small *ngIf="!user.isOtherUserActive" class="deactivated-text">
+          Non disponibile
+        </small>
       </div>
     </div>
   </nav>
 
   <!-- Sezione dove sarà presente la chat -->
   <div class="messages-content">
+    <!-- 🔥 BANNER DI AVVISO SE UTENTE DISATTIVATO -->
+    <div *ngIf="isOtherUserDeactivated()" class="deactivated-banner">
+      <div class="banner-content">
+        <span class="banner-icon">⚠️</span>
+        <div class="banner-text">
+          <strong>Questo utente non è più disponibile</strong>
+          <small>Non puoi più inviare messaggi a questo utente</small>
+        </div>
+      </div>
+    </div>
+
     <router-outlet></router-outlet>
   </div>
 
@@ -29,10 +48,18 @@
     <form [formGroup]="chatForm">
       <textarea
         formControlName="message"
-        placeholder="Scrivi un messaggio"
+        placeholder="{{ isOtherUserDeactivated() ? 'Utente non disponibile - non puoi inviare messaggi' : 'Scrivi un messaggio' }}"
         rows="3"
+        [disabled]="isOtherUserDeactivated()"
       ></textarea>
-      <button type="button" (click)="sendMessage()">Invia</button>
+      <button
+        type="button"
+        (click)="sendMessage()"
+        [disabled]="isOtherUserDeactivated() || chatForm.invalid"
+        [class.disabled]="isOtherUserDeactivated()"
+      >
+        {{ isOtherUserDeactivated() ? '❌ Non disponibile' : 'Invia' }}
+      </button>
     </form>
   </div>
 </div>
