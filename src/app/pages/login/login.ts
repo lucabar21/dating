@@ -63,31 +63,51 @@ export class Login implements OnInit, OnDestroy {
   }
 
   onLogin(): void {
-    let email = this.loginForm.get('email')?.value ?? '';
-    let password = this.loginForm.get('password')?.value ?? '';
-    this.loginError = '';
+  let email = this.loginForm.get('email')?.value ?? '';
+  let password = this.loginForm.get('password')?.value ?? '';
+  this.loginError = '';
 
-    if (this.loginForm.valid) {
-      this.authService.login(email, password).subscribe({
-        next: (response: any) => {
-          if (response && response.token) {
-            localStorage.setItem('auth_token', response.token);
-            localStorage.setItem('primo_accesso', response.primoAccesso.toString());
-            localStorage.setItem('account_type', response.accountType);
-            this.authService.isLoggedIn.set(true);
-            this.router.navigate(['/dashboard']);
-          }
-        },
-        error: (error: any) => {
-          console.error('Errore durante il login:', error);
-          this.loginError = 'Email o password errati! Riprova!';
-
-          this.shake = true;
-          setTimeout(() => this.shake = false, 500); // remove after animation
+  if (this.loginForm.valid) {
+    this.authService.login(email, password).subscribe({
+      next: (response: any) => {
+        if (response && response.token) {
+          localStorage.setItem('auth_token', response.token);
+          localStorage.setItem('primo_accesso', response.primoAccesso.toString());
+          localStorage.setItem('account_type', response.accountType);
+          this.authService.isLoggedIn.set(true);
+          this.router.navigate(['/dashboard']);
         }
-      });
-    }
+      },
+      error: (error: any) => {
+        console.error('Errore durante il login:', error);
+
+        // 🔥 GESTIONE SPECIFICA ACCOUNT NON ATTIVATO
+        if (error.status === 400 && error.error?.message?.includes('non attivato')) {
+          this.loginError = '📧 Account non attivato! Controlla la tua email e clicca sul link di conferma.';
+          return;
+        }
+
+        // 🔥 GESTIONE ALTRI ERRORI 400
+        if (error.status === 400) {
+          this.loginError = error.error?.message || 'Errore durante il login';
+          this.shake = true;
+          setTimeout(() => this.shake = false, 500);
+          return;
+        }
+
+        // 🔥 GESTIONE ERRORI 401/403 (credenziali)
+        if (error.status === 401 || error.status === 403) {
+          this.loginError = 'Email o password errati! Riprova!';
+        } else {
+          this.loginError = 'Errore di connessione. Riprova più tardi.';
+        }
+
+        this.shake = true;
+        setTimeout(() => this.shake = false, 500);
+      }
+    });
   }
+}
 
   // 🔥 METODI PER RECUPERO PASSWORD
   openForgotPasswordModal(): void {
@@ -130,5 +150,5 @@ export class Login implements OnInit, OnDestroy {
       '--random-blur': (Math.random() * 4).toFixed(1) + 'px',
     } as any;
   }
-  
+
 }

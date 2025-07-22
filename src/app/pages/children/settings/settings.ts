@@ -815,18 +815,7 @@ export class Settings implements OnInit {
     this.closeModal('passwordModal');
   }
 
-  // Metodo per disattivazione account
-  deactivateAccount(): void {
-    if (
-      confirm(
-        '⚠️ Sei sicuro di voler disattivare il tuo account? Questa azione non può essere annullata.'
-      )
-    ) {
-      console.log('🔥 Disattivando account...');
-      // TODO: Implementare disattivazione account reale
-      this.showSuccessMessage('Account disattivato. Ci mancherai! 💔');
-    }
-  }
+
 
   // Metodo di test (mantenuto per debug)
   testConnection() {
@@ -950,4 +939,137 @@ export class Settings implements OnInit {
       this.showErrorMessage('Errore durante il salvataggio');
     }
   }
+
+
+  // Metodo per disattivazione account
+deactivateAccount(): void {
+  // 🔥 CONFERMA CON SWEETALERT
+  Swal.fire({
+    icon: 'warning',
+    title: 'Disattivare l\'account?',
+    html: `
+      <p><strong>⚠️ Questa azione disattiverà temporaneamente il tuo account.</strong></p>
+      <br>
+      <p>📋 <strong>Cosa succederà:</strong></p>
+      <ul style="text-align: left; margin: 0 auto; display: inline-block;">
+        <li>🚫 Non apparirai più nelle ricerche</li>
+        <li>💬 Non potrai più inviare/ricevere messaggi</li>
+        <li>👤 Il tuo profilo non sarà visibile</li>
+        <li>🔄 Potrai riattivare l'account in qualsiasi momento</li>
+      </ul>
+      <br>
+      <p><small>💡 Per riattivare l'account, contatta il supporto o prova ad accedere nuovamente.</small></p>
+    `,
+    showCancelButton: true,
+    confirmButtonText: 'Sì, disattiva account',
+    cancelButtonText: 'Annulla',
+    confirmButtonColor: '#dc3545',
+    cancelButtonColor: '#6c757d',
+    focusCancel: true,
+    reverseButtons: true,
+    customClass: {
+      popup: 'swal-deactivate-account'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.executeAccountDeactivation();
+    }
+  });
+}
+
+/**
+ * 🔥 ESEGUE LA DISATTIVAZIONE REALE - VERSIONE CON MESSAGGIO CORRETTO
+ */
+private executeAccountDeactivation(): void {
+  this.saving = true;
+
+  // 🔥 CHIAMATA ALL'ENDPOINT BACKEND
+  this.userServ.deactivateAccount().subscribe({
+    next: (response: string) => {
+      console.log('✅ Account disattivato:', response);
+      this.saving = false;
+
+      // 🔥 MESSAGGIO DI CONFERMA AGGIORNATO
+      Swal.fire({
+        icon: 'success',
+        title: 'Utente disattivato con successo',
+        html: `
+          <p>💔 <strong>Il tuo account è stato disattivato con successo.</strong></p>
+          <br>
+          <p>Ci mancherai! 😢</p>
+          <br>
+          <p><strong>Verrai reindirizzato alla homepage.</strong></p>
+        `,
+        confirmButtonText: 'Vai alla Homepage',
+        confirmButtonColor: '#e91e63',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then(() => {
+        // 🔥 LOGOUT E REDIRECT ALLA HOMEPAGE
+        this.performLogoutAndRedirect();
+      });
+    },
+    error: (error) => {
+      console.error('❌ Errore disattivazione account:', error);
+      this.saving = false;
+
+      let errorMessage = 'Errore durante la disattivazione dell\'account';
+
+      // 🔥 GESTIONE MIGLIORATA DEGLI ERRORI
+      if (error.status === 200) {
+        // Se status è 200 ma c'è errore di parsing, probabilmente è riuscito
+        console.log('⚠️ Disattivazione probabilmente riuscita, ma errore nel parsing della response');
+
+        // 🔥 STESSO MESSAGGIO DI SUCCESSO ANCHE QUI
+        Swal.fire({
+          icon: 'success',
+          title: 'Utente disattivato con successo',
+          html: `
+            <p>💔 <strong>Il tuo account è stato disattivato con successo.</strong></p>
+            <br>
+            <p>Ci mancherai! 😢</p>
+            <br>
+            <p><strong>Verrai reindirizzato alla homepage.</strong></p>
+          `,
+          confirmButtonText: 'Vai alla Homepage',
+          confirmButtonColor: '#e91e63',
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        }).then(() => {
+          this.performLogoutAndRedirect();
+        });
+        return;
+      }
+
+      if (error.error && typeof error.error === 'string') {
+        errorMessage = error.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Errore',
+        text: errorMessage,
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#e91e63'
+      });
+    }
+  });
+}
+
+/**
+ * 🔥 LOGOUT E REDIRECT ALLA HOMEPAGE
+ */
+private performLogoutAndRedirect(): void {
+  // Pulisci localStorage
+  localStorage.removeItem('auth_token');
+  localStorage.removeItem('primo_accesso');
+  localStorage.removeItem('account_type');
+
+  // 🔥 REDIRECT ALLA HOMEPAGE INVECE CHE AL LOGIN
+  window.location.href = '/';
+}
+
+
 }

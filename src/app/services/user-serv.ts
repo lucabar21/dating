@@ -62,4 +62,13 @@ export class UserServ {
   updatePreferences(preferences: any): Observable<any> {
     return this.http.put(`${this.baseUrl}preferenze/me`, preferences);
   }
+
+  /**
+ * Disattiva l'account dell'utente corrente
+ */
+
+deactivateAccount(): Observable<any> {
+  return this.http.post(`${this.baseUrl}utenti/me/deactivate`, {});
+}
+
 }
