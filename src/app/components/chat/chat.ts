@@ -38,5 +38,10 @@ export class Chat implements OnInit {
       }
     });
     this.getCurrentUser();
+
+    this.messageService.reloadChat$.subscribe((matchId) => {
+      // Esegui il reload dei messaggi per quel matchId
+      this.loadMessages(matchId);
+    });
   }
 }

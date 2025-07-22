@@ -61,15 +61,27 @@ export class Messages implements OnInit {
           next: (response) => {
             console.log('Message sent successfully: ' + response);
             this.chatForm.reset();
-            this.getChats();
           },
           error: (error) => {
-            console.error('Error sending message: ' + error);
+            console.error('❌ Error sending message:', error);
+            console.error('❌ Error details:', error.error);
+            console.error('❌ Status:', error.status);
+            console.error('❌ Status text:', error.statusText);
+
+            if (error.status === 0 || error.status === 200) {
+              console.log('🔄 Reloading messages anyway...');
+              this.chatForm.reset();
+              this.reloadCurrentChat(matchId);
+            }
           },
         });
     } else {
       alert('Assicurati di inserire un messaggio valido.');
     }
+  }
+
+  private reloadCurrentChat(matchId: number) {
+    this.messageService.emitReload(matchId);
   }
 
   getChats() {

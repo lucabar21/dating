@@ -61,6 +61,7 @@
     padding: 32px;
     align-items: center;
     gap: 32px;
+    overflow-y: auto;
 
     p {
       margin: 0;
