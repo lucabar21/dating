@@ -83,7 +83,7 @@ export class Login implements OnInit, OnDestroy {
 
         // 🔥 GESTIONE SPECIFICA ACCOUNT NON ATTIVATO
         if (error.status === 400 && error.error?.message?.includes('non attivato')) {
-          this.loginError = '📧 Account non attivato! Controlla la tua email e clicca sul link di conferma.';
+          this.loginError = '📧 Account non attivo!';
           return;
         }
 

@@ -35,6 +35,10 @@ export class Messages implements OnInit {
   chats = signal<any[]>([]);
   currentUser = signal<any>(null);
 
+  // 🔥 NUOVO: Signal per tracciare lo stato dell'altro utente
+  currentOtherUser = signal<any>(null);
+  isOtherUserDeactivated = signal<boolean>(false);
+
   private userService = inject(UserServ);
   private matchService = inject(MatchServ);
   private messageService = inject(MessageServ);
@@ -50,6 +54,12 @@ export class Messages implements OnInit {
   });
 
   sendMessage() {
+    // 🔥 CONTROLLO SE L'ALTRO UTENTE È DISATTIVATO
+    if (this.isOtherUserDeactivated()) {
+      alert('❌ Non puoi inviare messaggi a questo utente perché non è più disponibile.');
+      return;
+    }
+
     if (this.chatForm.valid) {
       const messageContent = this.chatForm.value.message;
       const matchId = Number(
@@ -71,6 +81,13 @@ export class Messages implements OnInit {
             console.error('❌ Error details:', error.error);
             console.error('❌ Status:', error.status);
             console.error('❌ Status text:', error.statusText);
+
+            // 🔥 GESTIONE ERRORE UTENTE DISATTIVATO
+            if (error.status === 400 && error.error?.includes('non è più disponibile')) {
+              alert('❌ Questo utente non è più disponibile.');
+              this.isOtherUserDeactivated.set(true);
+              return;
+            }
 
             if (error.status === 0 || error.status === 200) {
               console.log('🔄 Reloading messages anyway...');
@@ -106,7 +123,7 @@ export class Messages implements OnInit {
     });
   }
 
-  // Metodo per ottenere il profilo dell'altro utente nel match
+  // 🔥 METODO AGGIORNATO per gestire utenti disattivati
   getOtherUserProfile(match: any) {
     const otherUserId =
       match.utente1Id === this.currentUser()?.id
@@ -116,16 +133,74 @@ export class Messages implements OnInit {
     this.userService.getUserProfile(otherUserId).subscribe({
       next: (profile) => {
         match.otherUserProfile = profile;
+        match.isOtherUserActive = true; // 🔥 Assume attivo se riceve il profilo
         this.chats.update((chats) => [...chats]);
+
+        // 🔥 AGGIORNA STATO DELL'ALTRO UTENTE SE È LA CHAT CORRENTE
+        this.updateCurrentOtherUserStatus(match);
       },
       error: (error) => {
         console.error('Error loading profile:', error);
+
+        // 🔥 GESTIONE ERRORE UTENTE DISATTIVATO
+        if (error.status === 400 || error.status === 404) {
+          console.log('⚠️ Utente probabilmente disattivato:', otherUserId);
+          match.otherUserProfile = {
+            id: otherUserId,
+            nome: 'Utente non disponibile',
+            fotoProfilo: 'assets/images/user-deactivated.png', // Immagine placeholder
+            isDeactivated: true
+          };
+          match.isOtherUserActive = false; // 🔥 Marca come disattivato
+          this.chats.update((chats) => [...chats]);
+
+          // 🔥 AGGIORNA STATO DELL'ALTRO UTENTE SE È LA CHAT CORRENTE
+          this.updateCurrentOtherUserStatus(match);
+        }
       },
     });
   }
 
+  // 🔥 NUOVO: Metodo per aggiornare lo stato dell'altro utente nella chat corrente
+  private updateCurrentOtherUserStatus(match: any) {
+    const currentMatchId = Number(this.route.snapshot.firstChild?.paramMap.get('matchId'));
+
+    if (currentMatchId === match.id) {
+      this.currentOtherUser.set(match.otherUserProfile);
+      this.isOtherUserDeactivated.set(!match.isOtherUserActive);
+
+      console.log('🔍 Current other user status updated:', {
+        matchId: currentMatchId,
+        otherUser: match.otherUserProfile?.nome,
+        isActive: match.isOtherUserActive
+      });
+    }
+  }
+
   goToChat(matchId: number) {
-    this.router.navigate(['/dashboard/messages/chat', matchId]).then(() => {});
+    this.router.navigate(['/dashboard/messages/chat', matchId]).then(() => {
+      // 🔥 AGGIORNA STATO DELL'ALTRO UTENTE QUANDO CAMBIA CHAT
+      const currentMatch = this.chats().find(chat => chat.id === matchId);
+      if (currentMatch) {
+        this.updateCurrentOtherUserStatus(currentMatch);
+      }
+    });
+  }
+
+  // 🔥 NUOVO: Metodo per ottenere il display name dell'altro utente
+  getOtherUserDisplayName(chat: any): string {
+    if (chat.otherUserProfile?.isDeactivated) {
+      return 'Utente non disponibile';
+    }
+    return chat.otherUserProfile?.nome || 'Caricamento...';
+  }
+
+  // 🔥 NUOVO: Metodo per ottenere la classe CSS per la chat
+  getChatClass(chat: any): string {
+    if (!chat.isOtherUserActive) {
+      return 'user-card deactivated';
+    }
+    return 'user-card';
   }
 
   ngOnInit() {
@@ -134,6 +209,17 @@ export class Messages implements OnInit {
       this.currentUser.set(user);
       // chiamata solo dopo aver ottenuto l'utente
       this.getChats();
+    });
+
+    // 🔥 ASCOLTA CAMBI DI ROTTA PER AGGIORNARE STATO ALTRO UTENTE
+    this.route.firstChild?.paramMap.subscribe((params) => {
+      const matchId = Number(params.get('matchId'));
+      if (matchId) {
+        const currentMatch = this.chats().find(chat => chat.id === matchId);
+        if (currentMatch) {
+          this.updateCurrentOtherUserStatus(currentMatch);
+        }
+      }
     });
   }
 }
