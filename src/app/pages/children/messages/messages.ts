@@ -63,17 +63,14 @@ export class Messages implements OnInit {
         .sendMessage(matchId, { contenuto: messageContent })
         .subscribe({
           next: (response) => {
-            console.log('✅ Message sent successfully:', response);
+            console.log('✅ Messaggio inviato con successo:', response);
             this.chatForm.reset();
           },
           error: (error) => {
-            console.error('❌ Error sending message:', error);
-            console.error('❌ Error details:', error.error);
-            console.error('❌ Status:', error.status);
-            console.error('❌ Status text:', error.statusText);
+            console.error("Errore durante l'invio del messaggio:", error);
 
             if (error.status === 0 || error.status === 200) {
-              console.log('🔄 Reloading messages anyway...');
+              console.log('🔄 Ricaricamento dei messaggi...');
               this.chatForm.reset();
               this.reloadCurrentChat(matchId);
             }

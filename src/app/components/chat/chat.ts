@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MessageServ } from '../../services/message-serv';
 import { UserServ } from '../../services/user-serv';
@@ -10,14 +18,26 @@ import { UserServ } from '../../services/user-serv';
   templateUrl: './chat.html',
   styleUrl: './chat.css',
 })
-export class Chat implements OnInit {
+export class Chat implements OnInit, AfterViewChecked {
   messages = signal<any[]>([]);
   currentUser = signal<any>(null);
   private currentMatchId: number = 0;
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   private route = inject(ActivatedRoute);
   private messageService = inject(MessageServ);
   private userService = inject(UserServ);
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.scrollContainer.nativeElement.scrollTop =
+        this.scrollContainer.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
 
   getCurrentUser() {
     this.userService.getCurrentUser().subscribe((user) => {
@@ -47,5 +67,9 @@ export class Chat implements OnInit {
       // Esegui il reload dei messaggi per quel matchId
       this.loadMessages(matchId);
     });
+
+    // setInterval(() => {
+    //   this.loadMessages(this.currentMatchId);
+    // }, 5000);
   }
 }

@@ -112,7 +112,7 @@
         border-radius: 8px;
         padding: 8px;
         font-size: 24px;
-        resize: vertical; /* 🔥 Permetti resize verticale */
+        resize: vertical;
         min-height: 60px;
         max-height: 120px;
 
@@ -123,14 +123,14 @@
 
       button {
         width: 100px;
-        height: 60px; /* 🔥 Altezza fissa bottone */
+        height: 60px;
         background-color: var(--accent-color-f);
         color: var(--bg-color);
         border: none;
         border-radius: 8px;
         cursor: pointer;
         font-size: 32px;
-        flex-shrink: 0; /* 🔥 Non si restringe */
+        flex-shrink: 0;
       }
     }
   }
