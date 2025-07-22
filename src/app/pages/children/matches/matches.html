@@ -3,18 +3,26 @@
   <h2>I TUOI MATCHES</h2>
   <div class="matches-grid">
     <div class="card" *ngFor="let match of matches()">
-      <img
-        src="{{match.otherUserProfile?.fotoProfilo || 'http://placedog.net/350'}}"
-        alt="Foto profilo"
-      />
+      <img src="{{match.otherUserProfile?.fotoProfilo || 'http://placedog.net/350'}}" alt="Foto profilo" />
       <p class="username">{{match.otherUserProfile?.nome}}</p>
       <div class="user-info">
         <p>{{timeAgo(match.timestamp)}}</p>
       </div>
       <button type="button" (click)="goToChat(match.id)">Chatta!</button>
+
+      <!--OLD, per mandare a una pagina separata
       <a [routerLink]="['/dashboard/utente', match.otherUserProfile?.id]">
         Profilo
-      </a>
+      -->
+      <button type="button" class="view-profile" (click)="openProfileModal(match.otherUserProfile?.id)">Profilo</button>
+
+    </div>
+
+
+    <!-- MODAL -->
+    <div class="modal-overlay" *ngIf="showProfileModal">
+      <app-profile-details *ngIf="showProfileModal" [userId]="selectedUserId" (close)="closeProfileModal()">
+      </app-profile-details>
+
     </div>
   </div>
-</div>

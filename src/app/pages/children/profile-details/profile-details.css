@@ -11,6 +11,8 @@
         box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
         padding: 2rem;
+        background-color: var(--bg-color);
+
         .top-section {
             width: 100%;
             display: flex;
@@ -24,7 +26,7 @@
                 height: 250px;
                 border-radius: 10%;
                 object-fit: cover;
-                margin-top: -40px;
+                margin-top: -30px;
             }
 
             .user-info {
@@ -35,29 +37,22 @@
                 .name-age {
                     align-items: center;
                     display: flex;
-                    line-height: 32px;
                     color: var(--text-color);
+                    min-width: 200px;
+                    font-size: 30px;
 
                     :nth-child(1) {
                         font-size: 3rem;
                         font-weight: bold;
-                    }
-
-                    :nth-child(2) {
-                        font-size: 3rem;
+                        line-height: 20px;
                     }
                 }
 
                 .location {
                     width: 100%;
-                    line-height: 64px;
-                    font-size: 2.5rem;
+                    line-height: 40px;
+                    font-size: 2.2rem;
                     color: var(--text-color);
-
-                    p {
-                        width: 100%;
-                        line-height: 2.5rem;
-                    }
                 }
 
             }
@@ -119,13 +114,13 @@
 
 
 .close-btn {
-    position:relative;
+    position: relative;
     top: 0px;
     right: -85%;
     background: var(--accent-color-f);
     color: var(--bg-color);
     border: none;
-    font-size: 30px;
+    font-size: 24px;
     padding: 2px 16px 0px 16px;
     border-radius: 8px;
     cursor: pointer;
@@ -137,42 +132,57 @@
         gap: 20px;
 
         hr {
-            margin: 0px;
+            margin-bottom: 10px;
         }
 
-        .top-section {
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+        .border-container {
 
-            .profile-picture {
-                width: 200px;
-                height: 200px;
-            }
-
-            .user-info {
+            .top-section {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
                 align-items: center;
+                justify-content: center;
+                gap: 30px;
+                padding: 10px;
 
-                .name-age {
+                .profile-picture {
+                    width: 200px;
+                    height: 200px;
+                }
+
+                .profile-picture {
                     display: flex;
-                    align-items: center;
-                    font-size: 3rem;
-                    margin-top: 10px;
+                    justify-content: center;
+                    width: 100%;
                 }
 
-                .location {
-                    font-size: 2.5rem;
+                .user-info {
                     text-align: center;
+
+                    .name-age {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        justify-items: center;
+                        margin-top: 10px;
+                    }
+
+                    .location {
+                        font-size: 2.5rem;
+                        text-align: center;
+                    }
+
+                    p {
+                        line-height: 0.6rem;
+                        font-size: 34px;
+                    }
                 }
 
-                p {
-                    line-height: 0.8rem;
+                .settings-btn {
+                    align-items: center;
+                    margin: auto;
                 }
-            }
-
-            .settings-btn {
-                align-items: center;
-                margin: auto;
             }
         }
 
@@ -180,6 +190,12 @@
         .interests {
             h2 {
                 font-size: 48px;
+            }
+
+            h3 {
+                font-size: 36px;
+                font-weight: bold;
+                color: var(--text-color);
             }
 
             p {
@@ -193,11 +209,12 @@
             align-items: center;
         }
     }
-.close-btn {
-    top: -20px;
-    right: -85%;
-    font-size: 24px;
 
-}
+    .close-btn {
+        top: -20px;
+        right: -85%;
+        font-size: 20px;
+
+    }
 
 }

@@ -4,15 +4,16 @@ import { Router, RouterModule } from '@angular/router';
 import { MatchServ } from '../../../services/matchServ';
 import { UserServ } from '../../../services/user-serv';
 import { Spinner } from '../../../components/spinner/spinner';
+import { ProfileDetails } from '../profile-details/profile-details';
 
 @Component({
   selector: 'app-matches',
-  imports: [CommonModule, RouterModule, Spinner],
+  imports: [CommonModule, RouterModule, Spinner, ProfileDetails],
   templateUrl: './matches.html',
   styleUrl: './matches.css',
 })
 export class Matches implements OnInit {
- // Stati per loading ed errori
+  // Stati per loading ed errori
   loading: boolean = false;
 
   private matchService = inject(MatchServ);
@@ -21,6 +22,9 @@ export class Matches implements OnInit {
 
   currentUser = signal<any>(null);
   matches = signal<any[]>([]);
+
+  showProfileModal = false;
+  selectedUserId: number | null = null;
 
   // Metodo per ottenere l'utente corrente e per settarlo nel signal currentUser
   getCurrentUser() {
@@ -31,13 +35,13 @@ export class Matches implements OnInit {
 
   // Metodo per ottenere i match e per settarli nel signal matches
   getMatches() {
-     this.loading = true;
+    this.loading = true;
     this.matchService.getMatches().subscribe((data: any[]) => {
       this.matches.set(data);
       data.forEach((match) => {
         this.getOtherUserProfile(match);
       });
-       this.loading = false;
+      this.loading = false;
     });
   }
 
@@ -89,5 +93,17 @@ export class Matches implements OnInit {
       // chiamata solo dopo aver ottenuto l'utente
       this.getMatches();
     });
+  }
+
+  openProfileModal(userId: number | null) {
+    if (userId) {
+      this.selectedUserId = userId;
+      this.showProfileModal = true;
+    }
+  }
+
+  closeProfileModal() {
+    this.showProfileModal = false;
+    this.selectedUserId = null;
   }
 }

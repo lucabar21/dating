@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserServ, UserData } from '../../../services/user-serv';
 import { Spinner } from '../../../components/spinner/spinner';
+import { Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-profile-details',
@@ -15,6 +16,10 @@ export class ProfileDetails implements OnInit {
   user: UserData | null = null;
   loading = false;
   error: string | null = null;
+
+  @Input() userId: number | null = null;
+
+  @Output() close = new EventEmitter<void>();
 
   interestDisplayMap: { [key: string]: string } = {
     sport: '⚽ Sport',
@@ -43,12 +48,23 @@ export class ProfileDetails implements OnInit {
     montagna: '🏔️ Montagna',
   };
 
-  constructor(private route: ActivatedRoute, private userServ: UserServ, private location: Location) {}
+  constructor(
+    private route: ActivatedRoute,
+    private userServ: UserServ,
+    private location: Location
+  ) {}
 
   ngOnInit(): void {
-    const userId = Number(this.route.snapshot.paramMap.get('id'));
-    if (!isNaN(userId)) {
+    //const userId = Number(this.route.snapshot.paramMap.get('id'));
+    /*if (!isNaN(userId)) {
       this.loadUserProfile(userId);
+    } else {
+      this.error = 'ID utente non valido.';
+      this.loading = false;
+    }*/
+
+    if (this.userId != null) {
+      this.loadUserProfile(this.userId);
     } else {
       this.error = 'ID utente non valido.';
       this.loading = false;
@@ -88,10 +104,14 @@ export class ProfileDetails implements OnInit {
   }
 
   getProfilePicture(): string {
-    return this.user?.fotoProfilo || 'https://via.placeholder.com/200x200?text=Foto+Profilo';
+    return (
+      this.user?.fotoProfilo ||
+      'https://via.placeholder.com/200x200?text=Foto+Profilo'
+    );
   }
 
   goBack() {
-    this.location.back();
+    //this.location.back();
+    this.close.emit();
   }
 }
