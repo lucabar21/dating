@@ -371,12 +371,8 @@ export class Settings implements OnInit {
       error: (error) => {
         console.error('❌ Errore salvataggio preferenze:', error);
         this.saving = false;
-        //this.showErrorMessage('❌ Errore durante il salvataggio');
-        Swal.fire({
-          icon: 'error',
-          title: 'Errore durante il salvataggio',
-          confirmButtonText: 'OK',
-        });
+        this.showErrorMessage('Errore durante il salvataggio');
+
       },
     });
   }
@@ -476,7 +472,7 @@ export class Settings implements OnInit {
         console.error('❌ Errore salvataggio:', error);
         this.saving = false;
         this.showErrorMessage(
-          `❌ Errore durante l'aggiornamento di ${fieldName}`
+          `Errore durante l'aggiornamento di ${fieldName}`
         );
       },
     });
@@ -514,7 +510,7 @@ export class Settings implements OnInit {
         console.error('❌ Errore salvataggio interessi:', error);
         this.saving = false;
         this.showErrorMessage(
-          '❌ Errore durante il salvataggio degli interessi'
+          'Errore durante il salvataggio degli interessi'
         );
       },
     });
@@ -542,7 +538,11 @@ export class Settings implements OnInit {
    */
   private showErrorMessage(message: string): void {
     // TODO: Implementare toast/notifica più elegante
-    alert(message);
+    Swal.fire({
+      icon: 'error',
+      title: message,
+      confirmButtonText: 'OK',
+    });
   }
 
   /**
@@ -625,7 +625,7 @@ export class Settings implements OnInit {
           console.error('❌ Errore salvataggio immagine:', error);
           this.isUploadingImage = false;
           this.showErrorMessage(
-            "❌ Errore durante il salvataggio dell'immagine"
+            "Errore durante il salvataggio dell'immagine"
           );
 
           // Ripristina l'immagine precedente in caso di errore
@@ -746,19 +746,19 @@ export class Settings implements OnInit {
   changePassword(): void {
     // Validazione
     if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
-      this.showErrorMessage('❌ Le password non coincidono!');
+      this.showErrorMessage('Le password non coincidono!');
       return;
     }
 
     if (this.passwordData.newPassword.length < 6) {
       this.showErrorMessage(
-        '❌ La password deve contenere almeno 6 caratteri!'
+        'La password deve contenere almeno 6 caratteri!'
       );
       return;
     }
 
     if (!this.passwordData.currentPassword) {
-      this.showErrorMessage('❌ Inserisci la password attuale per cambiarla!');
+      this.showErrorMessage('Inserisci la password attuale per cambiarla!');
       return;
     }
 
@@ -800,7 +800,7 @@ export class Settings implements OnInit {
           errorMessage = error.message;
         }
 
-        this.showErrorMessage('❌ ' + errorMessage);
+        this.showErrorMessage(errorMessage);
       },
     });
   }
@@ -892,7 +892,7 @@ export class Settings implements OnInit {
         console.error('❌ Errore salvataggio:', error);
         this.saving = false;
         this.showErrorMessage(
-          `❌ Errore durante l'aggiornamento di ${fieldName}`
+          `Errore durante l'aggiornamento di ${fieldName}`
         );
       },
     });
@@ -914,7 +914,7 @@ export class Settings implements OnInit {
 
   async saveCityField(): Promise<void> {
     if (!this.selectedCity) {
-      this.showErrorMessage('❌ Seleziona una città dalla lista!');
+      this.showErrorMessage('Seleziona una città dalla lista!');
       return;
     }
 
@@ -947,7 +947,7 @@ export class Settings implements OnInit {
     } catch (error) {
       console.error('❌ Errore nel salvataggio:', error);
       this.saving = false;
-      this.showErrorMessage('❌ Errore durante il salvataggio');
+      this.showErrorMessage('Errore durante il salvataggio');
     }
   }
 }
