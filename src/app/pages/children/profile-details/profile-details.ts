@@ -2,13 +2,12 @@ import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserServ, UserData } from '../../../services/user-serv';
-import { Spinner } from '../../../components/spinner/spinner';
 import { Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-profile-details',
   standalone: true,
-  imports: [CommonModule, Spinner],
+  imports: [CommonModule],
   templateUrl: './profile-details.html',
   styleUrl: './profile-details.css',
 })
