@@ -102,14 +102,29 @@ export class Messages implements OnInit {
     this.messageService.emitReload(matchId);
   }
 
+  // 🔥 METODO MODIFICATO - Fix caricamento
   getChats() {
     this.loading = true;
     this.matchService.getMatches().subscribe((data: any[]) => {
-      this.chats.set(data);
+      // 🔥 INIZIALIZZA LE CHAT CON PLACEHOLDER "NORMALI"
+      const chatsWithDefaults = data.map(chat => ({
+        ...chat,
+        otherUserProfile: {
+          nome: 'Caricamento...',
+          fotoProfilo: 'http://placedog.net/350', // Avatar di default
+          isLoading: true
+        },
+        isOtherUserActive: true, // 🔥 ASSUME SEMPRE ATTIVO INIZIALMENTE
+        profileLoaded: false
+      }));
+
+      this.chats.set(chatsWithDefaults);
+      this.loading = false; // 🔥 NASCONDI SPINNER PRINCIPALE
+
+      // 🔥 CARICA I PROFILI REALI IN BACKGROUND
       data.forEach((chat) => {
         this.getOtherUserProfile(chat);
       });
-      this.loading = false;
     });
   }
 
@@ -129,9 +144,22 @@ export class Messages implements OnInit {
 
     this.userService.getUserProfile(otherUserId).subscribe({
       next: (profile) => {
-        match.otherUserProfile = profile;
-        match.isOtherUserActive = true; // 🔥 Assume attivo se riceve il profilo
-        this.chats.update((chats) => [...chats]);
+        // 🔥 AGGIORNA IL MATCH SPECIFICO CON PROFILO REALE
+        this.chats.update((chats) =>
+          chats.map(chat =>
+            chat.id === match.id
+              ? {
+                  ...chat,
+                  otherUserProfile: {
+                    ...profile,
+                    isLoading: false
+                  },
+                  isOtherUserActive: true,
+                  profileLoaded: true
+                }
+              : chat
+          )
+        );
 
         // 🔥 AGGIORNA STATO DELL'ALTRO UTENTE SE È LA CHAT CORRENTE
         this.updateCurrentOtherUserStatus(match);
@@ -142,14 +170,25 @@ export class Messages implements OnInit {
         // 🔥 GESTIONE ERRORE UTENTE DISATTIVATO
         if (error.status === 400 || error.status === 404) {
           console.log('⚠️ Utente probabilmente disattivato:', otherUserId);
-          match.otherUserProfile = {
-            id: otherUserId,
-            nome: 'Utente non disponibile',
-            fotoProfilo: 'assets/images/user-deactivated.png', // Immagine placeholder
-            isDeactivated: true
-          };
-          match.isOtherUserActive = false; // 🔥 Marca come disattivato
-          this.chats.update((chats) => [...chats]);
+
+          // 🔥 AGGIORNA COME DISATTIVATO
+          this.chats.update((chats) =>
+            chats.map(chat =>
+              chat.id === match.id
+                ? {
+                    ...chat,
+                    otherUserProfile: {
+                      id: otherUserId,
+                      fotoProfilo: 'assets/images/user-deactivated.png',
+                      isDeactivated: true,
+                      isLoading: false
+                    },
+                    isOtherUserActive: false, // 🔥 ORA DIVENTA DISATTIVATO
+                    profileLoaded: true
+                  }
+                : chat
+            )
+          );
 
           // 🔥 AGGIORNA STATO DELL'ALTRO UTENTE SE È LA CHAT CORRENTE
           this.updateCurrentOtherUserStatus(match);
@@ -163,14 +202,17 @@ export class Messages implements OnInit {
     const currentMatchId = Number(this.route.snapshot.firstChild?.paramMap.get('matchId'));
 
     if (currentMatchId === match.id) {
-      this.currentOtherUser.set(match.otherUserProfile);
-      this.isOtherUserDeactivated.set(!match.isOtherUserActive);
+      const currentMatch = this.chats().find(chat => chat.id === match.id);
+      if (currentMatch) {
+        this.currentOtherUser.set(currentMatch.otherUserProfile);
+        this.isOtherUserDeactivated.set(!currentMatch.isOtherUserActive);
 
-      console.log('🔍 Current other user status updated:', {
-        matchId: currentMatchId,
-        otherUser: match.otherUserProfile?.nome,
-        isActive: match.isOtherUserActive
-      });
+        console.log('🔍 Current other user status updated:', {
+          matchId: currentMatchId,
+          otherUser: currentMatch.otherUserProfile?.nome,
+          isActive: currentMatch.isOtherUserActive
+        });
+      }
     }
   }
 
@@ -184,19 +226,31 @@ export class Messages implements OnInit {
     });
   }
 
-  // 🔥 NUOVO: Metodo per ottenere il display name dell'altro utente
+  // 🔥 METODO AGGIORNATO per ottenere il display name dell'altro utente
   getOtherUserDisplayName(chat: any): string {
+    // Se sta ancora caricando, mostra "Caricamento..."
+    if (chat.otherUserProfile?.isLoading || !chat.profileLoaded) {
+      return 'Caricamento...';
+    }
+    // Se è disattivato, mostra nome speciale
     if (chat.otherUserProfile?.isDeactivated) {
       return '';
     }
+    // Altrimenti mostra il nome normale
     return chat.otherUserProfile?.nome || 'Caricamento...';
   }
 
-  // 🔥 NUOVO: Metodo per ottenere la classe CSS per la chat
+  // 🔥 METODO AGGIORNATO per ottenere la classe CSS per la chat
   getChatClass(chat: any): string {
+    // Se è ancora in caricamento, classe normale
+    if (chat.otherUserProfile?.isLoading || !chat.profileLoaded) {
+      return 'user-card';
+    }
+    // Se è disattivato, classe disattivata
     if (!chat.isOtherUserActive) {
       return 'user-card deactivated';
     }
+    // Altrimenti classe normale
     return 'user-card';
   }
 
