@@ -1,6 +1,6 @@
+<app-spinner *ngIf="loading()"></app-spinner>
 <div class="explore-container">
   <!-- 🔄 LOADING STATE -->
-  <app-spinner *ngIf="loading()"></app-spinner>
 
   <!-- 📋 PLACEHOLDER CARD (array vuoto o fine swipe) -->
   <app-placeholder-card *ngIf="shouldShowPlaceholder"></app-placeholder-card>
