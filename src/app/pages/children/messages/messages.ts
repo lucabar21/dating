@@ -187,7 +187,7 @@ export class Messages implements OnInit {
   // 🔥 NUOVO: Metodo per ottenere il display name dell'altro utente
   getOtherUserDisplayName(chat: any): string {
     if (chat.otherUserProfile?.isDeactivated) {
-      return 'Utente non disponibile';
+      return '';
     }
     return chat.otherUserProfile?.nome || 'Caricamento...';
   }
