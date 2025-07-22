@@ -55,21 +55,45 @@ export class Messages implements OnInit {
       const matchId = Number(
         this.route.snapshot.firstChild?.paramMap.get('matchId')
       );
+
+      console.log('🔥 DEBUG: Sending message to matchId:', matchId);
+      console.log('🔥 DEBUG: Message content:', messageContent);
+
       this.messageService
         .sendMessage(matchId, { contenuto: messageContent })
         .subscribe({
           next: (response) => {
-            console.log('Message sent successfully: ' + response);
+            console.log('✅ Message sent successfully:', response);
             this.chatForm.reset();
-            this.getChats();
+
+            // 🔥 RICARICA I MESSAGGI DELLA CHAT SPECIFICA
+            this.reloadCurrentChat(matchId);
           },
           error: (error) => {
-            console.error('Error sending message: ' + error);
+            console.error('❌ Error sending message:', error);
+            console.error('❌ Error details:', error.error);
+            console.error('❌ Status:', error.status);
+            console.error('❌ Status text:', error.statusText);
+
+            // Ricarica comunque i messaggi se l'errore è solo di risposta
+            if (error.status === 0 || error.status === 200) {
+              console.log('🔄 Reloading messages anyway...');
+              this.chatForm.reset();
+              this.reloadCurrentChat(matchId);
+            }
           },
         });
     } else {
       alert('Assicurati di inserire un messaggio valido.');
     }
+  }
+
+  // 🔥 NUOVO METODO per ricaricare la chat corrente
+  private reloadCurrentChat(matchId: number) {
+    // Emetti un evento per far ricaricare il componente Chat
+    window.dispatchEvent(new CustomEvent('reloadMessages', {
+      detail: { matchId }
+    }));
   }
 
   getChats() {
