@@ -55,11 +55,15 @@ export class Messages implements OnInit {
       const matchId = Number(
         this.route.snapshot.firstChild?.paramMap.get('matchId')
       );
+
+      console.log('🔥 DEBUG: Sending message to matchId:', matchId);
+      console.log('🔥 DEBUG: Message content:', messageContent);
+
       this.messageService
         .sendMessage(matchId, { contenuto: messageContent })
         .subscribe({
           next: (response) => {
-            console.log('Message sent successfully: ' + response);
+            console.log('✅ Message sent successfully:', response);
             this.chatForm.reset();
           },
           error: (error) => {

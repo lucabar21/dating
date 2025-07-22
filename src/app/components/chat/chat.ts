@@ -13,6 +13,7 @@ import { UserServ } from '../../services/user-serv';
 export class Chat implements OnInit {
   messages = signal<any[]>([]);
   currentUser = signal<any>(null);
+  private currentMatchId: number = 0;
 
   private route = inject(ActivatedRoute);
   private messageService = inject(MessageServ);
@@ -27,6 +28,7 @@ export class Chat implements OnInit {
   loadMessages(matchId: number) {
     this.messageService.getMessages(matchId).subscribe((data: any[]) => {
       this.messages.set(data);
+      console.log('🔄 Messages loaded:', data.length);
     });
   }
 
@@ -34,9 +36,11 @@ export class Chat implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const matchId = Number(params.get('matchId'));
       if (matchId) {
+        this.currentMatchId = matchId;
         this.loadMessages(matchId);
       }
     });
+
     this.getCurrentUser();
 
     this.messageService.reloadChat$.subscribe((matchId) => {

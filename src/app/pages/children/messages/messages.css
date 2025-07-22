@@ -1,13 +1,13 @@
 .messages-container {
   width: 100%;
-  height: 100%;
+  height: 100vh; /* 🔥 Altezza fissa viewport */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 
   .messages-navbar {
     width: 100%;
-    height: 100px;
+    height: 100px; /* 🔥 Altezza fissa navbar */
+    flex-shrink: 0; /* 🔥 Non si restringe */
     display: flex;
     background-color: var(--text-color);
     gap: 16px;
@@ -36,6 +36,7 @@
         object-fit: cover;
         border: 2px solid var(--text-color);
       }
+
       .user-info {
         display: flex;
         align-items: center;
@@ -54,14 +55,16 @@
   }
 
   .messages-content {
+    flex: 1; /* 🔥 Prende tutto lo spazio rimasto */
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
     padding: 32px;
+    padding-bottom: 0; /* 🔥 Rimuovi padding bottom */
     align-items: center;
     gap: 32px;
-    overflow-y: auto;
+    overflow-y: auto; /* 🔥 Scroll verticale */
+    min-height: 0; /* 🔥 Permette al flex di restringersi */
 
     p {
       margin: 0;
@@ -91,6 +94,7 @@
   }
 
   .input-chat {
+    flex-shrink: 0; /* 🔥 Non si restringe mai */
     background-color: var(--text-color);
 
     form {
@@ -108,20 +112,25 @@
         border-radius: 8px;
         padding: 8px;
         font-size: 24px;
+        resize: vertical; /* 🔥 Permetti resize verticale */
+        min-height: 60px;
+        max-height: 120px;
 
         &:focus {
           outline: 2px solid var(--accent-color-f);
         }
       }
+
       button {
         width: 100px;
-        height: 100%;
+        height: 60px; /* 🔥 Altezza fissa bottone */
         background-color: var(--accent-color-f);
         color: var(--bg-color);
         border: none;
         border-radius: 8px;
         cursor: pointer;
         font-size: 32px;
+        flex-shrink: 0; /* 🔥 Non si restringe */
       }
     }
   }
@@ -132,6 +141,45 @@
     .user-card {
       .user-info {
         display: none !important;
+      }
+    }
+  }
+}
+
+/* 🔥 CSS MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .messages-container {
+    height: calc(100vh - 80px); /* 🔥 Considera bottom nav su mobile */
+
+    .messages-navbar {
+      height: 80px;
+      padding: 16px;
+
+      .user-card {
+        height: 40px;
+
+        img {
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+
+    .messages-content {
+      padding: 16px;
+    }
+
+    .input-chat form {
+      padding: 16px;
+
+      textarea {
+        font-size: 18px;
+      }
+
+      button {
+        width: 80px;
+        height: 50px;
+        font-size: 24px;
       }
     }
   }
