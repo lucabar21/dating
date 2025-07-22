@@ -55,7 +55,7 @@
       color: var(--text-color);
       font-size: 20px;
       padding: 10px 16px 8px 8px;
-      margin: 0px 6px 6px 0px; 
+      margin: 0px 6px 6px 0px;
     }
   }
   p {
@@ -122,4 +122,18 @@
       padding: 16px;
     }
   }
+}
+
+
+.bio-preview {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+  max-height: 3.6em; /* 2 righe */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* numero di righe */
+  -webkit-box-orient: vertical;
+  word-break: break-word;
 }
