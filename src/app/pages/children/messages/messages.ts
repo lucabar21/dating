@@ -34,6 +34,7 @@ export class Messages implements OnInit {
   loading: boolean = false;
   chats = signal<any[]>([]);
   currentUser = signal<any>(null);
+  activeChatId: number | null = null;
 
   // 🔥 NUOVO: Signal per tracciare lo stato dell'altro utente
   currentOtherUser = signal<any>(null);
@@ -56,7 +57,9 @@ export class Messages implements OnInit {
   sendMessage() {
     // 🔥 CONTROLLO SE L'ALTRO UTENTE È DISATTIVATO
     if (this.isOtherUserDeactivated()) {
-      alert('❌ Non puoi inviare messaggi a questo utente perché non è più disponibile.');
+      alert(
+        '❌ Non puoi inviare messaggi a questo utente perché non è più disponibile.'
+      );
       return;
     }
 
@@ -80,7 +83,10 @@ export class Messages implements OnInit {
             console.error("Errore durante l'invio del messaggio:", error);
 
             // 🔥 GESTIONE ERRORE UTENTE DISATTIVATO
-            if (error.status === 400 && error.error?.includes('non è più disponibile')) {
+            if (
+              error.status === 400 &&
+              error.error?.includes('non è più disponibile')
+            ) {
               alert('❌ Questo utente non è più disponibile.');
               this.isOtherUserDeactivated.set(true);
               return;
@@ -107,15 +113,15 @@ export class Messages implements OnInit {
     this.loading = true;
     this.matchService.getMatches().subscribe((data: any[]) => {
       // 🔥 INIZIALIZZA LE CHAT CON PLACEHOLDER "NORMALI"
-      const chatsWithDefaults = data.map(chat => ({
+      const chatsWithDefaults = data.map((chat) => ({
         ...chat,
         otherUserProfile: {
           nome: 'Caricamento...',
           fotoProfilo: 'http://placedog.net/350', // Avatar di default
-          isLoading: true
+          isLoading: true,
         },
         isOtherUserActive: true, // 🔥 ASSUME SEMPRE ATTIVO INIZIALMENTE
-        profileLoaded: false
+        profileLoaded: false,
       }));
 
       this.chats.set(chatsWithDefaults);
@@ -146,16 +152,16 @@ export class Messages implements OnInit {
       next: (profile) => {
         // 🔥 AGGIORNA IL MATCH SPECIFICO CON PROFILO REALE
         this.chats.update((chats) =>
-          chats.map(chat =>
+          chats.map((chat) =>
             chat.id === match.id
               ? {
                   ...chat,
                   otherUserProfile: {
                     ...profile,
-                    isLoading: false
+                    isLoading: false,
                   },
                   isOtherUserActive: true,
-                  profileLoaded: true
+                  profileLoaded: true,
                 }
               : chat
           )
@@ -173,7 +179,7 @@ export class Messages implements OnInit {
 
           // 🔥 AGGIORNA COME DISATTIVATO
           this.chats.update((chats) =>
-            chats.map(chat =>
+            chats.map((chat) =>
               chat.id === match.id
                 ? {
                     ...chat,
@@ -181,10 +187,10 @@ export class Messages implements OnInit {
                       id: otherUserId,
                       fotoProfilo: 'assets/images/user-deactivated.png',
                       isDeactivated: true,
-                      isLoading: false
+                      isLoading: false,
                     },
                     isOtherUserActive: false, // 🔥 ORA DIVENTA DISATTIVATO
-                    profileLoaded: true
+                    profileLoaded: true,
                   }
                 : chat
             )
@@ -199,10 +205,12 @@ export class Messages implements OnInit {
 
   // 🔥 NUOVO: Metodo per aggiornare lo stato dell'altro utente nella chat corrente
   private updateCurrentOtherUserStatus(match: any) {
-    const currentMatchId = Number(this.route.snapshot.firstChild?.paramMap.get('matchId'));
+    const currentMatchId = Number(
+      this.route.snapshot.firstChild?.paramMap.get('matchId')
+    );
 
     if (currentMatchId === match.id) {
-      const currentMatch = this.chats().find(chat => chat.id === match.id);
+      const currentMatch = this.chats().find((chat) => chat.id === match.id);
       if (currentMatch) {
         this.currentOtherUser.set(currentMatch.otherUserProfile);
         this.isOtherUserDeactivated.set(!currentMatch.isOtherUserActive);
@@ -210,16 +218,17 @@ export class Messages implements OnInit {
         console.log('🔍 Current other user status updated:', {
           matchId: currentMatchId,
           otherUser: currentMatch.otherUserProfile?.nome,
-          isActive: currentMatch.isOtherUserActive
+          isActive: currentMatch.isOtherUserActive,
         });
       }
     }
   }
 
   goToChat(matchId: number) {
+    this.activeChatId = matchId;
     this.router.navigate(['/dashboard/messages/chat', matchId]).then(() => {
       // 🔥 AGGIORNA STATO DELL'ALTRO UTENTE QUANDO CAMBIA CHAT
-      const currentMatch = this.chats().find(chat => chat.id === matchId);
+      const currentMatch = this.chats().find((chat) => chat.id === matchId);
       if (currentMatch) {
         this.updateCurrentOtherUserStatus(currentMatch);
       }
@@ -228,13 +237,9 @@ export class Messages implements OnInit {
 
   // 🔥 METODO AGGIORNATO per ottenere il display name dell'altro utente
   getOtherUserDisplayName(chat: any): string {
-    // Se sta ancora caricando, mostra "Caricamento..."
-    if (chat.otherUserProfile?.isLoading || !chat.profileLoaded) {
-      return 'Caricamento...';
-    }
     // Se è disattivato, mostra nome speciale
     if (chat.otherUserProfile?.isDeactivated) {
-      return '';
+      return 'Utente disattivato';
     }
     // Altrimenti mostra il nome normale
     return chat.otherUserProfile?.nome || 'Caricamento...';
@@ -242,10 +247,6 @@ export class Messages implements OnInit {
 
   // 🔥 METODO AGGIORNATO per ottenere la classe CSS per la chat
   getChatClass(chat: any): string {
-    // Se è ancora in caricamento, classe normale
-    if (chat.otherUserProfile?.isLoading || !chat.profileLoaded) {
-      return 'user-card';
-    }
     // Se è disattivato, classe disattivata
     if (!chat.isOtherUserActive) {
       return 'user-card deactivated';
@@ -266,7 +267,7 @@ export class Messages implements OnInit {
     this.route.firstChild?.paramMap.subscribe((params) => {
       const matchId = Number(params.get('matchId'));
       if (matchId) {
-        const currentMatch = this.chats().find(chat => chat.id === matchId);
+        const currentMatch = this.chats().find((chat) => chat.id === matchId);
         if (currentMatch) {
           this.updateCurrentOtherUserStatus(currentMatch);
         }
