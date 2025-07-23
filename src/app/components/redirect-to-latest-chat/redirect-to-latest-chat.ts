@@ -17,11 +17,12 @@ export class RedirectToLatestChat {
   redirectToChat() {
     this.chatService.getMatches().subscribe((chats: any[]) => {
       if (chats && chats.length > 0) {
-        const latestChat = chats[0]; // oppure scegli come vuoi (ultima attiva, ordinata, ecc.)
-        this.router.navigate(['chat', latestChat.id]);
+        const latestChat = chats[0];
+        // 🔥 NAVIGA CORRETTAMENTE DENTRO IL ROUTING MESSAGES
+        this.router.navigate(['/dashboard/messages/chat', latestChat.id]);
       } else {
-        // Nessuna chat, mostra un componente vuoto o un messaggio
-        this.router.navigate(['/no-chats']);
+        // 🔥 CREA UN COMPONENT "NO CHATS" E NAVIGA LÌ
+        this.router.navigate(['/dashboard/messages/no-chats']);
       }
     });
   }

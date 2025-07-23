@@ -17,6 +17,11 @@ export const messagesRoutes: Routes = [
         loadComponent: () =>
           import('../../../components/chat/chat').then((m) => m.Chat),
       },
+      {
+        path: 'no-chats', // 🔥 AGGIUNGI QUESTA ROUTE
+        loadComponent: () =>
+          import('../../../components/no-chats/no-chats').then((m) => m.NoChats),
+      },
     ],
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }, // fallback alla route con redirect dinamico
