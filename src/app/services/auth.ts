@@ -16,7 +16,10 @@ export class AuthService {
   private router = inject(Router);
 
   login(email: string, password: string) {
-    return this.http.post(`${this.apiUrl}auth/login`, { email, password });
+    return this.http.post(`${this.apiUrl}auth/login`, {
+      email,
+      password,
+    });
   }
 
   register(email: string, password: string) {
@@ -30,15 +33,15 @@ export class AuthService {
   }
 
   // 🔥 METODO RECUPERO PASSWORD
-   forgotPassword(email: string): Observable<any> {
-  return this.http.post(`${this.apiUrl}auth/forgot-password`, { email });
-}
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}auth/forgot-password`, { email });
+  }
 
-// 🔥 METODO RESET PASSWORD
-resetPassword(token: string, newPassword: string): Observable<any> {
-  return this.http.post(`${this.apiUrl}auth/reset-password`, {
-    token: token,
-    newPassword: newPassword
-  });
-}
+  // 🔥 METODO RESET PASSWORD
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}auth/reset-password`, {
+      token: token,
+      newPassword: newPassword,
+    });
+  }
 }

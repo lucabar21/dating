@@ -1,13 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  signal,
-  ViewChild,
-} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MessageServ } from '../../services/message-serv';
 import { UserServ } from '../../services/user-serv';
@@ -26,6 +18,8 @@ export class Chat implements OnInit {
   private route = inject(ActivatedRoute);
   private messageService = inject(MessageServ);
   private userService = inject(UserServ);
+
+  intervalId: any;
 
   getCurrentUser() {
     this.userService.getCurrentUser().subscribe((user) => {
@@ -55,9 +49,14 @@ export class Chat implements OnInit {
       // Esegui il reload dei messaggi per quel matchId
       this.loadMessages(matchId);
     });
+    this.intervalId = setInterval(() => {
+      this.loadMessages(this.currentMatchId);
+    }, 10000);
+  }
 
-    // setInterval(() => {
-    //   this.loadMessages(this.currentMatchId);
-    // }, 5000);
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 }
