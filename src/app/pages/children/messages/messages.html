@@ -19,10 +19,6 @@
       </div>
       <div class="user-info">
         <h3>{{ getOtherUserDisplayName(user) }}</h3>
-        <!-- 🔥 SOTTOTITOLO PER UTENTE DISATTIVATO -->
-        <small *ngIf="!user.isOtherUserActive" class="deactivated-text">
-          Non disponibile
-        </small>
       </div>
     </div>
   </nav>
@@ -58,7 +54,7 @@
         [disabled]="isOtherUserDeactivated() || chatForm.invalid"
         [class.disabled]="isOtherUserDeactivated()"
       >
-        {{ isOtherUserDeactivated() ? '❌ Non disponibile' : 'Invia' }}
+        Invia
       </button>
     </form>
   </div>

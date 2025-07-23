@@ -45,23 +45,34 @@ export class Matches implements OnInit {
     });
   }
 
-  // Metodo per ottenere il profilo dell'altro utente nel match
-  getOtherUserProfile(match: any) {
-    const otherUserId =
-      match.utente1Id === this.currentUser()?.id
-        ? match.utente2Id
-        : match.utente1Id;
+// Metodo per ottenere il profilo dell'altro utente nel match
+getOtherUserProfile(match: any) {
+  const otherUserId =
+    match.utente1Id === this.currentUser()?.id
+      ? match.utente2Id
+      : match.utente1Id;
 
-    this.userService.getUserProfile(otherUserId).subscribe({
-      next: (profile) => {
-        match.otherUserProfile = profile;
-        this.matches.update((matches) => [...matches]);
-      },
-      error: (error) => {
-        console.error('Error loading profile:', error);
-      },
-    });
-  }
+  this.userService.getUserProfile(otherUserId).subscribe({
+    next: (profile) => {
+      match.otherUserProfile = profile;
+      match.isOtherUserActive = true; // 🔥 Utente attivo se riceve il profilo
+      this.matches.update((matches) => [...matches]);
+    },
+    error: (error) => {
+      console.error('Error loading profile:', error);
+
+      // 🔥 GESTIONE UTENTE DISATTIVATO - RIMUOVI DALLA LISTA
+      if (error.status === 400 || error.status === 404) {
+        console.log('⚠️ Utente disattivato, rimuovo match dalla lista:', otherUserId);
+
+        // 🔥 FILTRA VIA IL MATCH CON UTENTE DISATTIVATO
+        this.matches.update((matches) =>
+          matches.filter(m => m.id !== match.id)
+        );
+      }
+    },
+  });
+}
 
   goToChat(matchId: number) {
     this.router.navigate(['/dashboard/messages/chat', matchId]).then(() => {});
