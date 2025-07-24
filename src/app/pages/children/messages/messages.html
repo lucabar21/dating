@@ -1,7 +1,7 @@
 <app-spinner *ngIf="loading" class="spinner"></app-spinner>
 <div class="messages-container">
   <!-- Sezione header con chat avviate -->
-  <nav class="messages-navbar">
+  <nav class="messages-navbar" *ngIf="chats().length > 0">
     <div
       class="user-card"
       *ngFor="let user of chats()"
@@ -25,7 +25,7 @@
   </nav>
 
   <div class="chat-wrapper">
-    <div class="chat-header" *ngIf="!isOtherUserDeactivated()">
+    <div class="chat-header" *ngIf="chats().length > 0">
       <img
         src="{{currentOtherUser().fotoProfilo || 'http://placedog.net/350'}}"
         alt="Foto profilo"
