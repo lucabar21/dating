@@ -7,7 +7,7 @@
 </div>
 <div class="container1">
   <div class="login-container" [ngClass]="{ 'shake': shake }">
-    <div class="heart-login-title">
+    <div class="heart-login-title" (click)="goBack()">
       <img
         [src]="isDarkTheme ?  '/assets/image/lovvami_logo_light.svg' : '/assets/image/lovvami_logo_dark.svg'"
         alt="Logo"
@@ -15,70 +15,80 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-  <input
-    type="email"
-    formControlName="email"
-    placeholder="Inserisci la tua mail"
-  />
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Inserisci la tua mail"
+      />
 
-  <input
-    type="password"
-    formControlName="password"
-    placeholder="Inserisci la tua password"
-  />
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Inserisci la tua password"
+      />
 
-  <!-- Login Error -->
-  <p class="login-error" *ngIf="loginError">{{ loginError }}</p>
+      <!-- Login Error -->
+      <p class="login-error" *ngIf="loginError">{{ loginError }}</p>
 
-  <button type="submit" [disabled]="loginForm.invalid">Accedi</button>
+      <button type="submit" [disabled]="loginForm.invalid">Accedi</button>
 
-  <!-- 🔥 LINK PASSWORD DIMENTICATA -->
-  <p class="forgot-password-link">
-    <a (click)="openForgotPasswordModal()" style="cursor: pointer;">
-      Password dimenticata?
-    </a>
-  </p>
+      <!-- 🔥 LINK PASSWORD DIMENTICATA -->
+      <p class="forgot-password-link">
+        <a (click)="openForgotPasswordModal()" style="cursor: pointer">
+          Password dimenticata?
+        </a>
+      </p>
 
-  <p class="register-link">
-    Non hai un account? <a routerLink="/register">Creane uno nuovo!</a>
-  </p>
-</form>
+      <p class="register-link">
+        Non hai un account? <a routerLink="/register">Creane uno nuovo!</a>
+      </p>
+    </form>
 
-<!-- 🔥 MODAL RECUPERO PASSWORD -->
-<div class="modal fade" id="forgotPasswordModal" tabindex="-1"
-     *ngIf="showForgotModal" [class.show]="showForgotModal"
-     [style.display]="showForgotModal ? 'block' : 'none'">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content forgot-modal">
-      <div class="modal-header d-flex flex-row">
-        <h5 class="modal-title col-10">🔑 Recupera Password</h5>
-        <button type="button" class="btn-close" (click)="closeForgotModal()"></button>
-      </div>
-      <div class="modal-body">
-        <p>Inserisci la tua email per ricevere il link di reset password</p>
-        <form [formGroup]="forgotForm" (ngSubmit)="onForgotPassword()">
-          <input
-            type="email"
-            formControlName="email"
-            placeholder="La tua email"
-            class="forgot-input"
-          />
-          <button
-            type="submit"
-            class="forgot-btn"
-            [disabled]="forgotForm.invalid || isLoading">
-            {{ isLoading ? 'Invio...' : 'Invia Link di Reset' }}
-          </button>
-        </form>
+    <!-- 🔥 MODAL RECUPERO PASSWORD -->
+    <div
+      class="modal fade"
+      id="forgotPasswordModal"
+      tabindex="-1"
+      *ngIf="showForgotModal"
+      [class.show]="showForgotModal"
+      [style.display]="showForgotModal ? 'block' : 'none'"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content forgot-modal">
+          <div class="modal-header d-flex flex-row">
+            <h5 class="modal-title col-10">🔑 Recupera Password</h5>
+            <button
+              type="button"
+              class="btn-close"
+              (click)="closeForgotModal()"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>Inserisci la tua email per ricevere il link di reset password</p>
+            <form [formGroup]="forgotForm" (ngSubmit)="onForgotPassword()">
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="La tua email"
+                class="forgot-input"
+              />
+              <button
+                type="submit"
+                class="forgot-btn"
+                [disabled]="forgotForm.invalid || isLoading"
+              >
+                {{ isLoading ? 'Invio...' : 'Invia Link di Reset' }}
+              </button>
+            </form>
 
-        <!-- Messaggio di successo -->
-        <div *ngIf="resetMessage" class="alert alert-success mt-3">
-          {{ resetMessage }}
+            <!-- Messaggio di successo -->
+            <div *ngIf="resetMessage" class="alert alert-success mt-3">
+              {{ resetMessage }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
   </div>
 </div>
 <app-footer></app-footer>

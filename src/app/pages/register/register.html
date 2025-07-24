@@ -1,32 +1,62 @@
 <div class="heart-rain">
-  <span class="heart" *ngFor="let h of hearts" [ngStyle]="generateStyle()"></span>
+  <span
+    class="heart"
+    *ngFor="let h of hearts"
+    [ngStyle]="generateStyle()"
+  ></span>
 </div>
 <div class="container1">
   <div class="login-container">
-    <div class="heart-login-title">
-      <img [src]="isDarkTheme ?  '/assets/image/lovvami_logo_light.svg' : '/assets/image/lovvami_logo_dark.svg'"
-        alt="Logo" />
+    <div class="heart-login-title" (click)="goBack()">
+      <img
+        [src]="isDarkTheme ?  '/assets/image/lovvami_logo_light.svg' : '/assets/image/lovvami_logo_dark.svg'"
+        alt="Logo"
+      />
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="registra()">
       <!-- Email Field -->
-      <input type="email" formControlName="email" placeholder="Inserisci una mail" />
-      <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
-        <div class="register-validity" *ngIf="registerForm.get('email')?.errors?.['required']">
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Inserisci una mail"
+      />
+      <div
+        *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+      >
+        <div
+          class="register-validity"
+          *ngIf="registerForm.get('email')?.errors?.['required']"
+        >
           L'email è obbligatoria.
         </div>
-        <div class="register-validity" *ngIf="registerForm.get('email')?.errors?.['email']">
+        <div
+          class="register-validity"
+          *ngIf="registerForm.get('email')?.errors?.['email']"
+        >
           Inserisci un'email valida.
         </div>
       </div>
 
       <!-- Password Field -->
-      <input type="password" formControlName="password" placeholder="Inserisci una password" />
-      <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
-        <div class="register-validity" *ngIf="registerForm.get('password')?.errors?.['required']">
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Inserisci una password"
+      />
+      <div
+        *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+      >
+        <div
+          class="register-validity"
+          *ngIf="registerForm.get('password')?.errors?.['required']"
+        >
           La password è obbligatoria.
         </div>
-        <div class="register-validity" *ngIf="registerForm.get('password')?.errors?.['minlength']">
+        <div
+          class="register-validity"
+          *ngIf="registerForm.get('password')?.errors?.['minlength']"
+        >
           La password deve contenere almeno 6 caratteri.
         </div>
         <!--
@@ -37,23 +67,25 @@
       </div>
 
       <!-- Confirm Password -->
-      <input type="password" placeholder="Conferma Password" formControlName="confirmPassword" />
+      <input
+        type="password"
+        placeholder="Conferma Password"
+        formControlName="confirmPassword"
+      />
 
       <!-- Field is empty -->
       <div
-        *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors?.['required']">
-        <div class="register-validity">
-          Conferma la password.
-        </div>
+        *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors?.['required']"
+      >
+        <div class="register-validity">Conferma la password.</div>
       </div>
 
       <!-- Passwords don't match -->
-      <div *ngIf="!registerForm.get('confirmPassword')?.errors && passwordMatchError">
-        <div class="register-validity">
-          Le password non coincidono.
-        </div>
+      <div
+        *ngIf="!registerForm.get('confirmPassword')?.errors && passwordMatchError"
+      >
+        <div class="register-validity">Le password non coincidono.</div>
       </div>
-
 
       <button type="submit" [disabled]="registerForm.invalid">
         Registrati

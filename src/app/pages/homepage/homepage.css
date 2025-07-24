@@ -24,6 +24,8 @@
   border-radius: 10px;
 }
 .content {
+  background-color: var(--bg-color);
+  border-radius: 10px;
   width: 550px;
   display: flex;
   flex-direction: column;

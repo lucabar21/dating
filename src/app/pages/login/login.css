@@ -81,17 +81,26 @@
   background-color: #eb97cc;
 }
 @keyframes shake {
-  0%   { transform: translateX(0); }
-  25%  { transform: translateX(-8px); }
-  50%  { transform: translateX(8px); }
-  75%  { transform: translateX(-8px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+  75% {
+    transform: translateX(-8px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .shake {
   animation: shake 0.4s ease;
 }
-
 
 /* Register link */
 .register-link {
@@ -130,6 +139,7 @@
   justify-content: center;
   justify-items: center;
   margin: 10px 0px;
+  cursor: pointer;
 }
 
 /* Entry animation */
@@ -294,7 +304,11 @@
 .forgot-btn {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(45deg, var(--accent-color-f), var(--accent-color-m));
+  background: linear-gradient(
+    45deg,
+    var(--accent-color-f),
+    var(--accent-color-m)
+  );
   color: white;
   font-size: 1.1rem;
   font-weight: 600;

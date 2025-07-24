@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
   AbstractControl,
-  ValidatorFn
+  ValidatorFn,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
@@ -37,17 +37,22 @@ export class Register implements OnInit, OnDestroy {
     });
   }
 
+  goBack(): void {
+    this.router.navigate(['/']);
+  }
+
   ngOnDestroy(): void {
     this.themeSub?.unsubscribe();
   }
 
-  registerForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(6),
-    ]),
-    confirmPassword: new FormControl('', [Validators.required]),
+  registerForm = new FormGroup(
+    {
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+      confirmPassword: new FormControl('', [Validators.required]),
     },
     { validators: passwordsMatchValidator }
   );
@@ -82,8 +87,8 @@ export class Register implements OnInit, OnDestroy {
             confirmButtonColor: '#e91e63',
             allowOutsideClick: false,
             customClass: {
-              popup: 'swal-register-success'
-            }
+              popup: 'swal-register-success',
+            },
           }).then((result) => {
             if (result.isConfirmed) {
               this.router.navigate(['/login']);
@@ -99,8 +104,12 @@ export class Register implements OnInit, OnDestroy {
           let errorMessage = 'Errore durante la registrazione';
 
           if (error.status === 409 || error.status === 400) {
-            if (error.error?.message && error.error.message.includes('Email già in uso')) {
-              errorMessage = 'Questa email è già registrata. Prova con un\'altra email o accedi al tuo account.';
+            if (
+              error.error?.message &&
+              error.error.message.includes('Email già in uso')
+            ) {
+              errorMessage =
+                "Questa email è già registrata. Prova con un'altra email o accedi al tuo account.";
             }
           }
 
@@ -109,7 +118,7 @@ export class Register implements OnInit, OnDestroy {
             title: 'Registrazione fallita',
             text: errorMessage,
             confirmButtonText: 'Riprova',
-            confirmButtonColor: '#e91e63'
+            confirmButtonColor: '#e91e63',
           });
 
           this.registerForm.reset();
@@ -129,7 +138,9 @@ export class Register implements OnInit, OnDestroy {
 }
 
 // ✅ Custom validator
-export const passwordsMatchValidator: ValidatorFn = (form: AbstractControl): { [key: string]: any } | null => {
+export const passwordsMatchValidator: ValidatorFn = (
+  form: AbstractControl
+): { [key: string]: any } | null => {
   const password = form.get('password')?.value;
   const confirmPassword = form.get('confirmPassword')?.value;
 
