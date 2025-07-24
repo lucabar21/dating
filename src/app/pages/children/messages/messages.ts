@@ -266,6 +266,7 @@ export class Messages implements OnInit {
     // 🔥 ASCOLTA CAMBI DI ROTTA PER AGGIORNARE STATO ALTRO UTENTE
     this.route.firstChild?.paramMap.subscribe((params) => {
       const matchId = Number(params.get('matchId'));
+      this.activeChatId = matchId;
       if (matchId) {
         const currentMatch = this.chats().find((chat) => chat.id === matchId);
         if (currentMatch) {
