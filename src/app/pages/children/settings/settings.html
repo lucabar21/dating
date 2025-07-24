@@ -19,31 +19,31 @@
           [class.active]="selectedTab === 'account'"
           (click)="selectedTab = 'account'"
         >
-          👤 Account
+          👤<span class="tab-text"> Account</span>
         </li>
         <li
           [class.active]="selectedTab === 'matching'"
           (click)="selectedTab = 'matching'"
         >
-          💕 Matching
+          💕<span class="tab-text"> Matching</span>
         </li>
         <li
           [class.active]="selectedTab === 'theme'"
           (click)="selectedTab = 'theme'"
         >
-          🎨 Tema
+          🎨<span class="tab-text"> Tema</span>
         </li>
         <li
           [class.active]="selectedTab === 'notifications'"
           (click)="selectedTab = 'notifications'"
         >
-          🔔 Notifiche
+          🔔<span class="tab-text"> Notifiche</span>
         </li>
         <li
           [class.active]="selectedTab === 'actions'"
           (click)="selectedTab = 'actions'"
         >
-          ⚠️ Azioni
+          ⚠️<span class="tab-text"> Azioni</span>
         </li>
       </ul>
     </div>
