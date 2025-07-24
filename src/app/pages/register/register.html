@@ -38,6 +38,11 @@
         </div>
       </div>
 
+      <!-- Email Already Exists -->
+      <div class="register-validity" *ngIf="emailAlreadyExistsError">
+        {{ emailAlreadyExistsError }}
+      </div>
+
       <!-- Password Field -->
       <input
         type="password"
