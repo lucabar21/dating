@@ -1,12 +1,12 @@
 .messages-container {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: row-reverse;
 
   .messages-navbar {
     height: 100%;
-    flex-shrink: 0; /* 🔥 Non si restringe */
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     background-color: var(--text-color);
@@ -59,7 +59,7 @@
 
   .chat-wrapper {
     width: 100%;
-    height: 100%;
+    height: calc(100dvh - 64px);
     display: flex;
     flex-direction: column;
 
@@ -86,7 +86,6 @@
     }
 
     .messages-content {
-      flex: 1; /* 🔥 Prende tutto lo spazio rimasto */
       display: flex;
       flex-direction: column;
       width: 100%;
@@ -161,7 +160,6 @@
           border-radius: 8px;
           cursor: pointer;
           font-size: 32px;
-          flex-shrink: 0;
         }
       }
     }
@@ -341,10 +339,9 @@ button.disabled:hover {
 /* 🔥 CSS MOBILE RESPONSIVE */
 @media (max-width: 768px) {
   .messages-container {
-    height: calc(100vh - 80px); /* 🔥 Considera bottom nav su mobile */
+    height: calc(100vh - 64px); /* 🔥 Considera bottom nav su mobile */
 
     .messages-navbar {
-      height: 80px;
       padding: 16px;
 
       .user-card {
@@ -357,21 +354,25 @@ button.disabled:hover {
       }
     }
 
-    .messages-content {
-      padding: 16px;
-    }
+    .chat-wrapper {
+      justify-content: space-between;
 
-    .input-chat form {
-      padding: 16px;
-
-      textarea {
-        font-size: 18px;
+      .messages-content {
+        padding: 16px;
+        height: 100%;
       }
+      .input-chat form {
+        padding: 16px;
 
-      button {
-        width: 80px;
-        height: 50px;
-        font-size: 24px;
+        textarea {
+          font-size: 18px;
+        }
+
+        button {
+          width: auto;
+          padding: 4px 8px;
+          font-size: 20px;
+        }
       }
     }
   }
