@@ -138,6 +138,7 @@
         textarea {
           width: 100%;
           background-color: var(--bg-color);
+          color: var(--text-color);
           border: none;
           border-radius: 8px;
           padding: 8px;
