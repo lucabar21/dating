@@ -50,7 +50,7 @@
       <router-outlet></router-outlet>
     </div>
     <!-- Form di invio messaggi -->
-    <div class="input-chat">
+    <div class="input-chat" *ngIf="chats().length > 0">
       <form [formGroup]="chatForm">
         <textarea
           formControlName="message"

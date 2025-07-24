@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-no-chats',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './no-chats.html',
-  styleUrl: './no-chats.css'
+  styleUrl: './no-chats.css',
 })
-export class NoChats {
-
-}
+export class NoChats {}

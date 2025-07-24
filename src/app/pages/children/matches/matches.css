@@ -80,7 +80,47 @@
       }
     }
   }
+  .no-matches {
+    margin-inline: auto;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+
+    h1 {
+      text-align: center;
+      background-color: var(--text-color);
+      color: var(--bg-color);
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    p {
+      font-size: 32px;
+      line-height: 0.7;
+      text-align: center;
+      font-style: italic;
+    }
+    button {
+      padding: 8px 16px;
+      border: none;
+      background-color: var(--accent-color-f);
+      color: var(--bg-color);
+      border-radius: 8px;
+      font-size: 24px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--accent-color-bright-f);
+        transition: 0.2 ease-in-out;
+      }
+    }
+  }
 }
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -117,6 +157,9 @@
           font-size: 24px;
         }
       }
+    }
+    .no-matches {
+      width: 90%;
     }
   }
 }

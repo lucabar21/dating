@@ -1,28 +1,45 @@
 <app-spinner *ngIf="loading" class="spinner"></app-spinner>
 <div class="matches-container">
   <h2>I TUOI MATCHES</h2>
-  <div class="matches-grid">
+  <div class="matches-grid" *ngIf="matches().length > 0 else noMatches">
     <div class="card" *ngFor="let match of matches()">
-      <img src="{{match.otherUserProfile?.fotoProfilo || 'http://placedog.net/350'}}" alt="Foto profilo" />
+      <img
+        src="{{match.otherUserProfile?.fotoProfilo || 'http://placedog.net/350'}}"
+        alt="Foto profilo"
+      />
       <p class="username">{{match.otherUserProfile?.nome}}</p>
       <div class="user-info">
         <p>{{timeAgo(match.timestamp)}}</p>
       </div>
       <button type="button" (click)="goToChat(match.id)">Chatta!</button>
 
-      <!--OLD, per mandare a una pagina separata
-      <a [routerLink]="['/dashboard/utente', match.otherUserProfile?.id]">
+      <button
+        type="button"
+        class="view-profile"
+        (click)="openProfileModal(match.otherUserProfile?.id)"
+      >
         Profilo
-      -->
-      <button type="button" class="view-profile" (click)="openProfileModal(match.otherUserProfile?.id)">Profilo</button>
-
+      </button>
     </div>
-
-
     <!-- MODAL -->
     <div class="modal-overlay" *ngIf="showProfileModal">
-      <app-profile-details *ngIf="showProfileModal" [userId]="selectedUserId" (close)="closeProfileModal()">
+      <app-profile-details
+        *ngIf="showProfileModal"
+        [userId]="selectedUserId"
+        (close)="closeProfileModal()"
+      >
       </app-profile-details>
-
     </div>
   </div>
+
+  <ng-template #noMatches>
+    <div class="no-matches">
+      <h1>Non ci sono match disponibili!</h1>
+      <p>
+        Non dimenticare di completare il tuo profilo per aumentare le
+        possibilità di trovare la persona giusta!
+      </p>
+      <button routerLink="/dashboard/explore">Trova nuovi match</button>
+    </div>
+  </ng-template>
+</div>
