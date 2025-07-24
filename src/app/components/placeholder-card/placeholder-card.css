@@ -14,6 +14,8 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: top;
+    background-color: var(--text-color);
   }
 
   .info-wrapper {
@@ -88,56 +90,8 @@
   }
 
   .edit:hover {
-    color: var(--text-color);
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--accent-color-bright-f);
     transform: translateY(-2px); /* 🔥 Effetto hover elegante */
-  }
-
-  .btns-container {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-
-    button {
-      width: 100%;
-      padding: 16px;
-      font-size: 24px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-
-      svg {
-        width: 40px;
-        height: auto;
-      }
-
-      &.superlike {
-        background-color: #fdb833;
-        svg {
-          fill: var(--bg-color);
-        }
-      }
-
-      &.like {
-        background-color: var(--accent-color-m);
-        svg {
-          fill: var(--bg-color);
-        }
-      }
-
-      &.pass {
-        background-color: var(--accent-color-f);
-        svg {
-          fill: var(--bg-color);
-        }
-      }
-
-      &:hover {
-        opacity: 0.8;
-        transition: 0.1s;
-      }
-    }
   }
 }
 
