@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { latestChatGuard } from '../../../guards/latest-chat-guard-guard';
 
 export const messagesRoutes: Routes = [
   {
@@ -7,17 +8,22 @@ export const messagesRoutes: Routes = [
     children: [
       {
         path: '',
+        canActivate: [latestChatGuard],
         loadComponent: () =>
-          import(
-            '../../../components/redirect-to-latest-chat/redirect-to-latest-chat'
-          ).then((m) => m.RedirectToLatestChat),
+          import('../../../components/chat/chat').then((m) => m.Chat),
       },
       {
         path: 'chat/:matchId',
         loadComponent: () =>
           import('../../../components/chat/chat').then((m) => m.Chat),
       },
+      {
+        path: 'no-chats',
+        loadComponent: () =>
+          import('../../../components/no-chats/no-chats').then(
+            (m) => m.NoChats
+          ),
+      },
     ],
   },
-  { path: '**', redirectTo: '', pathMatch: 'full' }, // fallback alla route con redirect dinamico
 ];

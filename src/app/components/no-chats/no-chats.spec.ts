@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RedirectToLatestChat } from './redirect-to-latest-chat';
+import { NoChats } from './no-chats';
 
-describe('RedirectToLatestChat', () => {
-  let component: RedirectToLatestChat;
-  let fixture: ComponentFixture<RedirectToLatestChat>;
+describe('NoChats', () => {
+  let component: NoChats;
+  let fixture: ComponentFixture<NoChats>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RedirectToLatestChat]
+      imports: [NoChats]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RedirectToLatestChat);
+    fixture = TestBed.createComponent(NoChats);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
