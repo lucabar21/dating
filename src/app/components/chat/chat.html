@@ -1,10 +1,9 @@
-<div class="chat-wrapper" #chatComponent>
+<div class="chat-wrapper" #chatComponent [style.visibility]="chatVisible() ? 'visible' : 'hidden'">
   <div
     class="message-box"
     *ngFor="let message of messages()"
     [ngClass]="message.mittenteId === currentUser()?.id ? 'sent' : 'received'"
   >
-    <!-- 🔥 SAFE NAVIGATION con ?. -->
     <p>{{ message.contenuto }}</p>
     <span class="timestamp">{{ message.timestamp | date: 'short' }}</span>
   </div>
