@@ -28,12 +28,19 @@ export class Register implements OnInit, OnDestroy {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  emailAlreadyExistsError: string | null = null;
+
 
   constructor(private themeService: ThemeServ) {}
 
   ngOnInit(): void {
     this.themeSub = this.themeService.theme$.subscribe((theme) => {
       this.isDarkTheme = theme === 'dark';
+    });
+
+    // Clear the error if email changes
+    this.registerForm.get('email')?.valueChanges.subscribe(() => {
+      this.emailAlreadyExistsError = null;
     });
   }
 
@@ -95,7 +102,9 @@ export class Register implements OnInit, OnDestroy {
         error: (error: any) => {
           console.error('Errore nella registrazione:', error);
 
+
           // 🔥 GESTIONE ERRORI CON SWEETALERT
+          /*
           let errorMessage = 'Errore durante la registrazione';
 
           if (error.status === 409 || error.status === 400) {
@@ -103,7 +112,23 @@ export class Register implements OnInit, OnDestroy {
               errorMessage = 'Questa email è già registrata. Prova con un\'altra email o accedi al tuo account.';
             }
           }
+          */
 
+          // Clear previous error
+          this.emailAlreadyExistsError = null;
+
+          // Show HTML error
+          if (error.status === 409 || error.status === 400) {
+            if (error.error?.message?.includes('Email già in uso')) {
+              this.emailAlreadyExistsError = 'Questa email è già registrata. Prova con un\'altra email o accedi al tuo account.';
+            } else {
+              this.emailAlreadyExistsError = 'Errore nella registrazione. Riprova.';
+            }
+          } else {
+            this.emailAlreadyExistsError = 'Errore nel server. Riprova più tardi.';
+          }
+
+          /*
           Swal.fire({
             icon: 'error',
             title: 'Registrazione fallita',
@@ -111,8 +136,9 @@ export class Register implements OnInit, OnDestroy {
             confirmButtonText: 'Riprova',
             confirmButtonColor: '#e91e63'
           });
-
+          
           this.registerForm.reset();
+          */
         },
       });
     }

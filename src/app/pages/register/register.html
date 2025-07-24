@@ -11,6 +11,7 @@
     <form [formGroup]="registerForm" (ngSubmit)="registra()">
       <!-- Email Field -->
       <input type="email" formControlName="email" placeholder="Inserisci una mail" />
+
       <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
         <div class="register-validity" *ngIf="registerForm.get('email')?.errors?.['required']">
           L'email è obbligatoria.
@@ -18,6 +19,11 @@
         <div class="register-validity" *ngIf="registerForm.get('email')?.errors?.['email']">
           Inserisci un'email valida.
         </div>
+      </div>
+
+      <!-- Email Already Exists -->
+      <div class="register-validity" *ngIf="emailAlreadyExistsError">
+        {{ emailAlreadyExistsError }}
       </div>
 
       <!-- Password Field -->
