@@ -19,31 +19,136 @@
           [class.active]="selectedTab === 'account'"
           (click)="selectedTab = 'account'"
         >
-          👤<span class="tab-text"> Account</span>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="style=fill">
+              <g id="profile">
+                <path
+                  id="vector (Stroke)"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M6.75 6.5C6.75 3.6005 9.1005 1.25 12 1.25C14.8995 1.25 17.25 3.6005 17.25 6.5C17.25 9.3995 14.8995 11.75 12 11.75C9.1005 11.75 6.75 9.3995 6.75 6.5Z"
+                />
+                <path
+                  id="rec (Stroke)"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M4.25 18.5714C4.25 15.6325 6.63249 13.25 9.57143 13.25H14.4286C17.3675 13.25 19.75 15.6325 19.75 18.5714C19.75 20.8792 17.8792 22.75 15.5714 22.75H8.42857C6.12081 22.75 4.25 20.8792 4.25 18.5714Z"
+                />
+              </g>
+            </g>
+          </svg>
+          <span class="tab-text"> Account</span>
         </li>
         <li
           [class.active]="selectedTab === 'matching'"
           (click)="selectedTab = 'matching'"
         >
-          💕<span class="tab-text"> Matching</span>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9 2C6.38 2 4.25 4.13 4.25 6.75C4.25 9.32 6.26 11.4 8.88 11.49C8.96 11.48 9.04 11.48 9.1 11.49C9.12 11.49 9.13 11.49 9.15 11.49C9.16 11.49 9.16 11.49 9.17 11.49C11.73 11.4 13.74 9.32 13.75 6.75C13.75 4.13 11.62 2 9 2Z"
+            />
+            <path
+              d="M14.0809 14.1489C11.2909 12.2889 6.74094 12.2889 3.93094 14.1489C2.66094 14.9989 1.96094 16.1489 1.96094 17.3789C1.96094 18.6089 2.66094 19.7489 3.92094 20.5889C5.32094 21.5289 7.16094 21.9989 9.00094 21.9989C10.8409 21.9989 12.6809 21.5289 14.0809 20.5889C15.3409 19.7389 16.0409 18.5989 16.0409 17.3589C16.0309 16.1289 15.3409 14.9889 14.0809 14.1489Z"
+            />
+            <path
+              d="M19.9894 7.33815C20.1494 9.27815 18.7694 10.9781 16.8594 11.2081C16.8494 11.2081 16.8494 11.2081 16.8394 11.2081H16.8094C16.7494 11.2081 16.6894 11.2081 16.6394 11.2281C15.6694 11.2781 14.7794 10.9681 14.1094 10.3981C15.1394 9.47815 15.7294 8.09815 15.6094 6.59815C15.5394 5.78815 15.2594 5.04815 14.8394 4.41815C15.2194 4.22815 15.6594 4.10815 16.1094 4.06815C18.0694 3.89815 19.8194 5.35815 19.9894 7.33815Z"
+            />
+            <path
+              d="M21.9883 16.5904C21.9083 17.5604 21.2883 18.4004 20.2483 18.9704C19.2483 19.5204 17.9883 19.7804 16.7383 19.7504C17.4583 19.1004 17.8783 18.2904 17.9583 17.4304C18.0583 16.1904 17.4683 15.0004 16.2883 14.0504C15.6183 13.5204 14.8383 13.1004 13.9883 12.7904C16.1983 12.1504 18.9783 12.5804 20.6883 13.9604C21.6083 14.7004 22.0783 15.6304 21.9883 16.5904Z"
+            />
+          </svg>
+          <span class="tab-text"> Matching</span>
         </li>
         <li
           [class.active]="selectedTab === 'theme'"
           (click)="selectedTab = 'theme'"
         >
-          🎨<span class="tab-text"> Tema</span>
+          <svg
+            fill="#000000"
+            height="800px"
+            width="800px"
+            version="1.1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 512 512"
+            xml:space="preserve"
+          >
+            <g>
+              <g>
+                <g>
+                  <path
+                    d="M490.667,149.333h-21.333c-11.797,0-21.333,9.557-21.333,21.333S457.536,192,469.333,192h21.333     c11.797,0,21.333-9.557,21.333-21.333S502.464,149.333,490.667,149.333z"
+                  />
+                  <path
+                    d="M64,170.667c0-11.776-9.536-21.333-21.333-21.333H21.333C9.536,149.333,0,158.891,0,170.667S9.536,192,21.333,192h21.333     C54.464,192,64,182.443,64,170.667z"
+                  />
+                  <path
+                    d="M437.25,79.447c3.84,0,7.723-1.024,11.221-3.2l18.133-11.264c10.027-6.229,13.077-19.371,6.869-29.397     c-6.208-9.984-19.371-13.077-29.376-6.848l-18.112,11.243c-10.027,6.229-13.099,19.392-6.891,29.397     C423.149,75.885,430.125,79.447,437.25,79.447z"
+                  />
+                  <path
+                    d="M63.52,265.094l-18.133,11.264c-10.005,6.208-13.077,19.371-6.869,29.376c4.053,6.507,11.029,10.069,18.155,10.069     c3.819,0,7.723-1.024,11.221-3.2l18.133-11.264c10.005-6.208,13.077-19.371,6.869-29.376     C86.688,261.958,73.525,258.865,63.52,265.094z"
+                  />
+                  <path
+                    d="M467.729,274.093l-18.24-11.072c-10.069-6.123-23.189-2.88-29.312,7.189c-6.123,10.091-2.88,23.189,7.168,29.291     l18.261,11.072c3.456,2.112,7.275,3.093,11.029,3.093c7.211,0,14.251-3.648,18.283-10.261     C481.02,293.314,477.798,280.194,467.729,274.093z"
+                  />
+                  <path
+                    d="M44.271,67.241l18.24,11.072c3.477,2.091,7.275,3.093,11.051,3.093c7.211,0,14.251-3.669,18.261-10.283     c6.123-10.091,2.88-23.189-7.168-29.291L66.394,30.761c-10.069-6.123-23.189-2.901-29.312,7.168     C30.98,48.019,34.202,61.139,44.271,67.241z"
+                  />
+                  <path
+                    d="M256,0C161.899,0,85.333,76.565,85.333,170.667c0,60.8,33.088,117.333,85.333,147.627v23.04h170.667v-23.04     c52.245-30.293,85.333-86.827,85.333-147.627C426.667,76.565,350.101,0,256,0z M256,128c-23.531,0-42.667,19.136-42.667,42.667     c0,11.776-9.536,21.333-21.333,21.333s-21.333-9.557-21.333-21.333c0-47.061,38.272-85.333,85.333-85.333     c11.797,0,21.333,9.557,21.333,21.333S267.797,128,256,128z"
+                  />
+                  <path
+                    d="M170.667,448c0,11.776,9.536,21.333,21.333,21.333v21.333c0,11.776,9.536,21.333,21.333,21.333h85.333     c11.797,0,21.333-9.557,21.333-21.333v-21.333c11.797,0,21.333-9.557,21.333-21.333v-64H170.667V448z"
+                  />
+                </g>
+              </g>
+            </g>
+          </svg>
+          <span class="tab-text"> Tema</span>
         </li>
         <li
           [class.active]="selectedTab === 'notifications'"
           (click)="selectedTab = 'notifications'"
         >
-          🔔<span class="tab-text"> Notifiche</span>
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19.3399 14.49L18.3399 12.83C18.1299 12.46 17.9399 11.76 17.9399 11.35V8.82C17.9399 6.47 16.5599 4.44 14.5699 3.49C14.0499 2.57 13.0899 2 11.9899 2C10.8999 2 9.91994 2.59 9.39994 3.52C7.44994 4.49 6.09994 6.5 6.09994 8.82V11.35C6.09994 11.76 5.90994 12.46 5.69994 12.82L4.68994 14.49C4.28994 15.16 4.19994 15.9 4.44994 16.58C4.68994 17.25 5.25994 17.77 5.99994 18.02C7.93994 18.68 9.97994 19 12.0199 19C14.0599 19 16.0999 18.68 18.0399 18.03C18.7399 17.8 19.2799 17.27 19.5399 16.58C19.7999 15.89 19.7299 15.13 19.3399 14.49Z"
+            />
+            <path
+              d="M14.8297 20.01C14.4097 21.17 13.2997 22 11.9997 22C11.2097 22 10.4297 21.68 9.87969 21.11C9.55969 20.81 9.31969 20.41 9.17969 20C9.30969 20.02 9.43969 20.03 9.57969 20.05C9.80969 20.08 10.0497 20.11 10.2897 20.13C10.8597 20.18 11.4397 20.21 12.0197 20.21C12.5897 20.21 13.1597 20.18 13.7197 20.13C13.9297 20.11 14.1397 20.1 14.3397 20.07C14.4997 20.05 14.6597 20.03 14.8297 20.01Z"
+            />
+          </svg>
+          <span class="tab-text"> Notifiche</span>
         </li>
         <li
           [class.active]="selectedTab === 'actions'"
           (click)="selectedTab = 'actions'"
         >
-          ⚠️<span class="tab-text"> Azioni</span>
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 1024 1024"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm0 192a58.432 58.432 0 0 0-58.24 63.744l23.36 256.384a35.072 35.072 0 0 0 69.76 0l23.296-256.384A58.432 58.432 0 0 0 512 256zm0 512a51.2 51.2 0 1 0 0-102.4 51.2 51.2 0 0 0 0 102.4z"
+            /></svg
+          ><span class="tab-text"> Azioni</span>
         </li>
       </ul>
     </div>
@@ -53,7 +158,7 @@
       <!-- Account Info Section -->
       <div class="settings-card mb-4">
         <div class="section-header">
-          <h3 class="mb-0">👤 Informazioni Account</h3>
+          <h3 class="mb-0">Informazioni Account</h3>
         </div>
         <div class="">
           <!-- 🔥 PROFILE IMAGE - CON DATI REALI -->
@@ -406,7 +511,7 @@
       <!-- Preferenze Matching Section -->
       <div class="settings-card mb-4">
         <div class="section-header">
-          <h3 class="mb-0">💕 Preferenze di Matching</h3>
+          <h3 class="mb-0">Preferenze di Matching</h3>
         </div>
         <div class="p-4">
           <!-- Genere Preferito -->
@@ -436,14 +541,16 @@
           </div>
 
           <!-- Fascia d'Età -->
-          <div class="editable-field">
+          <div class="editable-field w-100">
             <div class="field-info">
               <div class="field-label">Fascia d'Età</div>
               <div class="field-value">Età minima e massima dei tuoi match</div>
             </div>
             <div class="field-actions w-100">
-              <div class="row g-3 mt-2">
-                <div class="col-6">
+              <div
+                class="range-container d-flex justify-content-center gap-3 w-100"
+              >
+                <div class="sm-col-auto">
                   <label class="form-label small">Età Minima</label>
                   <div class="range-container">
                     <input
@@ -457,7 +564,7 @@
                     <span class="range-value">{{ preferences.minEta }}</span>
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="sm-col-auto">
                   <label class="form-label small">Età Massima</label>
                   <div class="range-container">
                     <input
@@ -481,7 +588,7 @@
               <div class="field-label">Distanza Massima</div>
               <div class="field-value">Raggio di ricerca per i match</div>
             </div>
-            <div class="field-actions w-50">
+            <div class="field-actions w-100 d-flex justify-content-center">
               <div class="range-container mt-2">
                 <input
                   type="range"
@@ -518,7 +625,7 @@
       <!-- Tema Section -->
       <div class="settings-card mb-4">
         <div class="section-header">
-          <h3 class="mb-0">🎨 Tema</h3>
+          <h3 class="mb-0">Tema</h3>
         </div>
         <div class="p-4">
           <div class="d-flex align-items-center justify-content-between">
@@ -545,7 +652,7 @@
       <!-- Notifiche Section -->
       <div class="settings-card mb-4">
         <div class="section-header">
-          <h3 class="mb-0">🔔 Notifiche</h3>
+          <h3 class="mb-0">Notifiche</h3>
         </div>
         <div class="p-4">
           <div class="editable-field">
@@ -572,7 +679,7 @@
       <!-- Account Actions -->
       <div class="settings-card">
         <div class="section-header">
-          <h3 class="mb-0">⚠️ Azioni Account</h3>
+          <h3 class="mb-0">Azioni Account</h3>
         </div>
         <div class="p-4">
           <div class="d-grid gap-3">

@@ -1,17 +1,22 @@
 <div class="profile-card" #card>
   <button (click)="emitOpenProfile($event)" class="profile-button">
-    <svg
-      width="800px"
-      height="800px"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M16.5 7.063C16.5 10.258 14.57 13 12 13c-2.572 0-4.5-2.742-4.5-5.938C7.5 3.868 9.16 2 12 2s4.5 1.867 4.5 5.063zM4.102 20.142C4.487 20.6 6.145 22 12 22c5.855 0 7.512-1.4 7.898-1.857a.416.416 0 0 0 .09-.317C19.9 18.944 19.106 15 12 15s-7.9 3.944-7.989 4.826a.416.416 0 0 0 .091.317z"
-      />
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="style=fill">
+        <g id="profile">
+          <path
+            id="vector (Stroke)"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M6.75 6.5C6.75 3.6005 9.1005 1.25 12 1.25C14.8995 1.25 17.25 3.6005 17.25 6.5C17.25 9.3995 14.8995 11.75 12 11.75C9.1005 11.75 6.75 9.3995 6.75 6.5Z"
+          />
+          <path
+            id="rec (Stroke)"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M4.25 18.5714C4.25 15.6325 6.63249 13.25 9.57143 13.25H14.4286C17.3675 13.25 19.75 15.6325 19.75 18.5714C19.75 20.8792 17.8792 22.75 15.5714 22.75H8.42857C6.12081 22.75 4.25 20.8792 4.25 18.5714Z"
+          />
+        </g>
+      </g>
     </svg>
   </button>
   <img
@@ -30,7 +35,10 @@
         slice:0:80) + '…' : discoverableUser.bio }}
       </p>
       <div class="wrapper">
-        <p class="badge" *ngFor="let interest of getDisplayInterests()">
+        <p
+          class="badge"
+          *ngFor="let interest of getDisplayInterests() | slice:0:5"
+        >
           {{ interest }}
         </p>
       </div>

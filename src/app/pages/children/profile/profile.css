@@ -133,9 +133,8 @@
       gap: 4px 16px;
       .badge {
         padding: 6px 20px 4px 14px;
-        /*background: linear-gradient(135deg, var(--accent-color-f), var(--accent-color-m));*/
-        background-color: var(--neutral-button-color);
-        color: var(--text-color);
+        background-color: var(--accent-color-m);
+        color: var(--bg-color);
         border-radius: 10px;
         font-size: 20px;
       }
@@ -179,6 +178,7 @@
 
         p {
           line-height: 0.8rem;
+          text-align: center;
         }
       }
 
@@ -192,9 +192,11 @@
     .interests {
       h2 {
         font-size: 48px;
+        text-align: center;
       }
       p {
         font-size: 24px;
+        text-align: center;
       }
     }
     .description,

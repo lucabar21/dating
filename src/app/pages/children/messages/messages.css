@@ -59,9 +59,10 @@
 
   .chat-wrapper {
     width: 100%;
-    height: calc(100dvh - 64px);
+    height: 100dvh;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     .chat-header {
       background-color: var(--text-color);
@@ -356,6 +357,7 @@ button.disabled:hover {
 
     .chat-wrapper {
       justify-content: space-between;
+      height: calc(100dvh - 64px);
 
       .messages-content {
         padding: 16px;
