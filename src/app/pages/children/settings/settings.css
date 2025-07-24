@@ -519,7 +519,6 @@
   color: var(--text-color);
 }
 
-
 .tabs-wrapper {
   width: 100%;
   display: flex;
@@ -566,6 +565,11 @@
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
 }
 
+.tab-text {
+  display: inline;
+  margin-left: 5px;
+}
+
 
 
 /* Responsive */
@@ -598,10 +602,21 @@
     text-align: center;
   }
 
+  .tabs li {
+    min-width: auto;
+    padding: 12px 8px;
+    font-size: 1.2rem; /* Icone più grandi su mobile */
+  }
+
+  .tab-text {
+    display: none; /* Nasconde il testo su mobile */
+  }
+
 
   .tabs {
     overflow-x: auto;
     scrollbar-width: none; /* Firefox */
+    gap: 2px; /* Piccolo spazio tra le tab */
   }
 
   .tabs::-webkit-scrollbar {
