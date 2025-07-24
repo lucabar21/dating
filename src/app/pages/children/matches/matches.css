@@ -179,9 +179,9 @@
           padding: 4px 8px;
         }
       }
-      .no-matches {
-        width: 90%;
-      }
+    }
+    .no-matches {
+      width: 90%;
     }
   }
 }
