@@ -370,8 +370,8 @@
             <div class="field-info">
               <div class="field-label">Città</div>
               <div class="field-value" *ngIf="!editingFields.citta">
-                {{ selectedCity?.name || userProfile.citta || 'Città non
-                specificata' }}
+                {{ selectedCity?.name || userProfile.citta || 'Città non specificata' }}
+
               </div>
 
               <!-- INPUT CON AUTOCOMPLETAMENTO quando in editing -->
@@ -901,8 +901,7 @@
           (click)="saveInterests()"
           [disabled]="saving"
         >
-          <i class="fas fa-save"></i> {{ saving ? 'Salvando...' : 'Salva
-          Interessi' }}
+          <i class="fas fa-save"></i> {{ saving ? 'Salvando...' : 'Salva Interessi' }}
         </button>
       </div>
     </div>
