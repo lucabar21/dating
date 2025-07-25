@@ -7,4 +7,14 @@
     <p>{{ message.contenuto }}</p>
     <span class="timestamp">{{ message.timestamp | date: 'short' }}</span>
   </div>
+
+    <!-- ✅ New message scroll-to-bottom button -->
+  <button
+    *ngIf="showScrollButton()"
+    class="scroll-to-bottom"
+    (click)="scrollToBottom(); showScrollButton.set(false); newMessageCount.set(0)"
+  >
+    ⬇️
+    <span class="badge" *ngIf="newMessageCount() > 0">{{ newMessageCount() }}</span>
+  </button>
 </div>

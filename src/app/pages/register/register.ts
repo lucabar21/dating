@@ -129,7 +129,7 @@ export class Register implements OnInit, OnDestroy {
           // Show HTML error
           if (error.status === 409 || error.status === 400) {
             if (error.error?.message?.includes('Email già in uso')) {
-              this.emailAlreadyExistsError = 'Questa email è già registrata. Prova con un\'altra email o accedi al tuo account.';
+              this.emailAlreadyExistsError = 'Questa email è già registrata!';
             } else {
               this.emailAlreadyExistsError = 'Errore nella registrazione. Riprova.';
             }

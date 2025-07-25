@@ -6,7 +6,7 @@ import {
   OnInit,
   signal,
   ViewChild,
-  ElementRef
+  ElementRef,
 } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MessageServ } from '../../services/message-serv';
@@ -29,6 +29,12 @@ export class Chat implements OnInit, OnDestroy {
   // 🔥 NUOVO: Signal per controllare visibilità chat
   chatVisible = signal<boolean>(true);
 
+  //
+  private previousMessageCount: number = 0;
+  newMessageCount = signal(0);
+  showScrollButton = signal(false);
+  private lastReadMessageCount = 0;
+
   @ViewChild('chatComponent') private scrollContainer!: ElementRef;
 
   private route = inject(ActivatedRoute);
@@ -40,17 +46,25 @@ export class Chat implements OnInit, OnDestroy {
   // 🔥 METODO PER SCROLLARE IN BASSO - SCROLL ISTANTANEO
   scrollToBottom(): void {
     try {
-      console.log('🔍 scrollToBottom chiamato, isNewChatLoad:', this.isNewChatLoad);
+      console.log(
+        '🔍 scrollToBottom chiamato, isNewChatLoad:',
+        this.isNewChatLoad
+      );
       const messagesContent = document.querySelector('.messages-content');
       console.log('🔍 messagesContent trovato:', !!messagesContent);
 
       if (messagesContent) {
-        console.log('🔍 Before scroll - scrollTop:', messagesContent.scrollTop, 'scrollHeight:', messagesContent.scrollHeight);
+        console.log(
+          '🔍 Before scroll - scrollTop:',
+          messagesContent.scrollTop,
+          'scrollHeight:',
+          messagesContent.scrollHeight
+        );
 
         // 🔥 SCROLL ISTANTANEO SENZA ANIMAZIONE
         messagesContent.scrollTo({
           top: messagesContent.scrollHeight,
-          behavior: 'auto' // 🔥 'auto' = istantaneo
+          behavior: 'auto', // 🔥 'auto' = istantaneo
         });
 
         console.log('✅ Scroll istantaneo eseguito verso il basso');
@@ -67,36 +81,64 @@ export class Chat implements OnInit, OnDestroy {
   }
 
   loadMessages(matchId: number) {
-    // 🔥 NASCONDI LA CHAT DURANTE IL CARICAMENTO CAMBIO CHAT
-    if (this.isNewChatLoad) {
-      this.chatVisible.set(false);
-      console.log('🔥 Chat nascosta durante cambio');
-    }
-
     this.messageService.getMessages(matchId).subscribe((data: any[]) => {
-      this.messages.set(data);
-      console.log('🔄 Messages loaded:', data.length, 'isNewChatLoad:', this.isNewChatLoad);
+      const totalMessages = data.length;
+      const wasAtBottom = this.isUserAtBottom();
 
-      // 🔥 GESTIONE SCROLL E VISIBILITÀ
+      this.messages.set(data);
+
       if (this.isNewChatLoad) {
-        // 🔥 SCROLL PRIMA DI MOSTRARE LA CHAT
         setTimeout(() => {
           this.scrollToBottom();
           this.isNewChatLoad = false;
-
-          // 🔥 MOSTRA LA CHAT DOPO LO SCROLL
-          setTimeout(() => {
-            this.chatVisible.set(true);
-            console.log('✅ Chat mostrata dopo scroll completo');
-          }, 20); // Piccolo delay per essere sicuri
-
+          this.newMessageCount.set(0);
+          this.lastReadMessageCount = totalMessages; // ✅ reset known read count
+          this.showScrollButton.set(false);
+          this.chatVisible.set(true);
         }, 50);
       } else {
-        // 🔥 REFRESH AUTOMATICO - MANTIENI SEMPRE VISIBILE
-        this.chatVisible.set(true);
-        console.log('📱 Refresh automatico - chat sempre visibile');
+        if (wasAtBottom) {
+          this.scrollToBottom();
+          this.lastReadMessageCount = totalMessages; // ✅ user read all messages
+          this.newMessageCount.set(0);
+          this.showScrollButton.set(false);
+        } else {
+          const unread = totalMessages - this.lastReadMessageCount;
+          this.newMessageCount.set(unread);
+          this.showScrollButton.set(true);
+          console.log(
+            '🆕 Total:',
+            totalMessages,
+            'Last Read:',
+            this.lastReadMessageCount,
+            'Unread:',
+            unread
+          );
+        }
       }
     });
+  }
+
+  private isUserNearBottom(): boolean {
+    const el = document.querySelector('.messages-content');
+    if (!el) return true;
+
+    const threshold = 150; // px from bottom
+    const position = el.scrollTop + el.clientHeight;
+    const height = el.scrollHeight;
+
+    return height - position < threshold;
+  }
+
+  isUserAtBottom(): boolean {
+    const container = document.querySelector('.messages-content');
+    if (!container) return true;
+
+    const threshold = 100; // pixels from bottom to still consider "at bottom"
+    const position = container.scrollTop + container.clientHeight;
+    const height = container.scrollHeight;
+
+    return height - position < threshold;
   }
 
   ngOnInit() {
@@ -105,7 +147,12 @@ export class Chat implements OnInit, OnDestroy {
     // 🔥 LOGICA DEL CAMBIO CHAT
     this.route.paramMap.subscribe((params) => {
       const matchId = Number(params.get('matchId'));
-      console.log('🔍 Route param changed - matchId:', matchId, 'currentMatchId:', this.currentMatchId);
+      console.log(
+        '🔍 Route param changed - matchId:',
+        matchId,
+        'currentMatchId:',
+        this.currentMatchId
+      );
 
       if (matchId && matchId !== this.currentMatchId) {
         // 🔥 CAMBIO CHAT
@@ -134,6 +181,34 @@ export class Chat implements OnInit, OnDestroy {
       console.log('🔄 Refresh automatico - mantengo posizione scroll');
       this.loadMessages(this.currentMatchId);
     }, 10000);
+
+    setTimeout(() => {
+      const container = document.querySelector('.messages-content');
+      if (container) {
+        container.addEventListener('scroll', () => {
+          if (this.isUserAtBottom()) {
+            this.showScrollButton.set(false);
+            this.newMessageCount.set(0);
+          }
+        });
+      }
+    }, 100); // wait DOM to render
+  }
+
+  ngAfterViewInit() {
+    const container = document.querySelector('.messages-content');
+    if (container) {
+      container.addEventListener('scroll', () => {
+        const threshold = 40;
+        const isAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
+
+        if (isAtBottom) {
+          this.newMessageCount.set(0);
+          this.lastReadMessageCount = this.messages().length;
+          this.showScrollButton.set(false);
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
