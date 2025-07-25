@@ -34,22 +34,22 @@
         color: var(--text-color);
 
         :nth-child(1) {
-          font-size: 3rem;
+          font-size: 2.2rem;
           font-weight: bold;
         }
         :nth-child(2) {
-          font-size: 3rem;
+          font-size: 2.2rem;
         }
       }
       .location {
         width: 100%;
         line-height: 64px;
-        font-size: 2.5rem;
         color: var(--text-color);
 
         p {
+          font-size: 2rem;
           width: 100%;
-          line-height: 2.5rem;
+          line-height: 1.5rem;
         }
       }
     }
@@ -63,7 +63,7 @@
         background-color: var(--accent-color-f);
         border: none;
         color: var(--bg-color);
-        padding: 8px 12px;
+        padding: 4px 12px;
         border-radius: 8px;
         font-size: 24px;
         /*
@@ -115,7 +115,7 @@
       color: var(--text-color);
     }
     h3 {
-      font-size: 40px;
+      font-size: 2rem;
       font-weight: bold;
       color: var(--text-color);
     }
@@ -195,7 +195,7 @@
         text-align: center;
       }
       p {
-        font-size: 24px;
+        font-size: 1.1rem;
         text-align: center;
       }
     }
