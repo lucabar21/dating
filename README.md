@@ -12,8 +12,6 @@ Una caratteristica è il **sistema di disattivazione temporanea** dell'account, 
 
 La sicurezza è una priorità: ogni utente deve **verificare la propria email** prima di poter utilizzare l'app, e il sistema di autenticazione garantisce la protezione dei dati personali. L'architettura modulare e scalabile rende l'app pronta per crescere e adattarsi alle esigenze future.
 
----
-
 ## ARCHITETTURA TECNICA
 
 ### **[Frontend - Angular](./FEATURES.md)** _(Sviluppo principale)_
@@ -31,17 +29,15 @@ La sicurezza è una priorità: ogni utente deve **verificare la propria email** 
 - Database relazionale con architettura scalabile
 - Algoritmi di matching personalizzati
 
----
-
 ## GETTING STARTED
 
-### INSTALLA LE DIPENDEZE
+### Installa le dipendenze
 
 ```bash
-ng serve
+npm install
 ```
 
-### AVVIA L'APP
+### Avvia l'app
 
 ```bash
 ng serve
