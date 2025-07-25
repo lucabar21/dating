@@ -42,3 +42,9 @@ npm install
 ```bash
 ng serve
 ```
+
+## DEMO
+
+Esplora l’app per testare l’interfaccia responsive e provare le funzionalità in tempo reale.
+
+[MVP](https://lovvami.netlify.app)

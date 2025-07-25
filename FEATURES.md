@@ -115,7 +115,7 @@
 - Navigation diretta a chat specifiche
 ```
 
-### ** Settings e Configurazioni**
+### **Settings e Configurazioni**
 
 ```typescript
 // SettingsComponent: Centro controllo utente
